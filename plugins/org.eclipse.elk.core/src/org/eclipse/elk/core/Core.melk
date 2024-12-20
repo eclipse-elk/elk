@@ -302,6 +302,29 @@ advanced option omitNodeMicroLayout: boolean {
     targets parents
 }
 
+// --- JSON
+group json {
+    
+    option shapeCoords: ShapeCoords {
+        label "Shape Coords"
+        description
+            "For layouts transferred into JSON graphs, specify the coordinate system
+             to be used for nodes, ports, and labels of nodes and ports."
+        default = ShapeCoords.INHERIT
+        targets parents
+    }
+    
+    option edgeCoords: EdgeCoords {
+        label "Edge Coords"
+        description
+            "For layouts transferred into JSON graphs, specify the coordinate system
+             to be used for edge route points and edge labels."
+        default = EdgeCoords.INHERIT
+        targets parents
+    }
+    
+}
+
 // --- SPACING
 group spacing {
     

@@ -63,8 +63,7 @@ class TransferLayoutTest {
     
     @Test
     def void transferLayoutEdgeSectionExistsTest() {
-        val parser = new JsonParser()
-        val jsonGraph = parser.parse(graph).asJsonObject
+        val jsonGraph = JsonParser.parseString(graph).asJsonObject
         
         val mby = new Maybe<JsonImporter>
         val root = ElkGraphJson.forGraph(jsonGraph)

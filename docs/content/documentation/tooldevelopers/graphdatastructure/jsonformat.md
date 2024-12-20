@@ -55,9 +55,12 @@ labels.
 Nodes can have an arbitrary number of ports. Edges can connect to a node either directly or
 through one of its ports. A node can also contain an arbitrary number of child nodes. A graph
 is actually nothing more than a simple node whose children are the top-level nodes of the graph.
-Finally, a node can contain edges. These edges do not necessarily connect to the node, but will
-usually connect its children. The edge coordinates will be interpreted relative to the upper
-left corner of the node which contains it.
+Finally, a node can contain edges. While it is common to define those edges under a given node
+that connect that node's children, in fact any edge may be defined under any node, regardless of its
+end points. This allows for flexibility when defining hierarchy-crossing edges, as well as for
+alternative schemes, such as defining all edges at the root level.
+See [_Coordinate System_]({{< relref "documentation/tooldevelopers/graphdatastructure/coordinatesystem.md" >}})
+for the rules for interpreting edge coordinates.
 
 ```json
 {
