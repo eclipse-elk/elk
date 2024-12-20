@@ -33,7 +33,7 @@ The Eclipse release process is described in more detail in the [Eclipse Project 
     `VERSION`             | Well... the version number...
     `ELK_TARGET_DIR`      | `/home/data/httpd/download.eclipse.org/elk/updates/releases/VERSION/`
     
-    Pre-releases should point to a separate directory. Otherwise people that already use the pre-release have to clean their p2 directory to avoid problems.
+  Pre-releases should point to a separate directory. Otherwise people that already use the pre-release have to clean their p2 directory to avoid problems.
     
 1. \[deprecated\] Update the _[ReleaseNightly](https://ci.eclipse.org/elk/job/ReleaseNightly/)_ build with the same default values for the build variables. Also remember to update the repository branch the build will check out. Run it.
 1. Update the version numbers on `master`. Tycho can help:

@@ -60,4 +60,3 @@ This is mainly a bugfix release. See GitHub for the full [list of resolved issue
 - [#924](https://github.com/eclipse/elk/pull/924): Corrected pom license for maven central.
 
 
-

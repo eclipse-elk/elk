@@ -154,6 +154,7 @@ public final class ComponentsProcessor {
         } else {
             result = Arrays.asList(graph);
         }
+        // FIXME order by the dominant group instead. Needs property dominantComponentOrderingGroup
         // If model order should be preserved the connected components should be ordered by their elements.
         // The component with the node with the smallest order should be first.
         if (graph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_COMPONENTS) != ComponentOrderingStrategy.NONE) {
