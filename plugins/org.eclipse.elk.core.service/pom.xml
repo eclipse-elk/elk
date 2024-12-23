@@ -60,10 +60,6 @@
           <groupId>org.eclipse.platform</groupId>
           <artifactId>org.eclipse.urischeme</artifactId>
         </exclusion>
-        <exclusion>
-          <groupId>javax.annotation</groupId>
-          <artifactId>javax.annotation-api</artifactId>
-        </exclusion>
       </exclusions>
       <!-- transitively pulls 'org.eclipse.jface', too,
              defining e.g. 'org.eclipse.jface.preference.IPreferenceStore' -->
