@@ -48,7 +48,7 @@
     <dependency>
       <groupId>org.eclipse.platform</groupId>
       <artifactId>org.eclipse.ui.workbench</artifactId>
-      <version>3.126.0</version>
+      <version>3.130.0</version>
       <exclusions>
         <!-- exclude org.eclipse.swt here, as that in turn depends on "org.eclipse.platform:org.eclipse.swt.${osgi.platform}";
                that construction is prone to result in build troubles. -->
