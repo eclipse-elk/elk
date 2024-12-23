@@ -57,10 +57,6 @@
           <artifactId>org.eclipse.swt</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>org.eclipse.platform</groupId>
-          <artifactId>org.eclipse.urischeme</artifactId>
-        </exclusion>
-        <exclusion>
           <groupId>javax.annotation</groupId>
           <artifactId>javax.annotation-api</artifactId>
         </exclusion>
