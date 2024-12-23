@@ -51,7 +51,11 @@ public final class LayoutMetaDataService {
      * @return  the singleton instance
      */
     public static synchronized LayoutMetaDataService getInstance() {
-        return getInstance(null);
+        Object loader = null;
+        // elkjs-exclude-start
+        loader = LayoutMetaDataService.class.getClassLoader();
+        // elkjs-exclude-end
+        return getInstance(loader);
     }
     
     /**
