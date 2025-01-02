@@ -479,8 +479,8 @@
   <!-- The license ELK is available as. -->
   <licenses>
     <license>
-      <name>Eclipse Public License - v 2.0</name>
-      <url>http://www.eclipse.org/legal/epl-v20.html</url>
+      <name>EPL-2.0</name>
+      <url>https://www.eclipse.org/legal/epl-2.0</url>
     </license>
   </licenses>
 
