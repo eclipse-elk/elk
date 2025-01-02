@@ -22,6 +22,9 @@
   <!-- Define a few properties used throughout all build profiles. -->
   <properties>
     <targetJdk>11</targetJdk>
+    <maven.compiler.release>${targetJdk}</maven.compiler.release>
+    <maven.compiler.source>${targetJdk}</maven.compiler.source>
+    <maven.compiler.target>${targetJdk}</maven.compiler.target>
     <tycho-version>2.7.3</tycho-version>
     <xtext-version>2.28.0</xtext-version>
     <elk-version>${project.version}</elk-version>
@@ -309,6 +312,7 @@
           <version>${xtext-version}</version>
           <configuration>
             <outputDirectory>${basedir}/xtend-gen</outputDirectory>
+            <javaSourceVersion>${maven.compiler.release}</javaSourceVersion>
           </configuration>
           <executions>
             <execution>
