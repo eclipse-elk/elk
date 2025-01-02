@@ -23,7 +23,6 @@
 
   <!-- all plugins need to be listed as module -->
   <modules>
-    <module>../build/org.eclipse.elk.targetplatform</module>
     <module>org.eclipse.elk.alg.common</module>
     <module>org.eclipse.elk.alg.disco</module>
     <module>org.eclipse.elk.alg.disco.debug</module>

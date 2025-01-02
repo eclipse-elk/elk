@@ -62,7 +62,6 @@
       <id>elk-meta</id>
 
       <modules>
-        <module>org.eclipse.elk.targetplatform</module>
         <module>../plugins/org.eclipse.elk.graph</module>
         <module>../plugins/org.eclipse.elk.core.meta</module>
       </modules>
@@ -176,6 +175,11 @@
               <artifactId>org.eclipse.elk.targetplatform</artifactId>
               <version>${elk-version}</version>
             </artifact>
+          </target>
+          <target>
+            <!-- Replace multi module dir by basedir after Tycho 3.0+ can be used.
+                 see https://github.com/eclipse-tycho/tycho/issues/1660 -->
+            <file>${maven.multiModuleProjectDirectory}/org.eclipse.elk.targetplatform/org.eclipse.elk.targetplatform.target</file>
           </target>
           <environments>
             <environment>
