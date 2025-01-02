@@ -34,7 +34,6 @@
          due to xtend's template symbols («) when running maven on windows. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
-    <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
   </properties>
 
 
@@ -240,15 +239,6 @@
         <version>${tycho-version}</version>
         <configuration>
           <enableAssertions>true</enableAssertions>
-          <!-- There seems to be an issue with executing several tests in parallel in that
-               it can happen that failed tests are eventually reported as having succeeded.
-               A resolution is to set forkCount=1 and reuseForks=false
-               See, e.g. the following stackoverflow post:
-               https://stackoverflow.com/questions/3365628/junit-tests-pass-in-eclipse-but-fail-in-maven-surefire -->
-          <!-- parallel>classes</parallel -->
-          <!-- threadCount>4</threadCount -->
-          <reuseForks>false</reuseForks>
-          <forkCount>1</forkCount>
           <excludes>
             <exclude>**/TestUtil.java</exclude>
           </excludes>
