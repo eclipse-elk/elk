@@ -28,3 +28,4 @@ Export-Package: org.eclipse.elk.alg.test,
  org.eclipse.elk.alg.test.framework,
  org.eclipse.elk.alg.test.framework.annotations,
  org.eclipse.elk.alg.test.framework.io
+Automatic-Module-Name: org.eclipse.elk.alg.test
