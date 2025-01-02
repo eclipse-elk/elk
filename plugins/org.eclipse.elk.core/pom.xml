@@ -17,10 +17,8 @@
     <relativePath>../../build/pom.xml</relativePath>
   </parent>
 
-  <groupId>org.eclipse.elk</groupId>
   <artifactId>org.eclipse.elk.core</artifactId>
   <name>ELK Core Components</name>
-  <version>0.10.0-SNAPSHOT</version>
   <description>The Core of the Eclipse Layout Kernel.</description>
   <packaging>eclipse-plugin</packaging>
 

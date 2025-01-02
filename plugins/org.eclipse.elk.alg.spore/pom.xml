@@ -17,10 +17,8 @@
     <relativePath>../../build/pom.xml</relativePath>
   </parent>
 
-  <groupId>org.eclipse.elk</groupId>
   <artifactId>org.eclipse.elk.alg.spore</artifactId>
   <name>ELK SPOrE</name>
-  <version>0.10.0-SNAPSHOT</version>
   <description>Algorithms for stable compaction and node overlap removal.</description>
   <packaging>eclipse-plugin</packaging>
 

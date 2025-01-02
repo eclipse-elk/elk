@@ -17,10 +17,8 @@
     <relativePath>../../build/pom.xml</relativePath>
   </parent>
 
-  <groupId>org.eclipse.elk</groupId>
   <artifactId>org.eclipse.elk.alg.layered</artifactId>
   <name>ELK Layered Layout Algorithm</name>
-  <version>0.10.0-SNAPSHOT</version>
   <description>Layout algorithm based on the layered approach.</description>
   <packaging>eclipse-plugin</packaging>
 

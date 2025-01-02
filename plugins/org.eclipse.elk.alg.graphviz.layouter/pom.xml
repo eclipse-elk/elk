@@ -17,10 +17,8 @@
     <relativePath>../../build/pom.xml</relativePath>
   </parent>
 
-  <groupId>org.eclipse.elk</groupId>
   <artifactId>org.eclipse.elk.alg.graphviz.layouter</artifactId>
   <name>ELK Layout Bridge for Graphviz</name>
-  <version>0.10.0-SNAPSHOT</version>
   <description>Bridge to the Graphviz command-line tool for access through ELK.</description>
   <packaging>eclipse-plugin</packaging>
 
