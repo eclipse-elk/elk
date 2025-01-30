@@ -452,6 +452,33 @@ public final class InternalProperties {
      * This is used to cache this once it was calculated.
      */
     public static final IProperty<Map<LNode, Integer>> TARGET_NODE_MODEL_ORDER = new Property<>("targetNode.modelOrder");
+
+    /**
+     * 
+     */
+    public static final IProperty<Integer> TARJAN_LOWLINK = new Property<>("tarjan.lowlink",Integer.MAX_VALUE);
+
+    /**
+     * 
+     */
+    public static final IProperty<Integer> TARJAN_ID = new Property<>("tarjan.id",-1);
+
+    /**
+     * 
+     */
+    public static final IProperty<Boolean> TARJAN_ON_STACK = new Property<>("tarjan.onstack",false);
+
+    /**
+     * 
+     */
+    public static final IProperty<Boolean> IS_FIXED = new Property<>("isFixed",false);
+
+    /**
+     * 
+     */
+    public static final IProperty<Boolean> IS_PART_OF_CYCLE = new Property<>("partOfCycle",false);
+
+    
     
     /**
      * Hidden default constructor.
