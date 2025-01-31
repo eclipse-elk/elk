@@ -34,6 +34,7 @@
     <module>org.eclipse.elk.alg.rectpacking</module>
     <module>org.eclipse.elk.alg.spore</module>
     <module>org.eclipse.elk.alg.topdownpacking</module>
+    <module>org.eclipse.elk.alg.vertiflex</module>
     <module>org.eclipse.elk.conn.gmf</module>
     <module>org.eclipse.elk.core</module>
     <module>org.eclipse.elk.core.debug</module>

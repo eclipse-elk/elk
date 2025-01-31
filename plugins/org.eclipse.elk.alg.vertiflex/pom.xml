@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2023 Kiel University and others.
+  
+  This program and the accompanying materials are made available under the
+  terms of the Eclipse Public License 2.0 which is available at
+  http://www.eclipse.org/legal/epl-2.0.
+  
+  SPDX-License-Identifier: EPL-2.0
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.eclipse.elk</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.10.0-SNAPSHOT</version>
+    <relativePath>../../build/pom.xml</relativePath>
+  </parent>
+
+  <groupId>org.eclipse.elk</groupId>
+  <artifactId>org.eclipse.elk.alg.vertiflex</artifactId>
+  <name>ELK Y Constraint Tree Layout Algorithm</name>
+  <version>0.10.0-SNAPSHOT</version>
+  <description>Tree drawing algorithm with y-level constraints.</description>
+  <packaging>eclipse-plugin</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.eclipse.elk</groupId>
+      <artifactId>org.eclipse.elk.core</artifactId>
+      <version>0.10.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.elk</groupId>
+      <artifactId>org.eclipse.elk.alg.common</artifactId>
+      <version>0.10.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Generate code from .melk files. -->
+      <plugin>
+        <groupId>org.eclipse.xtext</groupId>
+        <artifactId>xtext-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>
