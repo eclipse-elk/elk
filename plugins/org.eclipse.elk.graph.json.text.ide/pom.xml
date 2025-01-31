@@ -17,10 +17,8 @@
     <relativePath>../../build/pom.xml</relativePath>
   </parent>
 
-  <groupId>org.eclipse.elk</groupId>
   <artifactId>org.eclipse.elk.graph.json.text.ide</artifactId>
   <name>ELK Textual JSON Graph Format Generic IDE Services</name>
-  <version>0.10.0-SNAPSHOT</version>
   <description>Generic IDE Services for the textual ELK JSON Graph format.</description>
   <packaging>eclipse-plugin</packaging>
 

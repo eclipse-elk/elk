@@ -9,17 +9,13 @@
  *******************************************************************************/
 package org.eclipse.elk.alg.mrtree.p2order;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.eclipse.elk.alg.mrtree.TreeLayoutPhases;
-import org.eclipse.elk.alg.mrtree.TreeUtil;
 import org.eclipse.elk.alg.mrtree.graph.TEdge;
 import org.eclipse.elk.alg.mrtree.graph.TGraph;
 import org.eclipse.elk.alg.mrtree.graph.TNode;
@@ -27,7 +23,6 @@ import org.eclipse.elk.alg.mrtree.intermediate.IntermediateProcessorStrategy;
 import org.eclipse.elk.alg.mrtree.options.InternalProperties;
 import org.eclipse.elk.alg.mrtree.options.MrTreeOptions;
 import org.eclipse.elk.alg.mrtree.options.OrderWeighting;
-import org.eclipse.elk.alg.mrtree.p2order.OrderBalance.SortTEdgeTargetProperty;
 import org.eclipse.elk.core.alg.ILayoutPhase;
 import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.eclipse.elk.core.util.IElkProgressMonitor;

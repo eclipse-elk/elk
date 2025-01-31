@@ -25,7 +25,7 @@ jobs:
         path: elk
     - uses: actions/checkout@v4
       with:
-        repository: eclipse/elk-models
+        repository: eclipse-elk/elk-models
         path: elk-models
     # Prepare and use a cache for maven
     - uses: actions/cache@v4

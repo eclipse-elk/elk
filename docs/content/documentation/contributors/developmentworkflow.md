@@ -15,11 +15,11 @@ Once you [have everything set up]({{< relref "documentation/contributors/develop
 
 1. **Find a Git Repository to Work With**
 
-    While working you will probably want to create a bunch of commits and push them to a repository. However, our installer by default simply clones our official ELK repository at GitHub, which you don't have permission to write to. What you will want to do, thus, is to get your hands on another GitHub repository that you do have permission to write to. The best way is to simply fork our main repository by clicking the _Fork_ link at the upper right corner of [our repository page](https://github.com/eclipse/elk). Add your new repository as a second remote to your local clone and push your commits there.
+    While working you will probably want to create a bunch of commits and push them to a repository. However, our installer by default simply clones our official ELK repository at GitHub, which you don't have permission to write to. What you will want to do, thus, is to get your hands on another GitHub repository that you do have permission to write to. The best way is to simply fork our main repository by clicking the _Fork_ link at the upper right corner of [our repository page](https://github.com/eclipse-elk/elk). Add your new repository as a second remote to your local clone and push your commits there.
 
 1. **Tickets**
 
-    Of course we have [a list of issues](https://github.com/eclipse/elk/issues). If you want to work on one of them, you should mention your intentions there to let us know that we should not start working on the issue ourselves. Also, we might have helpful input for you to think about. If you want to implement a feature that we do not have an issue for yet, open one.
+    Of course we have [a list of issues](https://github.com/eclipse-elk/elk/issues). If you want to work on one of them, you should mention your intentions there to let us know that we should not start working on the issue ourselves. Also, we might have helpful input for you to think about. If you want to implement a feature that we do not have an issue for yet, open one.
 
 1. **Proper Commit Messages**
 
@@ -44,4 +44,4 @@ Once you [have everything set up]({{< relref "documentation/contributors/develop
 
 1. **Contributing Your Code**
 
-    To actually contribute your code to the ELK project, go [to our pull requests page](https://github.com/eclipse/elk/pulls) and click _New pull request_. Since you want us to pull in changes from your fork, click the _Compare across forks_ link and select the branch that contains the relevant changes. We will then review your code. Chances are that we will reject your pull request on your first try and ask you to make some changes. Don't let that discourage you (also, we try to be nice about it). Simply make the changes and create another pull request.
+    To actually contribute your code to the ELK project, go [to our pull requests page](https://github.com/eclipse-elk/elk/pulls) and click _New pull request_. Since you want us to pull in changes from your fork, click the _Compare across forks_ link and select the branch that contains the relevant changes. We will then review your code. Chances are that we will reject your pull request on your first try and ask you to make some changes. Don't let that discourage you (also, we try to be nice about it). Simply make the changes and create another pull request.

@@ -9,8 +9,6 @@
  *******************************************************************************/
 package org.eclipse.elk.core.alg;
 
-import org.eclipse.elk.core.alg.ILayoutProcessor;
-import org.eclipse.elk.core.alg.ILayoutProcessorFactory;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
 public enum TestProcessors implements ILayoutProcessorFactory<StringBuffer> {

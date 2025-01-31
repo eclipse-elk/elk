@@ -960,25 +960,26 @@ group layerUnzipping {
         advanced option layerSplit: Integer {
             label "Unzipping Layer Split"
             description
-                "Defines the number of sublayers to split a layer into when using the N_LAYERS strategy.
-                 The property can be set to the first node in a layer, which then applies the property
-                 for the layer the node belongs to."
+                "Defines the number of sublayers to split a layer into. The property can be set to the nodes in a layer,
+                 which then applies the property for the layer. If multiple nodes set the value to different values,
+                 then the lowest value is chosen."
             default = 2
             targets nodes
             lowerBound = 1
-            requires layerUnzipping.strategy == LayerUnzippingStrategy.N_LAYERS   
         }
         
         option resetOnLongEdges: Boolean {
             label "Reset Alternation on Long Edges"
             description
-                "If set to true, nodes will always be placed in the first sublayer after a long edge.
+                "If set to true, nodes will always be placed in the first sublayer after a long edge when using the 
+                 ALTERNATING strategy.
                  Otherwise long edge dummies are treated the same as regular nodes. The default value is true.
-                 The property can be set to the first node in a layer, which then applies the property
-                 for the layer the node belongs to."
+                 The property can be set to the nodes in a layer, which then applies the property
+                 for the layer. If any node sets the value to false, then the value is set to false for the entire
+                 layer."
             default = true
             targets nodes
-            requires layerUnzipping.strategy == LayerUnzippingStrategy.N_LAYERS
+            requires layerUnzipping.strategy == LayerUnzippingStrategy.ALTERNATING
         }
     }
 

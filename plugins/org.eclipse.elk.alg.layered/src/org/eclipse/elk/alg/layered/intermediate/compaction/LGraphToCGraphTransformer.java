@@ -479,6 +479,19 @@ public final class LGraphToCGraphTransformer {
             
         }
         
+        // offset selfloop labels 
+        nodesMap.keySet().stream()
+        .flatMap(n -> StreamSupport.stream(n.getOutgoingEdges().spliterator(), false))
+        .filter(e -> e.isSelfLoop())
+        .forEach(sl -> {
+           LNode lNode = sl.getSource().getNode();
+           CNode cNode = nodesMap.get(lNode);
+           double deltaX = cNode.hitbox.x - cNode.hitboxPreCompaction.x;
+           sl.getLabels().forEach(l -> {
+              l.getPosition().x += deltaX;
+           });
+        });
+        
         // calculating new graph size and offset
         KVector topLeft = new KVector(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
         KVector bottomRight = new KVector(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);

@@ -23,8 +23,6 @@ import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.options.SizeConstraint;
 import org.eclipse.elk.core.options.SizeOptions;
 import org.eclipse.elk.core.util.ElkUtil;
-import org.eclipse.elk.core.util.adapters.GraphAdapters.LabelAdapter;
-import org.eclipse.elk.core.util.adapters.GraphAdapters.PortAdapter;
 
 /**
  * Various little methods that didn't quite fit into any of the other classes.

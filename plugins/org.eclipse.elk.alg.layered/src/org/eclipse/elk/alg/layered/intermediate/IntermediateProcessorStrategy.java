@@ -11,7 +11,7 @@ package org.eclipse.elk.alg.layered.intermediate;
 
 import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.intermediate.compaction.HorizontalGraphCompactor;
-import org.eclipse.elk.alg.layered.intermediate.unzipping.GeneralLayerUnzipper;
+import org.eclipse.elk.alg.layered.intermediate.unzipping.AlternatingLayerUnzipper;
 import org.eclipse.elk.alg.layered.intermediate.wrapping.BreakingPointInserter;
 import org.eclipse.elk.alg.layered.intermediate.wrapping.BreakingPointProcessor;
 import org.eclipse.elk.alg.layered.intermediate.wrapping.BreakingPointRemover;
@@ -97,7 +97,7 @@ public enum IntermediateProcessorStrategy implements ILayoutProcessorFactory<LGr
     /** Position self loops after phase 3. */
     SELF_LOOP_PORT_RESTORER,
     /** Unzips layers for compaction. */
-    LAYER_UNZIPPER,
+    ALTERNATING_LAYER_UNZIPPER,
     /** Wraps graphs such that they better fit a given drawing area, allowing only a single edge per cut. */
     SINGLE_EDGE_GRAPH_WRAPPER,
     /** Makes sure that in-layer constraints are handled. */
@@ -331,8 +331,8 @@ public enum IntermediateProcessorStrategy implements ILayoutProcessorFactory<LGr
         case SELF_LOOP_PORT_RESTORER:
             return new SelfLoopPortRestorer();
         
-        case LAYER_UNZIPPER:
-            return new GeneralLayerUnzipper();
+        case ALTERNATING_LAYER_UNZIPPER:
+            return new AlternatingLayerUnzipper();
 
         case SELF_LOOP_POSTPROCESSOR:
             return new SelfLoopPostProcessor();

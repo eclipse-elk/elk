@@ -11,7 +11,6 @@ package org.eclipse.elk.alg.mrtree.p4route;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +31,6 @@ import org.eclipse.elk.core.options.Direction;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 import org.eclipse.elk.core.util.Pair;
 import org.eclipse.elk.core.util.Triple;
-import org.eclipse.elk.graph.ElkNode;
 
 /**
  * This class implements a dull edge routing by setting just source and target of a edge in mode MiddleToMiddle 

@@ -12,8 +12,6 @@ package org.eclipse.elk.alg.force.graph;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.elk.core.math.KVector;
-
 /**
  * A node in the force graph.
  * 

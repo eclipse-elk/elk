@@ -32,9 +32,9 @@ Information regarding source code management, builds, and more.
 
 The project maintains the following source code repositories
 
-* https://github.com/eclipse/elk
-* https://github.com/eclipse/elk-models
-* https://github.com/eclipse/elk-website
+* https://github.com/eclipse-elk/elk
+* https://github.com/eclipse-elk/elk-models
+* https://github.com/eclipse-elk/elk-website
 
 ## Eclipse Contributor Agreement
 

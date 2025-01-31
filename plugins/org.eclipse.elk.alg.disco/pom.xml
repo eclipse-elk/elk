@@ -17,10 +17,8 @@
     <relativePath>../../build/pom.xml</relativePath>
   </parent>
 
-  <groupId>org.eclipse.elk</groupId>
   <artifactId>org.eclipse.elk.alg.disco</artifactId>
   <name>ELK Disconnected Components Compaction</name>
-  <version>0.10.0-SNAPSHOT</version>
   <description>Compaction algorithms for disconnected graphs.</description>
   <packaging>eclipse-plugin</packaging>
 

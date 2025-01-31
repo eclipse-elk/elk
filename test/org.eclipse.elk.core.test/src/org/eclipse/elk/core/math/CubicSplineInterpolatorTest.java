@@ -3,9 +3,6 @@ package org.eclipse.elk.core.math;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.elk.core.math.BezierSpline;
-import org.eclipse.elk.core.math.CubicSplineInterpolator;
-import org.eclipse.elk.core.math.KVector;
 import org.junit.Test;
 
 public class CubicSplineInterpolatorTest {

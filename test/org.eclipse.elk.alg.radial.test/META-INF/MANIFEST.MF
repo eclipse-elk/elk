@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: org.eclipse.elk.alg.radial.test
 Bundle-Name: ELK Layout Radial Tests
 Bundle-SymbolicName: org.eclipse.elk.alg.radial.test;singleton:=true
 Bundle-Version: 0.10.0.qualifier

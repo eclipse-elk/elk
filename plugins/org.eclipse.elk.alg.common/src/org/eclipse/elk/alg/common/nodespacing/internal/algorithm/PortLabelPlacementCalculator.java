@@ -27,7 +27,6 @@ import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.options.PortLabelPlacement;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.options.SizeConstraint;
-import org.eclipse.elk.core.options.SizeOptions;
 
 /**
  * Knows how to place port labels.

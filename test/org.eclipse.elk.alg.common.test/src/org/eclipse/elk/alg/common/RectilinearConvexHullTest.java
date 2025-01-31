@@ -18,8 +18,6 @@ import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.eclipse.elk.alg.common.Point;
-import org.eclipse.elk.alg.common.RectilinearConvexHull;
 import org.eclipse.elk.core.math.ElkRectangle;
 import org.eclipse.elk.core.math.KVector;
 import org.junit.Assert;

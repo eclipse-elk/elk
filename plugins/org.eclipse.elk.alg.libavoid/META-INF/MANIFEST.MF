@@ -8,6 +8,7 @@ Bundle-Vendor: Eclipse Layout Kernel
 Bundle-Activator: org.eclipse.elk.alg.libavoid.LibavoidPlugin
 Bundle-ActivationPolicy: lazy
 Require-Bundle: com.google.guava,
+ org.eclipse.emf.common;bundle-version="2.10.0",
  org.eclipse.core.runtime,
  org.eclipse.elk.graph,
  org.eclipse.elk.core,

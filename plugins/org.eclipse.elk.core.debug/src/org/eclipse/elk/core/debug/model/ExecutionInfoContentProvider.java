@@ -12,7 +12,6 @@ package org.eclipse.elk.core.debug.model;
 import java.util.List;
 import java.util.function.Predicate;
 
-import org.eclipse.elk.core.debug.model.ExecutionInfo;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
 /**

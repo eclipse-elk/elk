@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ELK MrTree Tests
+Bundle-SymbolicName: org.eclipse.elk.alg.mrtree.test;singleton:=true
+Bundle-Version: 0.10.0.qualifier
+Automatic-Module-Name: org.eclipse.elk.alg.mrtree.test
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-Vendor: Eclipse Modeling Project
+Require-Bundle: com.google.guava,
+ org.eclipse.elk.core,
+ org.eclipse.elk.graph,
+ org.eclipse.elk.alg.common,
+ org.eclipse.elk.alg.mrtree,
+ org.eclipse.elk.alg.test,
+ org.junit;bundle-version="4.12.0",
+ org.hamcrest.library;bundle-version="1.3.0"
+

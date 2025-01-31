@@ -9,11 +9,6 @@
  *******************************************************************************/
 package org.eclipse.elk.core.math;
 
-import org.eclipse.elk.core.math.ElkMath;
-import org.eclipse.elk.core.math.ElkRectangle;
-import org.eclipse.elk.core.math.KVector;
-import org.eclipse.elk.core.math.KVectorChain;
-
 import static org.junit.Assert.*;
 import org.junit.Test;
 

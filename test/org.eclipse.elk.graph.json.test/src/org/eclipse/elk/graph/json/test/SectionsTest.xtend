@@ -100,8 +100,7 @@ class SectionsTest {
         
         
         // string -> json
-        val parser = new JsonParser
-        val json = parser.parse(graph).asJsonObject
+        val json = JsonParser.parseString(graph).asJsonObject
         
         // json -> elk
         val importer = new Maybe<JsonImporter>()
@@ -159,8 +158,8 @@ class SectionsTest {
      */
     private def toJsonGraphAndBackToString(String graph) {
         // string -> json
-        val parser = new JsonParser
-        val json = parser.parse(graph).asJsonObject
+        val json = JsonParser.parseString(graph).asJsonObject
+        
         // json -> elk
         val importer = new Maybe<JsonImporter>()
         val root = ElkGraphJson.forGraph(json).rememberImporter(importer).toElk

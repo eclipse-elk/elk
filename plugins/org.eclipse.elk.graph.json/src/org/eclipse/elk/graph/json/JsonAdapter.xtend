@@ -187,6 +187,14 @@ final class JsonAdapter {
     }
     
     // - - - - - - - - - - - - - - - - - - -
+    // Remove members from a json object
+    // - - - - - - - - - - - - - - - - - - -
+    
+    def void removeJsonObj(JsonObject o, String element) {
+        o.remove(element)
+    }
+    
+    // - - - - - - - - - - - - - - - - - - -
     // Add to a json array
     // - - - - - - - - - - - - - - - - - - -
         

@@ -6,7 +6,8 @@ Bundle-SymbolicName: org.eclipse.elk.alg.topdownpacking;singleton:=true
 Bundle-Version: 0.10.0.qualifier
 Bundle-Vendor: Eclipse Modeling Project
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: org.eclipse.elk.core,
+Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.10.0",
+ org.eclipse.elk.core,
  org.eclipse.elk.graph,
  org.eclipse.elk.alg.common,
  com.google.guava

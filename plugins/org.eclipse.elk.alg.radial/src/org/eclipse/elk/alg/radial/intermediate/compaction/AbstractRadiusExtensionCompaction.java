@@ -11,10 +11,7 @@ package org.eclipse.elk.alg.radial.intermediate.compaction;
 
 import java.util.List;
 
-import org.eclipse.elk.graph.ElkConnectableShape;
-import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkNode;
-import org.eclipse.elk.graph.util.ElkGraphUtil;
 
 /**
  * The class provides basic logic for extending or compacting radii, like overlap calculation.

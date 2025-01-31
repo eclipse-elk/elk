@@ -17,10 +17,8 @@
     <relativePath>../../build/pom.xml</relativePath>
   </parent>
 
-  <groupId>org.eclipse.elk</groupId>
   <artifactId>org.eclipse.elk.core.meta</artifactId>
   <name>ELK Layout Meta Data Language</name>
-  <version>0.10.0-SNAPSHOT</version>
   <description>The Layout Meta Data Language describes layout algorithms and their configuration options.</description>
   <packaging>eclipse-plugin</packaging>
 

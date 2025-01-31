@@ -10,7 +10,6 @@
 package org.eclipse.elk.alg.mrtree.intermediate;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -20,10 +19,8 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.eclipse.elk.alg.mrtree.TreeUtil;
-import org.eclipse.elk.alg.mrtree.graph.TEdge;
 import org.eclipse.elk.alg.mrtree.graph.TGraph;
 import org.eclipse.elk.alg.mrtree.graph.TNode;
-import org.eclipse.elk.alg.mrtree.options.CompactionMode;
 import org.eclipse.elk.alg.mrtree.options.EdgeRoutingMode;
 import org.eclipse.elk.alg.mrtree.options.InternalProperties;
 import org.eclipse.elk.alg.mrtree.options.MrTreeOptions;

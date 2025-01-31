@@ -66,7 +66,7 @@ Inclusion trees capture the hierarchical structure of a graph. See below for the
 
 ### The Meta Model
 
-The ELK Graph meta modelh looks like this:
+The ELK Graph meta model looks like this:
 
 {{< image src="graph_metamodel.png" alt="The ELK Graph meta model." >}}
 
@@ -118,6 +118,8 @@ Since ELK graphs are based on EMF, you can simply obtain an instance of the `Elk
     One method of particular value to layout algorithm developers is `firstEdgeSection(edge, reset, removeOthers)`, which returns the first edge section of the given edge, optionally resetting its layout data and removing all other edge sections. If the edge doesn't have any edge sections yet, one is created and added to it. This method is handy for applying layout results.
 
 * **Edge Containment:** Unless one uses one of the `create` methods to create edges, finding the node an edge should be contained in may be annoying (thus, don't). The `updateContainment(ElkEdge)` method automatically computes the best containment and puts the edge there. This requires at least one of the edge's end points to be set, since that is what determines the best containment.
+Note that, when graphs are imported into ELK from JSON, `updateContainment()` is automatically called on each edge. Authors of graphs in JSON format are therefore not responsible for placing edges
+inside their proper container nodes.
 
     While computing the containment is a little intricate (hence the utility method), the actual rule that determines the best containment is rather simple: it is the lowest common ancestor of all end points, where the ancestors of a node are defined as the sequence of nodes from the node itself to the graph's root node. Taking the graph at the top of this page as an example, the rule has the following implications for different types of edges:
 

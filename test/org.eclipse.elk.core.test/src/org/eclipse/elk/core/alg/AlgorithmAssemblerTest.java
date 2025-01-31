@@ -16,10 +16,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.eclipse.elk.core.alg.AlgorithmAssembler;
-import org.eclipse.elk.core.alg.ILayoutPhase;
-import org.eclipse.elk.core.alg.ILayoutProcessor;
-import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.junit.Test;
 
 public class AlgorithmAssemblerTest {

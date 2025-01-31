@@ -12,8 +12,6 @@ package org.eclipse.elk.core;
 import static org.junit.Assert.*;
 
 import org.eclipse.elk.alg.test.PlainJavaInitialization;
-import org.eclipse.elk.core.RecursiveGraphLayoutEngine;
-import org.eclipse.elk.core.UnsupportedConfigurationException;
 import org.eclipse.elk.core.data.LayoutAlgorithmData;
 import org.eclipse.elk.core.data.LayoutMetaDataService;
 import org.eclipse.elk.core.options.CoreOptions;

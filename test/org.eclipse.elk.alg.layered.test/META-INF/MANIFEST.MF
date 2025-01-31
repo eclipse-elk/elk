@@ -7,6 +7,7 @@ Automatic-Module-Name: org.eclipse.elk.alg.layered.test
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: Eclipse Modeling Project
 Require-Bundle: com.google.guava,
+ org.eclipse.emf.common,
  org.eclipse.elk.core,
  org.eclipse.elk.graph,
  org.eclipse.elk.alg.common,

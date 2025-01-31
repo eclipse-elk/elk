@@ -11,8 +11,6 @@ package org.eclipse.elk.alg.spore.test;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.elk.alg.common.compaction.oned.CompareFuzzy;
@@ -21,7 +19,6 @@ import org.eclipse.elk.alg.common.utils.Utils;
 import org.eclipse.elk.core.math.ElkMath;
 import org.eclipse.elk.core.math.ElkRectangle;
 import org.eclipse.elk.core.math.KVector;
-import org.eclipse.elk.core.util.ElkUtil;
 import org.eclipse.elk.core.util.Pair;
 import org.junit.Before;
 import org.junit.Test;

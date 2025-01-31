@@ -10,7 +10,7 @@ Export-Package: org.eclipse.elk.graph,
  org.eclipse.elk.graph.impl,
  org.eclipse.elk.graph.properties,
  org.eclipse.elk.graph.util
-Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.10.0";visibility:=reexport,
+Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.10.0",
  com.google.guava
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-11

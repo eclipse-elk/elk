@@ -17,6 +17,8 @@ import com.google.common.collect.Multimap
 import java.util.Map
 import org.eclipse.elk.core.data.LayoutMetaDataService
 import org.eclipse.elk.core.options.CoreOptions
+import org.eclipse.elk.core.options.EdgeCoords
+import org.eclipse.elk.core.options.ShapeCoords
 import org.eclipse.elk.core.util.IndividualSpacings
 import org.eclipse.elk.graph.ElkEdge
 import org.eclipse.elk.graph.ElkEdgeSection
@@ -58,6 +60,13 @@ final class JsonImporter {
     val Map<ElkEdge, Object> edgeJsonMap = Maps.newHashMap
     val Map<ElkEdgeSection, Object> edgeSectionJsonMap = Maps.newHashMap
     val Map<ElkLabel, Object> labelJsonMap = Maps.newHashMap
+    
+    /* Maps to help in adjusting coordinates */
+    val Map<ElkEdge, ElkNode> edgeOriginalParentMap = Maps.newHashMap
+    val Map<ElkShape, Double> globalXMap = Maps.newHashMap
+    val Map<ElkShape, Double> globalYMap = Maps.newHashMap
+    val Map<ElkGraphElement, ShapeCoords> shapeCoordsMap = Maps.newHashMap
+    val Map<ElkGraphElement, EdgeCoords> edgeCoordsMap = Maps.newHashMap
 
     var Object inputModel
 
@@ -91,10 +100,18 @@ final class JsonImporter {
         portIdMap.clear 
         edgeIdMap.clear
         edgeSectionIdMap.clear
+        
         nodeJsonMap.clear
         portJsonMap.clear
         edgeJsonMap.clear
-        edgeSectionJsonMap.clear 
+        edgeSectionJsonMap.clear
+        labelJsonMap.clear
+        
+        edgeOriginalParentMap.clear
+        globalXMap.clear
+        globalYMap.clear
+        shapeCoordsMap.clear
+        edgeCoordsMap.clear
     }
 
     private def transformChildNodes(Object jsonNodeA, ElkNode parent) {
@@ -525,36 +542,44 @@ final class JsonImporter {
       * Transfer the layout back to the formerly imported graph, using {@link #transform(Object)}.
       */
     def transferLayout(ElkNode graph) {
-        // transfer layout of all elements (including root)
+        // First pass handles nodes and ports.
         ElkGraphUtil.propertiesSkippingIteratorFor(graph, true).forEach [ element |
-            element.transferLayoutInt
+            element.transferLayoutInt1
+        ]
+        
+        // Second pass handles edges and labels.
+        ElkGraphUtil.propertiesSkippingIteratorFor(graph, true).forEach [ element |
+            element.transferLayoutInt2
         ]
     }
 
-    private def dispatch transferLayoutInt(ElkNode node) {
+    private def dispatch transferLayoutInt1(ElkNode node) {
         val jsonObj = nodeJsonMap.get(node)
         if (jsonObj === null) {
             throw formatError("Node did not exist in input.")
         }
-        // transfer positions and dimension
+        node.recordGlobalCoords
+        node.recordCoordinateModes
         node.transferShapeLayout(jsonObj)
     }
 
-    private def dispatch transferLayoutInt(ElkPort port) {
+    private def dispatch transferLayoutInt1(ElkPort port) {
         val jsonObj = portJsonMap.get(port)
         if (jsonObj === null) {
             throw formatError("Port did not exist in input.")
         }
-        
-        // transfer positions and dimension
+        port.recordGlobalCoords
+        port.recordCoordinateModes
         port.transferShapeLayout(jsonObj)
     }
 
-    private def dispatch transferLayoutInt(ElkEdge edge) {
+    private def dispatch transferLayoutInt2(ElkEdge edge) {
         val jsonObj = edgeJsonMap.get(edge).toJsonObject
         if (jsonObj === null) {
             throw formatError("Edge did not exist in input.")
         }
+        
+        edge.recordCoordinateModes
         
         val edgeId = jsonObj.id
                 
@@ -576,14 +601,14 @@ final class JsonImporter {
                 
                 // Start Point
                 val startPoint = newJsonObject
-                startPoint.addJsonObj("x", elkSection.startX)
-                startPoint.addJsonObj("y", elkSection.startY)
+                startPoint.addJsonObj("x", edge.adjustX(elkSection.startX))
+                startPoint.addJsonObj("y", edge.adjustY(elkSection.startY))
                 jsonSection.addJsonObj("startPoint", startPoint)
                 
                 // End Point
                 val endPoint = newJsonObject
-                endPoint.addJsonObj("x", elkSection.endX)
-                endPoint.addJsonObj("y", elkSection.endY)
+                endPoint.addJsonObj("x", edge.adjustX(elkSection.endX))
+                endPoint.addJsonObj("y", edge.adjustY(elkSection.endY))
                 jsonSection.addJsonObj("endPoint", endPoint)
                 
                 // Bend Points
@@ -591,8 +616,8 @@ final class JsonImporter {
                     val bendPoints = newJsonArray
                     elkSection.bendPoints.forEach [ pnt |
                         val jsonPnt = newJsonObject
-                        jsonPnt.addJsonObj("x", pnt.x)
-                        jsonPnt.addJsonObj("y", pnt.y)
+                        jsonPnt.addJsonObj("x", edge.adjustX(pnt.x))
+                        jsonPnt.addJsonObj("y", edge.adjustY(pnt.y))
                         bendPoints.addJsonArr(jsonPnt)
                     ]
                     jsonSection.addJsonObj("bendPoints", bendPoints)
@@ -627,6 +652,7 @@ final class JsonImporter {
                 }
                 
             ]
+            jsonObj.removeJsonObj("sections")
             jsonObj.addJsonObj("sections", sections)
         }
         
@@ -637,35 +663,76 @@ final class JsonImporter {
                 val jsonJPs = newJsonArray
                 jps.forEach[ jp |
                     val jsonPnt = newJsonObject
-                    jsonPnt.addJsonObj("x", jp.x)
-                    jsonPnt.addJsonObj("y", jp.y)
+                    jsonPnt.addJsonObj("x", edge.adjustX(jp.x))
+                    jsonPnt.addJsonObj("y", edge.adjustY(jp.y))
                     jsonJPs.addJsonArr(jsonPnt)
                 ]
                 jsonObj.addJsonObj("junctionPoints", jsonJPs)
             }
         }
 
-        jsonObj.addJsonObj("container", edge.getContainingNode().identifier)
+        if (edge.originalParent.edgeCoordsMode === EdgeCoords.CONTAINER) {
+            jsonObj.addJsonObj("container", edge.getContainingNode.identifier)
+        }
     }
     
-    private def dispatch transferLayoutInt(ElkLabel label) {
+    private def dispatch transferLayoutInt2(ElkLabel label) {
         val jsonObj = labelJsonMap.get(label)
-
-        // transfer positions and dimension
+        label.recordGlobalCoords
+        label.recordCoordinateModes
         label.transferShapeLayout(jsonObj)
     }
     
-    private def dispatch transferLayoutInt(Object obj) {
+    private def dispatch transferLayoutInt1(Object obj) {
+        // don't care about the rest
+    }
+    
+    private def dispatch transferLayoutInt2(Object obj) {
         // don't care about the rest
     }
 
     private def transferShapeLayout(ElkShape shape, Object jsonObjA) {
         val jsonObj = jsonObjA.toJsonObject
+        val parent = shape.jsonParent
         // pos and dimension
-        jsonObj.addJsonObj("x", shape.x)
-        jsonObj.addJsonObj("y", shape.y)
+        jsonObj.addJsonObj("x", parent?.adjustX(shape.x) ?: shape.x)
+        jsonObj.addJsonObj("y", parent?.adjustY(shape.y) ?: shape.y)
         jsonObj.addJsonObj("width", shape.width)
         jsonObj.addJsonObj("height", shape.height)
+    }
+    
+    private def dispatch Double adjustX(ElkEdge edge, Double x) {
+        val mode = edge.originalParent.edgeCoordsMode
+        return switch mode {
+            case EdgeCoords.ROOT: x + edge.getContainingNode.globalX
+            case EdgeCoords.PARENT: x + edge.getContainingNode.globalX - edge.originalParent.globalX
+            default: x
+        }
+    }
+    
+    private def dispatch Double adjustX(ElkShape shape, Double x) {
+        val mode = shape.shapeCoordsMode
+        return switch mode {
+            case ShapeCoords.ROOT: x + shape.globalX
+            default: x
+        }
+    }
+    
+    private def dispatch Double adjustY(ElkEdge edge, Double y) {
+        val mode = edge.originalParent.edgeCoordsMode
+        return switch mode {
+            case EdgeCoords.ROOT: y + edge.getContainingNode.globalY
+            case EdgeCoords.PARENT: y + edge.getContainingNode.globalY - edge.originalParent.globalY
+            default: y
+        }
+    }
+    
+    private def dispatch Double adjustY(ElkShape shape, Double y) {
+        val mode = shape.shapeCoordsMode
+        return switch mode {
+            case ShapeCoords.ROOT: y + shape.globalY
+            default: y
+        }
     }
     
     private def dispatch idByElement(ElkNode node) {
@@ -708,6 +775,7 @@ final class JsonImporter {
 
         edgeIdMap.put(id, edge)
         edgeJsonMap.put(edge, obj)
+        edgeOriginalParentMap.put(edge, edge.getContainingNode)
 
         return edge
     }
@@ -719,6 +787,75 @@ final class JsonImporter {
         edgeSectionJsonMap.put(edgeSection, obj)
 
         return edgeSection
+    }
+    
+    private def recordCoordinateModes(ElkGraphElement element) {
+        val parent = element.jsonParent
+        
+        var scm = element.getProperty(CoreOptions.JSON_SHAPE_COORDS) ?: ShapeCoords.INHERIT
+        if (scm === ShapeCoords.INHERIT) {
+            scm = parent.shapeCoordsMode ?: ShapeCoords.PARENT
+        }
+        shapeCoordsMap.put(element, scm)
+        
+        var ecm = element.getProperty(CoreOptions.JSON_EDGE_COORDS) ?: EdgeCoords.INHERIT
+        if (ecm === EdgeCoords.INHERIT) {
+            ecm = parent.edgeCoordsMode ?: EdgeCoords.CONTAINER
+        }
+        edgeCoordsMap.put(element, ecm)
+    }
+    
+    private def recordGlobalCoords(ElkShape shape) {
+        val parent = shape.jsonParent
+        val shapeA = parent?.shapeAncestor
+        val dx = shapeA.globalX ?: 0
+        val dy = shapeA.globalY ?: 0
+        globalXMap.put(shape, shape.x + dx)
+        globalYMap.put(shape, shape.y + dy)
+    }
+    
+    private def dispatch shapeAncestor(ElkEdge edge) {
+        return edge.originalParent
+    }
+    
+    private def dispatch shapeAncestor(ElkShape shape) {
+        return shape
+    }
+        
+    private def dispatch jsonParent(ElkNode node) {
+        return node.getParent
+    }
+    
+    private def dispatch jsonParent(ElkPort port) {
+        return port.getParent
+    }
+    
+    private def dispatch jsonParent(ElkEdge edge) {
+        return edge.originalParent
+    }
+    
+    private def dispatch jsonParent(ElkLabel label) {
+        return label.getParent
+    }    
+    
+    private def ElkNode originalParent(ElkEdge edge) {
+        return edgeOriginalParentMap.get(edge)
+    }
+    
+    private def Double globalX(ElkShape shape) {
+        return globalXMap.get(shape)
+    }
+    
+    private def Double globalY(ElkShape shape) {
+        return globalYMap.get(shape)
+    }
+    
+    private def ShapeCoords shapeCoordsMode(ElkGraphElement element) {
+        return shapeCoordsMap.get(element)
+    }
+    
+    private def EdgeCoords edgeCoordsMode(ElkGraphElement element) {
+        return edgeCoordsMap.get(element)
     }
 
 }

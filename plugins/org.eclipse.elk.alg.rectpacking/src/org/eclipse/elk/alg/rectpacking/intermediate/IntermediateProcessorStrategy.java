@@ -29,6 +29,7 @@ public enum IntermediateProcessorStrategy implements ILayoutProcessorFactory<Elk
     /*
      * Before Phase 1
      */
+    NODE_SIZE_REORDERER,
     INTERACTIVE_NODE_REORDERER,
     MIN_SIZE_PRE_PROCESSOR,
     
@@ -43,6 +44,8 @@ public enum IntermediateProcessorStrategy implements ILayoutProcessorFactory<Elk
     @Override
     public ILayoutProcessor<ElkNode> create() {
         switch (this) {
+        case NODE_SIZE_REORDERER:
+            return new NodeSizeReorderer();
         case INTERACTIVE_NODE_REORDERER:
             return new InteractiveNodeReorderer();
         case MIN_SIZE_PRE_PROCESSOR:

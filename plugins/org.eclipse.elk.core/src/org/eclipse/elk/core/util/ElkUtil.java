@@ -20,7 +20,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.eclipse.elk.core.math.ElkMargin;
-import org.eclipse.elk.core.math.ElkPadding;
 import org.eclipse.elk.core.math.ElkRectangle;
 import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.math.KVectorChain;

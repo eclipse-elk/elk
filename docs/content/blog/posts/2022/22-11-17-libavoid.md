@@ -61,4 +61,4 @@ They are included in ELK's [reference documentation](/reference.html), but you c
  * [RoutingOption](https://www.adaptagrams.org/documentation/namespaceAvoid.html#abc707ccbd6a0a7c29c124162c864ca05)
  * [RoutingParameter](https://www.adaptagrams.org/documentation/namespaceAvoid.html#a8a0154ae39129e7737d98e5a83daed19)
 
-That's it for now. Please try this new integration and give us feedback on the [ELK repository](https://github.com/eclipse/elk)!
+That's it for now. Please try this new integration and give us feedback on the [ELK repository](https://github.com/eclipse-elk/elk)!

@@ -59,6 +59,7 @@ algorithm rectpacking(RectPackingLayoutProvider) {
     supports currentPosition
     supports inNewRow
     supports trybox
+    supports orderBySize
 }
 
 
@@ -202,4 +203,13 @@ option inNewRow: boolean {
          compaction. Width approximation does does not take this into account."
     targets nodes
     default = false
+}
+
+option orderBySize: boolean {
+    label "Order nodes by height"
+    description
+        "If set to true the nodes will be sorted by their height before computing the layout. The highest
+         node will be in the first position."
+    default = false
+    targets parents
 }

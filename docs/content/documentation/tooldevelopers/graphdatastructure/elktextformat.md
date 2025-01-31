@@ -8,4 +8,4 @@ menu:
 ---
 
 Documentation is coming soon. For the moment you can find an example
-on [github](https://github.com/eclipse/elk/pull/106#issuecomment-268772479).
+on [github](https://github.com/eclipse-elk/elk/pull/106#issuecomment-268772479).

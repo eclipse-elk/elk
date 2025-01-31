@@ -8,7 +8,7 @@ menu:
 
 Automatic layout can be a complex thing, but starting to use the _Eclipse Layout Kernel_ can be easy.
 
-First of all, there are two versions of ELK. The [Java Version](https://github.com/eclipse/elk) and the Javascript Version, which is transpiled from the Java source using [GWT](https://www.gwtproject.org/).
+First of all, there are two versions of ELK. The [Java Version](https://github.com/eclipse-elk/elk) and the Javascript Version, which is transpiled from the Java source using [GWT](https://www.gwtproject.org/).
 
 Examples of ELK graphs can be found [here](https://rtsys.informatik.uni-kiel.de/elklive/examples.html) in the [elklive](https://rtsys.informatik.uni-kiel.de/elklive/index.html) tool, which supports writing ELK graphs in the [ELKT](https://rtsys.informatik.uni-kiel.de/elklive/elkgraph.html) and [JSON](https://rtsys.informatik.uni-kiel.de/elklive/json.html) format, can convert between different formats, and allows browsing additional models.
 
@@ -16,9 +16,9 @@ All layout algorithms and their options are documented [here](https://www.eclips
 
 ## Issues and Questions
 
-Both [ELK](https://github.com/eclipse/elk/issues/new) and [elkjs](https://github.com/kieler/elkjs/issues/new?assignees=&labels=bug&template=bug_report.md&title=) allow to report bugs and to ask questions in form of GitHub issues.
+Both [ELK](https://github.com/eclipse-elk/elk/issues/new) and [elkjs](https://github.com/kieler/elkjs/issues/new?assignees=&labels=bug&template=bug_report.md&title=) allow to report bugs and to ask questions in form of GitHub issues.
 
-Additionally, the [ELK gitter](https://gitter.im/eclipse/elk) can be used to ask questions.
+Additionally, the [ELK gitter](https://gitter.im/eclipse-elk/elk) can be used to ask questions.
 
 ## Downloads
 

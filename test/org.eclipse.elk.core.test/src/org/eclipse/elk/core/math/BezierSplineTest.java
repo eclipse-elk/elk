@@ -2,8 +2,6 @@ package org.eclipse.elk.core.math;
 
 import static org.junit.Assert.assertEquals;
 
-import org.eclipse.elk.core.math.BezierSpline;
-import org.eclipse.elk.core.math.KVector;
 import org.junit.Test;
 
 public class BezierSplineTest {

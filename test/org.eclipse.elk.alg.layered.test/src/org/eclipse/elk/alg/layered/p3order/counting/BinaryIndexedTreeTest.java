@@ -12,7 +12,6 @@ package org.eclipse.elk.alg.layered.p3order.counting;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.eclipse.elk.alg.layered.p3order.counting.BinaryIndexedTree;
 import org.junit.Test;
 
 // CHECKSTYLEOFF MagicNumber

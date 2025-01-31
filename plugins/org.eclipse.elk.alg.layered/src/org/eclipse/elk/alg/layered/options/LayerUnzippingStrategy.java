@@ -17,7 +17,7 @@ package org.eclipse.elk.alg.layered.options;
 public enum LayerUnzippingStrategy {
     
     NONE,
-    /** Splits all layers with more than two nodes into two layers. */
-    N_LAYERS;
+    /** Splits all layers with more than two nodes into several layers in an alternating pattern. */
+    ALTERNATING;
 
 }

@@ -328,7 +328,7 @@ public class LayerSweepCrossingMinimizer
         int wrongModelOrder = 0;
         for (LNode[] layer : layers) {
             ModelOrderNodeComparator comp = new ModelOrderNodeComparator(
-                    previousLayer == -1 ? layers[0] : layers[previousLayer], strategy, LongEdgeOrderingStrategy.EQUAL);
+                    previousLayer == -1 ? layers[0] : layers[previousLayer], strategy, LongEdgeOrderingStrategy.EQUAL, false);
             for (int i = 0; i < layer.length; i++) {
                 for (int j = i + 1; j < layer.length; j++) {
                     if (layer[i].hasProperty(InternalProperties.MODEL_ORDER)

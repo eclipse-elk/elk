@@ -7,8 +7,9 @@ The Eclipse release process is described in more detail in the [Eclipse Project 
 1. Add a new release on ELK's [project page](https://projects.eclipse.org/projects/modeling.elk).
 1. For major releases:
     1. Update NOTICE.md file with relevant information regarding used third-party content.
-    1. Have [PMC](mailto:modeling-pmc@eclipse.org) approve the release documentation.
-    1. Schedule a release review. Release reviews run for a minimum of one week and conclude on the first and third Wednesdays of each month.
+    2. Run `mvn org.eclipse.dash:license-tool-plugin:license-check -Dmaven.repo.local=./mvnrepo clean -Dtycho.target.eager=true -Dmaven.test.skip=true -Ddash.summary=../DEPENDENCIES` and commit the updated DEPENDENCIES file.
+    3. Have [PMC](mailto:modeling-pmc@eclipse.org) approve the release documentation.
+    4. Schedule a release review. Release reviews run for a minimum of one week and conclude on the first and third Wednesdays of each month.
 
 
 ## The Release Branch
@@ -66,5 +67,5 @@ This is a summary of the information on [this page](https://central.sonatype.org
 
 ## GitHub Management
 
-1. Close the release milestone [on GitHub](https://github.com/eclipse/elk/milestones).
-1. Create a new release [on GitHub](https://github.com/eclipse/elk/releases) with a release tag named `vVERSION` (for instance, `v0.4.0`).
+1. Close the release milestone [on GitHub](https://github.com/eclipse-elk/elk/milestones).
+1. Create a new release [on GitHub](https://github.com/eclipse-elk/elk/releases) with a release tag named `vVERSION` (for instance, `v0.4.0`).

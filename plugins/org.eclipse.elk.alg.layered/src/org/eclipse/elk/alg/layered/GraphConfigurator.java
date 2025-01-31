@@ -299,8 +299,8 @@ final class GraphConfigurator {
         }
         
         switch (lgraph.getProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY)) {
-        case N_LAYERS:
-            configuration.addBefore(LayeredPhases.P4_NODE_PLACEMENT, IntermediateProcessorStrategy.LAYER_UNZIPPER);
+        case ALTERNATING:
+            configuration.addBefore(LayeredPhases.P4_NODE_PLACEMENT, IntermediateProcessorStrategy.ALTERNATING_LAYER_UNZIPPER);
             break;
         default:
             break;

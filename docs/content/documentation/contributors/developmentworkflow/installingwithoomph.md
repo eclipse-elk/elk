@@ -31,6 +31,6 @@ Setting up an Eclipse to work on the _Eclipse Layout Kernel_ is comparatively ea
 
     {{< image src="oomph-install_step5.png" alt="Oomph Installation, Step 5" >}}
 
-1. Make sure everything looks good. You can usually leave the defaults, although you may need to change the _Eclipse Layout Kernel Github repository_ URL to whatever you see when you click on _Clone or download_ [on our repository page](https://github.com/eclipse/elk). Clicking _Next_ will allow you to review what the installer wants to do. Unless you understand what that is, simply ignore it and click _Finish_.
+1. Make sure everything looks good. You can usually leave the defaults, although you may need to change the _Eclipse Layout Kernel Github repository_ URL to whatever you see when you click on _Clone or download_ [on our repository page](https://github.com/eclipse-elk/elk). Clicking _Next_ will allow you to review what the installer wants to do. Unless you understand what that is, simply ignore it and click _Finish_.
 
 1. Once the setup has finished the basic installation, your new Eclipse will open and proceed to clone the GitHub repository and to set everything up properly. Once all ELK projects appear in your workspace, you're set and ready to start developing.

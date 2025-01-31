@@ -10,7 +10,6 @@ package org.eclipse.elk.alg.mrtree.p4route;
 
 import java.util.LinkedList;
 
-import org.eclipse.elk.alg.mrtree.TreeUtil;
 import org.eclipse.elk.alg.mrtree.graph.TEdge;
 import org.eclipse.elk.alg.mrtree.graph.TGraph;
 import org.eclipse.elk.alg.mrtree.graph.TNode;
@@ -18,7 +17,6 @@ import org.eclipse.elk.alg.mrtree.options.InternalProperties;
 import org.eclipse.elk.alg.mrtree.options.MrTreeOptions;
 import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.options.Direction;
-import org.eclipse.elk.core.util.Pair;
 import org.eclipse.elk.core.util.Triple;
 
 /**

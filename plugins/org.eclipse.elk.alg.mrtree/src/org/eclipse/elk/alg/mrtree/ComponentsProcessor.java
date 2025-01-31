@@ -272,10 +272,10 @@ public class ComponentsProcessor {
      * @param g the graph to work on
      */
     private void applyPaddingAndNormalizePositions(final TGraph g) {
-        ElkPadding padding = g.getNodes().get(0).getProperty(MrTreeOptions.PADDING);
+        ElkPadding padding = g.getProperty(MrTreeOptions.PADDING);
         g.setProperty(InternalProperties.BB_UPLEFT, new KVector(0, 0));
-        moveGraph(new TGraph(), g, padding.getHorizontal() - g.getProperty(InternalProperties.GRAPH_XMIN), 
-                padding.getVertical() - g.getProperty(InternalProperties.GRAPH_YMIN));
+        moveGraph(new TGraph(), g, padding.getLeft() - g.getProperty(InternalProperties.GRAPH_XMIN), 
+                padding.getTop() - g.getProperty(InternalProperties.GRAPH_YMIN));
     }
 
 

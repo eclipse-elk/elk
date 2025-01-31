@@ -302,6 +302,29 @@ advanced option omitNodeMicroLayout: boolean {
     targets parents
 }
 
+// --- JSON
+group json {
+    
+    option shapeCoords: ShapeCoords {
+        label "Shape Coords"
+        description
+            "For layouts transferred into JSON graphs, specify the coordinate system
+             to be used for nodes, ports, and labels of nodes and ports."
+        default = ShapeCoords.INHERIT
+        targets parents
+    }
+    
+    option edgeCoords: EdgeCoords {
+        label "Edge Coords"
+        description
+            "For layouts transferred into JSON graphs, specify the coordinate system
+             to be used for edge route points and edge labels."
+        default = EdgeCoords.INHERIT
+        targets parents
+    }
+    
+}
+
 // --- SPACING
 group spacing {
     
@@ -714,6 +737,17 @@ programmatic option labelManager: ILabelManager {
     description
         "Label managers can shorten labels upon a layout algorithm's request."
     targets parents, labels
+}
+
+option softwrappingFuzziness: double {
+    label "Softwrapping Fuzziness"
+    description
+        "Determines the amount of fuzziness to be used when performing softwrapping on labels.
+         The value expresses the percent of overhang that is permitted for each line.
+         If the next line would take up less space than this threshold, it is appended to the
+         current line instead of being placed in a new line."
+    default = 0.0
+    targets labels
 }
 
 option margins: ElkMargin {

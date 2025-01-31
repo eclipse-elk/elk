@@ -67,7 +67,7 @@ public ElkNode produceGraph() {
 
 ### Load Graphs From Disk
 
-Graphs stored in ELK's [models repository](https://github.com/eclipse/elk-models) can be used directly in tests. You specify graphs to be loaded through lists of `ModelResourcePath`, which accepts paths relative to the models repository:
+Graphs stored in ELK's [models repository](https://github.com/eclipse-elk/elk-models) can be used directly in tests. You specify graphs to be loaded through lists of `ModelResourcePath`, which accepts paths relative to the models repository:
 
 ```java
 @GraphResourceProvider

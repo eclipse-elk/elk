@@ -23,7 +23,6 @@ import org.eclipse.elk.alg.layered.graph.LNode;
 import org.eclipse.elk.alg.layered.graph.LPort;
 import org.eclipse.elk.alg.layered.graph.Layer;
 import org.eclipse.elk.alg.layered.intermediate.greedyswitch.TestGraphCreator;
-import org.eclipse.elk.alg.layered.p3order.GreedyPortDistributor;
 import org.eclipse.elk.alg.layered.p3order.counting.IInitializable;
 import org.eclipse.elk.core.options.PortSide;
 import org.junit.Test;

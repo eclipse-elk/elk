@@ -33,7 +33,7 @@ A few notes:
 Due to some tycho/surefire issue the unit tests cannot be executed with Java 9 and 10.
 {{% /note %}}
 
-The unit tests require our [models repository](https://github.com/eclipse/elk-models) to be checked out as well. If it is, the following command line will run the tests (note that the command line is split in order to improve readability):
+The unit tests require our [models repository](https://github.com/eclipse-elk/elk-models) to be checked out as well. If it is, the following command line will run the tests (note that the command line is split in order to improve readability):
 
 ```bash
 mvn
@@ -64,7 +64,7 @@ mvn
 
 The documentation website is our source of documentation. The main build produces reference documentation which is part of the website from our metadata files. The documentation website itself is then built with [Hugo](https://gohugo.io/), a static website generator. The website is setup in a way to be browsable both online and offline.
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/eclipse/elk)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/eclipse-elk/elk)
 
 To actually build the documentation website, go to the repository's `docs/` folder and simply execute the following command:
 

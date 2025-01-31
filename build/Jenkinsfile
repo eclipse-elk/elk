@@ -163,7 +163,7 @@ spec:
               ]
             ],
             submoduleCfg: [],
-            userRemoteConfigs: [[url: 'https://github.com/eclipse/elk.git']]
+            userRemoteConfigs: [[url: 'https://github.com/eclipse-elk/elk.git']]
           ]
         )
 
@@ -185,7 +185,7 @@ spec:
               ]
             ],
             submoduleCfg: [],
-            userRemoteConfigs: [[url: 'https://github.com/eclipse/elk-models.git']]
+            userRemoteConfigs: [[url: 'https://github.com/eclipse-elk/elk-models.git']]
           ]
         )
       }

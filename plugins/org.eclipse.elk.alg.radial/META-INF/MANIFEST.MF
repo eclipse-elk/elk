@@ -6,6 +6,7 @@ Bundle-SymbolicName: org.eclipse.elk.alg.radial;singleton:=true
 Bundle-Version: 0.10.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: com.google.guava,
+ org.eclipse.emf.common;bundle-version="2.10.0",
  org.eclipse.elk.core,
  org.eclipse.elk.graph,
  org.eclipse.elk.alg.common

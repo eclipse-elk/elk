@@ -17,10 +17,8 @@
     <relativePath>../../build/pom.xml</relativePath>
   </parent>
 
-  <groupId>org.eclipse.elk</groupId>
   <artifactId>org.eclipse.elk.graph.text</artifactId>
   <name>ELK Textual Graph Format</name>
-  <version>0.10.0-SNAPSHOT</version>
   <description>An Xtext language for the ELK Graph data structure.</description>
   <packaging>eclipse-plugin</packaging>
 

@@ -11,7 +11,6 @@ package org.eclipse.elk.core.alg;
 
 import static org.junit.Assert.assertEquals;
 
-import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.junit.Ignore;
 import org.junit.Test;
 

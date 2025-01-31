@@ -38,7 +38,7 @@ public enum LongEdgeOrderingStrategy {
         case DUMMY_NODE_OVER:
             return Integer.MAX_VALUE;
         case DUMMY_NODE_UNDER:
-            return -1;
+            return Integer.MIN_VALUE;
         default:
             return 0;
         }

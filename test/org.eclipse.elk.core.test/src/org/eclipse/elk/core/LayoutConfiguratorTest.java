@@ -11,7 +11,6 @@ package org.eclipse.elk.core;
 
 import static org.junit.Assert.assertEquals;
 
-import org.eclipse.elk.core.LayoutConfigurator;
 import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.core.util.ElkUtil;
 import org.eclipse.elk.graph.ElkGraphElement;

@@ -18,9 +18,7 @@
     <relativePath>../../build/pom.xml</relativePath>
   </parent>
 
-  <groupId>org.eclipse.elk</groupId>
   <artifactId>org.eclipse.elk.alg.test</artifactId>
-  <version>0.10.0-SNAPSHOT</version>
   <packaging>eclipse-test-plugin</packaging>
 
   <build>

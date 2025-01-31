@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/eclipse/elk/master/docs/static/img/elk_with_text.svg?sanitize=true" height="150"> 
+  <img src="https://raw.githubusercontent.com/eclipse-elk/elk/master/docs/static/img/elk_with_text.svg?sanitize=true" height="150"> 
 </p>
 
 Diagrams and visual languages are a great thing,
@@ -20,7 +20,7 @@ and can thus also be used outside of Eclipse.
 
 ## Example Layout
 
-![](https://raw.githubusercontent.com/eclipse/elk/master/docs/static/img/example_layout_complexRouter.svg?sanitize=true)
+![](https://raw.githubusercontent.com/eclipse-elk/elk/master/docs/static/img/example_layout_complexRouter.svg?sanitize=true)
 
 ## Repository Structure
 
@@ -39,7 +39,7 @@ The repository's structure is pretty straightforward. We only have a few folders
 * `setups`:
   Contains our Oomph setup files.
 * `tests`:
-  Contains unit tests. Note that we have [a whole repository](https://github.com/eclipse/elk-models/) dedicated to test models.
+  Contains unit tests. Note that we have [a whole repository](https://github.com/eclipse-elk/elk-models/) dedicated to test models.
 
 
 ## Building ELK

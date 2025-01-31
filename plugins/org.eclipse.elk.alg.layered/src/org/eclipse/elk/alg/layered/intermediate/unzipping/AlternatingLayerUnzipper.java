@@ -47,7 +47,7 @@ import com.google.common.collect.Lists;
  * </dl>
  *
  */
-public class GeneralLayerUnzipper implements ILayoutProcessor<LGraph> {
+public class AlternatingLayerUnzipper implements ILayoutProcessor<LGraph> {
     
     @Override
     public void process (LGraph graph, IElkProgressMonitor progressMonitor) {
@@ -58,8 +58,8 @@ public class GeneralLayerUnzipper implements ILayoutProcessor<LGraph> {
         List<Pair<Layer, Integer>> newLayers = new ArrayList<>();
         for (int i = 0; i < graph.getLayers().size(); i++) {
             
-            int N = graph.getLayers().get(i).getProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT);
-            boolean resetOnLongEdges = graph.getLayers().get(i).getProperty(LayeredOptions.LAYER_UNZIPPING_RESET_ON_LONG_EDGES);
+            int N = getLayerSplitProperty(graph.getLayers().get(i));
+            boolean resetOnLongEdges = getResetOnLongEdgesProperty(graph.getLayers().get(i));
             
             // only split if there are more nodes than the resulting sub-layers
             // an alternative would be to reduce N for this layer, this may or may
@@ -109,6 +109,45 @@ public class GeneralLayerUnzipper implements ILayoutProcessor<LGraph> {
         }
         
         
+    }
+
+    /**
+     * Checks all nodes of a layer for the layerSplit property and returns the lowest set value.
+     * 
+     * @param layer The layer to determine the layerSplit property for
+     * @return the layerSplit value
+     */
+    private int getLayerSplitProperty(Layer layer) {
+        int layerSplit = Integer.MAX_VALUE;
+        boolean propertyUnset = true;
+        for (int i = 0; i < layer.getNodes().size(); i++) {
+            if (layer.getNodes().get(i).hasProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT)) {
+                propertyUnset = false;
+                int nodeValue = layer.getNodes().get(i).getProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT);
+                layerSplit = layerSplit < nodeValue ? layerSplit : nodeValue;
+            }
+        }
+        if (propertyUnset) {
+            layerSplit = LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT.getDefault();
+        }
+        return layerSplit;
+    }
+    
+    /**
+     * Checks all nodes of a layer for the resetOnLongEdges property and if any sets the value to false, returns false.
+     * 
+     * @param layer The layer to determine the resetOnLongEdges property for.
+     * @return the resetOnLongEdges value
+     */
+    private boolean getResetOnLongEdgesProperty(Layer layer) {
+        for (int i = 0; i < layer.getNodes().size(); i++) {
+            if (layer.getNodes().get(i).hasProperty(LayeredOptions.LAYER_UNZIPPING_RESET_ON_LONG_EDGES)) {
+                if (!layer.getNodes().get(i).getProperty(LayeredOptions.LAYER_UNZIPPING_RESET_ON_LONG_EDGES)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     
     /**

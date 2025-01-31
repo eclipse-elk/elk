@@ -12,7 +12,6 @@ package org.eclipse.elk.alg.layered.issues;
 import static org.junit.Assert.assertNotEquals;
 
 import java.awt.geom.Line2D;
-import java.awt.geom.Line2D.Double;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +25,6 @@ import org.eclipse.elk.alg.test.framework.io.ModelResourcePath;
 import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.math.KVectorChain;
 import org.eclipse.elk.core.util.ElkUtil;
-import org.eclipse.elk.graph.ElkBendPoint;
 import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkEdgeSection;
 import org.eclipse.elk.graph.ElkNode;

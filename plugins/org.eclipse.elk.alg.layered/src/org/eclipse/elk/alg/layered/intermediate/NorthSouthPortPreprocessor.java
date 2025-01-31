@@ -23,6 +23,7 @@ import org.eclipse.elk.alg.layered.graph.LPort;
 import org.eclipse.elk.alg.layered.graph.Layer;
 import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
+import org.eclipse.elk.alg.layered.options.OrderingStrategy;
 import org.eclipse.elk.core.alg.ILayoutProcessor;
 import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.options.PortSide;
@@ -169,7 +170,8 @@ public final class NorthSouthPortPreprocessor implements ILayoutProcessor<LGraph
                 }
 
                 // Sort the port list if we have control over the port order
-                if (!node.getProperty(LayeredOptions.PORT_CONSTRAINTS).isOrderFixed()) {
+                if (!node.getProperty(LayeredOptions.PORT_CONSTRAINTS).isOrderFixed()
+                        && node.getGraph().getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY) == OrderingStrategy.NONE) {
                     sortPortList(node);
                 }
 
@@ -187,6 +189,10 @@ public final class NorthSouthPortPreprocessor implements ILayoutProcessor<LGraph
                 // in the diagram); create the appropriate dummy nodes and assign them to the layer
                 LinkedList<LPort> portList = Lists.newLinkedList();
                 Iterables.addAll(portList, node.getPorts(PortSide.NORTH));
+
+                if (node.getGraph().getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY) != OrderingStrategy.NONE) {                    
+                    portList = modelOrderNorthSouthInputReversing(portList, node);
+                }
 
                 createDummyNodes(layeredGraph, portList, northDummyNodes, southDummyNodes,
                         barycenterAssociates);
@@ -239,6 +245,10 @@ public final class NorthSouthPortPreprocessor implements ILayoutProcessor<LGraph
                 portList.clear();
                 for (LPort port : node.getPorts(PortSide.SOUTH)) {
                     portList.addFirst(port);
+                }
+
+                if (node.getGraph().getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY) != OrderingStrategy.NONE) {                    
+                    portList = modelOrderNorthSouthInputReversing(portList, node);
                 }
 
                 createDummyNodes(layeredGraph, portList, southDummyNodes, null,
@@ -357,6 +367,22 @@ public final class NorthSouthPortPreprocessor implements ILayoutProcessor<LGraph
                 }
             }
         });
+    }
+    
+    private LinkedList<LPort> modelOrderNorthSouthInputReversing(LinkedList<LPort> portList, LNode node) {
+        // Reverse port list if edges are incoming edges.
+        LinkedList<LPort> incoming = new LinkedList<LPort>();
+        LinkedList<LPort> outgoing = new LinkedList<LPort>();
+        for (LPort port : portList) {
+            if (!port.getIncomingEdges().isEmpty()) {
+                // Incoming edge
+                incoming.add(port);
+            } else {
+                outgoing.add(port);
+            }
+        }
+        Lists.reverse(incoming).addAll(outgoing);
+        return incoming;
     }
 
     // /////////////////////////////////////////////////////////////////////////////
