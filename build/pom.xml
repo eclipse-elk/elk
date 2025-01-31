@@ -21,12 +21,12 @@
 
   <!-- Define a few properties used throughout all build profiles. -->
   <properties>
-    <targetJdk>11</targetJdk>
+    <targetJdk>17</targetJdk>
     <maven.compiler.release>${targetJdk}</maven.compiler.release>
     <maven.compiler.source>${targetJdk}</maven.compiler.source>
     <maven.compiler.target>${targetJdk}</maven.compiler.target>
-    <tycho-version>2.7.3</tycho-version>
-    <xtext-version>2.28.0</xtext-version>
+    <tycho-version>2.7.5</tycho-version>
+    <xtext-version>2.36.0</xtext-version>
     <elk-version>${project.version}</elk-version>
 
     <!-- chsch: copied from https://eclipse.googlesource.com/recommenders/org.eclipse.recommenders/+/3dae4575d3370da2da25a1cbce3dfcff198f0611/features/pom.xml -->
@@ -200,17 +200,6 @@
               <arch>x86_64</arch>
             </environment>
           </environments>
-          <dependency-resolution>
-            <extraRequirements>
-              <!-- to force the same version of jdt.compiler.apt
-                and jdt.core (for xtext-maven-plugin) -->
-              <requirement>
-                <type>eclipse-plugin</type>
-                <id>org.eclipse.jdt.compiler.apt</id>
-                <versionRange>0.0.0</versionRange>
-              </requirement>
-            </extraRequirements>
-          </dependency-resolution>
         </configuration>
       </plugin>
 
