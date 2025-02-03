@@ -185,8 +185,8 @@ public class RelativeXPlacer implements ILayoutPhase<VertiFlexLayoutPhases, ElkN
                 }
                 double moveRoot = 0.0;
                 if (pos > 0) {
-                    moveRoot = (children.get(maxDepthStartPos).getX() + children.get(pos - 1).getX()) / 2.0 
-                            - graph.getX();
+                    moveRoot = (children.get(maxDepthStartPos).getX() + children.get(pos - 1).getX() + children.get(pos - 1).getWidth()) / 2.0 
+                            - graph.getX() - graph.getWidth() / 2.0;
                 }
             
             if (!graph.getProperty(VertiFlexOptions.CONSIDER_NODE_MODEL_ORDER)) {
