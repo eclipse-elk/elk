@@ -15,7 +15,7 @@ jobs:
         # 11  - LTS 
         # 17 - LTS
         java-version: [ 11, 17 ]
-        node-version: [ 12.x, 18.x ]
+        node-version: [ 18.x, 20.x ]
 
     steps:
     # Checkout the repository of both elk and elkjs, place them next to each other. 
