@@ -32,6 +32,8 @@ import org.eclipse.elk.graph.ElkPort;
  * @author uru
  */
 public class LibavoidLayoutProvider extends AbstractLayoutProvider {
+    
+    private final List<LibavoidServer> activeLibavoidServerList = new ArrayList<>();
 
     private LibavoidServerCommunicator comm = new LibavoidServerCommunicator();
 
@@ -54,8 +56,10 @@ public class LibavoidLayoutProvider extends AbstractLayoutProvider {
         
         // create an Libavoid server process instance or use an existing one
         LibavoidServer lvServer = LibavoidServerPool.INSTANCE.fetch();
+        this.activeLibavoidServerList.add(lvServer);
         // send a layout request to the server process and apply the layout
         comm.requestLayout(parentNode, progressMonitor, lvServer);
+        this.activeLqibavoidServerList.remove(lvServer);
         // if everything worked well, release the used process instance
         LibavoidServerPool.INSTANCE.release(lvServer);
 
@@ -75,6 +79,10 @@ public class LibavoidLayoutProvider extends AbstractLayoutProvider {
     			
     		}
     	}
+    }
+    
+    public List<LibavoidServer> getActiveLibavoidServers() {
+        return this.activeLibavoidServerList;
     }
 
 }

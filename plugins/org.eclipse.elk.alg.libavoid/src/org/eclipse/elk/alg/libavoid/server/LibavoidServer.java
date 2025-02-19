@@ -454,6 +454,15 @@ public class LibavoidServer {
         }
         error.append('.');
     }
+    
+    /** interrupt Server process early **/
+    public void cancelEarly() {
+        Process myProcess = process;
+        if (myProcess != null && myProcess.isAlive()) {
+            libavoidStream = null;
+            myProcess.destroy();
+        }
+    }
 
     /** default timeout for waiting for the server to give some output. */
     public static final int PROCESS_DEF_TIMEOUT = 10000;
