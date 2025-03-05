@@ -14,7 +14,7 @@ jobs:
         # We check LTS versions and the latest release
         # 11 - LTS
         # 17 - LTS
-        java-version: [ 11, 17 ]
+        java-version: [ 17 ]
 
     steps:
     # Checkout the reposity of both elk and elk-models (the latter is required for the tests)
