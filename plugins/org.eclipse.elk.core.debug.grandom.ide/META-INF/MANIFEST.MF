@@ -10,6 +10,6 @@ Require-Bundle: org.eclipse.elk.core.debug.grandom,
  org.eclipse.xtext.ide,
  org.eclipse.xtext.xbase.ide,
  org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.elk.core.debug.grandom.ide.contentassist.antlr.internal,
  org.eclipse.elk.core.debug.grandom.ide.contentassist.antlr

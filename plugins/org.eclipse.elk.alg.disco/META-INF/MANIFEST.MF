@@ -9,7 +9,7 @@ Require-Bundle: com.google.guava,
  org.eclipse.elk.core,
  org.eclipse.elk.graph,
  org.eclipse.elk.alg.common
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.elk.alg.disco,
  org.eclipse.elk.alg.disco.graph,
  org.eclipse.elk.alg.disco.options,

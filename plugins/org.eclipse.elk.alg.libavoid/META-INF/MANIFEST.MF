@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Libavoid Integration for ELK
 Bundle-SymbolicName: org.eclipse.elk.alg.libavoid;singleton:=true
 Bundle-Version: 0.10.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: Eclipse Layout Kernel
 Bundle-Activator: org.eclipse.elk.alg.libavoid.LibavoidPlugin
 Bundle-ActivationPolicy: lazy

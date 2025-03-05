@@ -21,7 +21,7 @@ Require-Bundle: org.eclipse.elk.core.debug.grandom,
  org.eclipse.elk.graph,
  org.eclipse.elk.core
 Import-Package: org.apache.log4j
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.elk.core.debug.grandom.ui,
  org.eclipse.elk.core.debug.grandom.ui.contentassist,
  org.eclipse.elk.core.debug.grandom.ui.internal,

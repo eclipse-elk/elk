@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.elk.core,
  org.eclipse.xtext.util,
  org.eclipse.xtend.lib;bundle-version="2.14.0",
  org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.elk.graph.json.text,
  org.eclipse.elk.graph.json.text.conversion,
  org.eclipse.elk.graph.json.text.formatting2,

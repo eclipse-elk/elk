@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ELK Graph Model Tests
 Bundle-SymbolicName: org.eclipse.elk.graph.test;singleton:=true
 Bundle-Version: 0.10.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: Eclipse Modeling Project
 Require-Bundle: com.google.guava,
  org.eclipse.emf.common,

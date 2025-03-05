@@ -23,7 +23,7 @@ Require-Bundle: org.eclipse.elk.core,
  org.eclipse.xtend.lib;resolution:=optional,
  org.eclipse.xtext.xbase.lib
 Import-Package: org.apache.log4j
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.elk.graph.text.ui,
  org.eclipse.elk.graph.text.ui.contentassist,
  org.eclipse.elk.graph.text.ui.internal,

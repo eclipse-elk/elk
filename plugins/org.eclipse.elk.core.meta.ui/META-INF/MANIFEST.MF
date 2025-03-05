@@ -22,7 +22,7 @@ Require-Bundle: org.eclipse.elk.core.meta,
  org.eclipse.jdt.debug.ui,
  org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
 Import-Package: org.apache.log4j
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.elk.core.meta.ui.internal,
  org.eclipse.elk.core.meta.ui.quickfix,
  org.eclipse.elk.core.meta.ui.contentassist,

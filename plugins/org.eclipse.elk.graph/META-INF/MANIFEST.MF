@@ -13,4 +13,4 @@ Export-Package: org.eclipse.elk.graph,
 Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.10.0",
  com.google.guava
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17

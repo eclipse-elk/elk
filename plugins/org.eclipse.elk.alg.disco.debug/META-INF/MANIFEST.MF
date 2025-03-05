@@ -4,7 +4,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ELK DisCo Debugging Utilities
 Bundle-SymbolicName: org.eclipse.elk.alg.disco.debug;singleton:=true
 Bundle-Version: 0.10.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: com.google.guava,
  org.eclipse.ui,
  org.eclipse.core.runtime,

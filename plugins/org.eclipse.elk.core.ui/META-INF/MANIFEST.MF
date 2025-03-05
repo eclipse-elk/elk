@@ -22,5 +22,5 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.4.0",
  org.eclipse.elk.graph,
  org.eclipse.elk.core,
  org.eclipse.elk.core.service
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy

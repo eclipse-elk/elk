@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ELK Shared Tests
 Bundle-SymbolicName: org.eclipse.elk.shared.test;singleton:=true
 Bundle-Version: 0.10.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: com.google.guava,
  org.eclipse.emf.ecore,
  org.junit;bundle-version="4.12.0",

@@ -4,7 +4,7 @@ Automatic-Module-Name: org.eclipse.elk.alg.radial.test
 Bundle-Name: ELK Layout Radial Tests
 Bundle-SymbolicName: org.eclipse.elk.alg.radial.test;singleton:=true
 Bundle-Version: 0.10.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: com.google.guava;bundle-version="18.0.0",
  org.eclipse.elk.core,
  org.eclipse.elk.graph,
