@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.elk.core.service
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Layout Service Layer
 Bundle-SymbolicName: org.eclipse.elk.core.service;singleton:=true
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.10.0
 Bundle-Vendor: Eclipse Modeling Project
 Require-Bundle: com.google.guava,
  com.google.inject;bundle-version="3.0.0",

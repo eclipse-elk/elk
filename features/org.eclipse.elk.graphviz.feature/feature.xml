@@ -11,7 +11,7 @@
 <feature
       id="org.eclipse.elk.graphviz.feature"
       label="Eclipse Layout Kernel (Incubation) - Graphviz Library Support"
-      version="0.10.0.qualifier"
+      version="0.10.0"
       provider-name="Eclipse Layout Kernel"
       plugin="org.eclipse.elk.core">
 
@@ -44,7 +44,7 @@ SPDX-License-Identifier: EPL-2.0
       <import plugin="org.antlr.runtime"/>
       <import plugin="org.eclipse.core.runtime" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.emf.ecore" version="2.5.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.elk.feature" version="0.7.0.qualifier"/>
+      <import feature="org.eclipse.elk.feature" version="0.10.0"/>
    </requires>
 
    <plugin

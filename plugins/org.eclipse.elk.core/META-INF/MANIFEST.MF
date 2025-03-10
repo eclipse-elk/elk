@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.elk.core
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Core Components
 Bundle-SymbolicName: org.eclipse.elk.core;singleton:=true
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.10.0
 Eclipse-BuddyPolicy: registered
 Require-Bundle: com.google.guava,
  org.eclipse.emf.ecore,

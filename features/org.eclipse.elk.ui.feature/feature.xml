@@ -11,7 +11,7 @@
 <feature
       id="org.eclipse.elk.ui.feature"
       label="Eclipse Layout Kernel (Incubation) - UI Components"
-      version="0.10.0.qualifier"
+      version="0.10.0"
       provider-name="Eclipse Layout Kernel"
       plugin="org.eclipse.elk.core">
 
@@ -45,7 +45,7 @@ SPDX-License-Identifier: EPL-2.0
       <import plugin="org.eclipse.emf.ecore.xmi" version="2.9.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.emf.transaction" version="1.3.0" match="greaterOrEqual"/>
       <import plugin="com.google.guava"/>
-      <import feature="org.eclipse.elk.feature" version="0.7.0.qualifier"/>
+      <import feature="org.eclipse.elk.feature" version="0.10.0"/>
    </requires>
 
    <plugin

@@ -14,7 +14,7 @@
   <groupId>org.eclipse.elk</groupId>
   <name>Eclipse Layout Kernel</name>
   <url>https://www.eclipse.org/elk/</url>
-  <version>0.10.0-SNAPSHOT</version>
+  <version>0.10.0</version>
   <description>An infrastructure for automatic graph layout and implementations of different layout algorithms.</description>
   <packaging>pom</packaging>
 
