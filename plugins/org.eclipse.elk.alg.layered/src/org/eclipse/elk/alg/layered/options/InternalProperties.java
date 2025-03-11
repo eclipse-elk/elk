@@ -454,6 +454,11 @@ public final class InternalProperties {
     public static final IProperty<Map<LNode, Integer>> TARGET_NODE_MODEL_ORDER = new Property<>("targetNode.modelOrder");
     
     /**
+     * The weight of a node as used by the MedianHeuristic class.
+     */
+    public static final IProperty<Double> WEIGHT = new Property<>("medianHeuristic.weight");
+    
+    /**
      * Hidden default constructor.
      */
     private InternalProperties() {
