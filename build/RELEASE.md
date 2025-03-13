@@ -24,7 +24,7 @@ The Eclipse release process is described in more detail in the [Eclipse Project 
       Update site for the Eclipse Layout Kernel, version VERSION_NUMBER.
     </description>
     ```
-
+1. Configure the build variables in the [Jenkins configuration](https://ci.eclipse.org/elk/job/IntegrationNightly/):
    
     Variable              | New value
     --------------------- | ---------------------------------------------------------------------
