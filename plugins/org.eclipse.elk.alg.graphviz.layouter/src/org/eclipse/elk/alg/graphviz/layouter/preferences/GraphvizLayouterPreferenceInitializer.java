@@ -26,7 +26,7 @@ public class GraphvizLayouterPreferenceInitializer extends AbstractPreferenceIni
     public void initializeDefaultPreferences() {
         IPreferenceStore store = GraphvizLayouterPreferenceStore.getInstance().getPreferenceStore();
 
-        store.setDefault(GraphvizTool.PREF_TIMEOUT, GraphvizTool.PROCESS_DEF_TIMEOUT);
+        store.setDefault(GraphvizTool.PREF_TIMEOUT, GraphvizTool.PROCESS_DEF_TIMEOUT.get());
         store.setDefault(GraphvizLayoutProvider.PREF_GRAPHVIZ_REUSE_PROCESS,
                 GraphvizLayoutProvider.REUSE_PROCESS_DEFAULT);
     }
