@@ -47,25 +47,6 @@ public class BarycenterHeuristic implements ICrossingMinimizationHeuristic {
     protected final AbstractBarycenterPortDistributor portDistributor;
 
     /**
-     * Constructs a Barycenter heuristic for crossing minimization.
-     * 
-     * @param constraintResolver
-     *            the constraint resolver
-     * @param random
-     *            the random number generator
-     * @param portDistributor
-     *            calculates the port ranks for the barycenter heuristic.
-     * @param graph
-     *            current node order
-     */
-    public BarycenterHeuristic(final ForsterConstraintResolver constraintResolver, final Random random,
-            final AbstractBarycenterPortDistributor portDistributor, final LNode[][] graph) {
-        this.constraintResolver = constraintResolver;
-        this.random = random;
-        this.portDistributor = portDistributor;
-    }
-
-    /**
      * Don't use!
      * Only public to be accessible by a test.
      */
@@ -75,6 +56,7 @@ public class BarycenterHeuristic implements ICrossingMinimizationHeuristic {
         if (randomize) {
             // Randomize barycenters (we don't need to update the edge count in this case;
             // there are no edges of interest since we're only concerned with one layer)
+            // simply a permutation of nodes in layer
             randomizeBarycenters(layer);
         } else {
             // Calculate barycenters and assign barycenters to barycenterless node groups
@@ -88,6 +70,7 @@ public class BarycenterHeuristic implements ICrossingMinimizationHeuristic {
                 ModelOrderBarycenterHeuristic.insertionSort(layer, barycenterStateComparator,
                         (ModelOrderBarycenterHeuristic) this);
             } else {
+                // use comparator based on "<"
                 Collections.sort(layer, barycenterStateComparator);
             }
 
@@ -193,6 +176,25 @@ public class BarycenterHeuristic implements ICrossingMinimizationHeuristic {
         }
     }
 
+    /**
+     * Constructs a Barycenter heuristic for crossing minimization.
+     * 
+     * @param constraintResolver
+     *            the constraint resolver
+     * @param random
+     *            the random number generator
+     * @param portDistributor
+     *            calculates the port ranks for the barycenter heuristic.
+     * @param graph
+     *            current node order
+     */
+    public BarycenterHeuristic(final ForsterConstraintResolver constraintResolver, final Random random,
+            final AbstractBarycenterPortDistributor portDistributor, final LNode[][] graph) {
+        this.constraintResolver = constraintResolver;
+        this.random = random;
+        this.portDistributor = portDistributor;
+    }
+
     /** the amount of random value to add to each calculated barycenter. */
     private static final float RANDOM_AMOUNT = 0.07f;
 
@@ -210,7 +212,7 @@ public class BarycenterHeuristic implements ICrossingMinimizationHeuristic {
      * @return a pair containing the summed port positions of the connected ports as the first, and
      *         the number of connected edges as the second entry.
      */
-    private void calculateBarycenter(final LNode node, final boolean forward) {
+    private void calculateBarycenter(final LNode node, final boolean forward) {// javadoc for this method outdated
 
         // Check if the node group's barycenter was already computed
         if (stateOf(node).visited) {
@@ -240,7 +242,7 @@ public class BarycenterHeuristic implements ICrossingMinimizationHeuristic {
                         // Update this node group's values
                         stateOf(node).degree += stateOf(fixedNode).degree;
                         stateOf(node).summedWeight += stateOf(fixedNode).summedWeight;
-                    }
+                    } // else { }
                 } else {
                     stateOf(node).summedWeight += portRanks[fixedPort.id];
                     stateOf(node).degree++;
@@ -351,10 +353,14 @@ public class BarycenterHeuristic implements ICrossingMinimizationHeuristic {
 
     @Override
     public boolean setFirstLayerOrder(final LNode[][] order, final boolean isForwardSweep) {
+        // if sweeping forward, startIndex = 0, else the last existing element of order
         int startIndex = startIndex(isForwardSweep, order.length);
+        // extract first layer into List<LNode>
         List<LNode> nodes = Lists.newArrayList(
                 order[startIndex]);
+        // randomize nodes' barycenters
         minimizeCrossings(nodes, false, true, isForwardSweep);
+        // fill first layer with nodes
         int index = 0;
         for (LNode nodeGroup : nodes) {
                 order[startIndex][index++] = nodeGroup;

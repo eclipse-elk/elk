@@ -649,7 +649,9 @@ public class LayerSweepCrossingMinimizer
         /** Use one-sided GreedySwitchHeuristic. */
         ONE_SIDED_GREEDY_SWITCH,
         /** Use two-sided GreedySwitchHeuristic. */
-        TWO_SIDED_GREEDY_SWITCH
+        TWO_SIDED_GREEDY_SWITCH,
+        /** Use MedianHeuristic */
+        MEDIAN
     }
 
     /** intermediate processing configuration. */
