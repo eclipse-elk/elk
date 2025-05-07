@@ -125,6 +125,7 @@ public class ModelOrderNodeComparator implements Comparator<LNode> {
                 if (!p.getIncomingEdges().isEmpty()) {
                     if (p.getIncomingEdges().get(0).getSource().getNode().getLayer().id == (n1.getLayer().id - 1)) {
                         p1SourcePort = p.getIncomingEdges().get(0).getSource();
+                        break;
                     }
                 }
             }
@@ -135,6 +136,7 @@ public class ModelOrderNodeComparator implements Comparator<LNode> {
                 if (!p.getIncomingEdges().isEmpty()) {
                     if (p.getIncomingEdges().get(0).getSource().getNode().getLayer().id == (n2.getLayer().id - 1)) {
                         p2SourcePort = p.getIncomingEdges().get(0).getSource();
+                        break;
                     }
                 }
             }
