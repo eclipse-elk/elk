@@ -455,6 +455,17 @@ public class LibavoidServer {
         error.append('.');
     }
 
+    /** interrupt Server operation */
+    public void cancelProcess() {
+        synchronized (nextJob) {
+            Process myProcess = process;
+            if (myProcess != null) {
+                libavoidStream = null;
+                myProcess.destroy();
+            }
+        }
+    }
+
     /** default timeout for waiting for the server to give some output. */
     public static final int PROCESS_DEF_TIMEOUT = 10000;
 
@@ -496,14 +507,7 @@ public class LibavoidServer {
                 }
 
                 if (!interrupted) {
-                    synchronized (nextJob) {
-                        // timeout has occurred! kill the process so the main thread will wake
-                        Process myProcess = process;
-                        if (myProcess != null) {
-                            libavoidStream = null;
-                            myProcess.destroy();
-                        }
-                    }
+                    cancelProcess();
                 }
 
             } while (watchdog == this);
