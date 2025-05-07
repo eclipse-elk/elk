@@ -194,6 +194,11 @@ public class BoxLayoutProvider extends AbstractLayoutProvider {
         double stddev = areaStdDev(sortedBoxes, mean);
         
         totalArea += (sortedBoxes.size() * 1 * stddev);
+        // add top and bottom padding to total area
+        totalArea += Math.sqrt(totalArea) * (padding.getBottom() + padding.getTop());
+        // add left and right padding
+        totalArea += Math.sqrt(totalArea) * (padding.getRight());
+
 
         // calculate the required row width w to achieve the desired aspect ratio,
         //  i.e.:  w*h=area s.t. w/h=dar  ->  w=sqrt(area * dar) 
