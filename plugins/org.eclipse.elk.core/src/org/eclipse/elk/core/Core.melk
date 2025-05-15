@@ -915,18 +915,6 @@ group topdown {
         requires sizeApproximator == TopdownSizeApproximator.FIXED_INTEGER_RATIO_BOXES
     }
     
-    advanced option sizeCategoriesRangeMax: double {
-        label "Top end of range to use to determine size category"
-        description
-            "The size categories are distributed evenly on a logarithmic scale from 1 to the value defined by this 
-             option. If the default value of 64 is chosen and the number of categories is three then the categories will
-             be in the following ranges: CAT 0: 1 - 4, CAT 1: 4 - 16, CAT 2: 16 - 64."
-        default = 64.0
-        lowerBound = 2.0
-        targets parents
-        requires sizeCategories
-    }
-    
     advanced option sizeCategoriesHierarchicalNodeWeight: int {
         label "Weight of a node containing children for determining the graph size"
         description

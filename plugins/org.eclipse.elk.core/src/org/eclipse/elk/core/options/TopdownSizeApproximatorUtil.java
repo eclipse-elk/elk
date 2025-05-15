@@ -52,7 +52,7 @@ public class TopdownSizeApproximatorUtil {
             
             
             double sizeMin = 1;
-            double sizeMax = originalGraph.getProperty(CoreOptions.TOPDOWN_SIZE_CATEGORIES_RANGE_MAX);
+            double sizeMax = Math.pow(4, CATEGORIES);
             // shift the range to encompass the largest graph in the local neighbourhood
             if (sizeMaxFound > sizeMax) {
                 sizeMax = sizeMaxFound;
