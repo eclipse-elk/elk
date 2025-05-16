@@ -65,7 +65,7 @@ public class TopdownSizeApproximatorUtil {
             // 3. assign node size according to dynamic cutoffs
             double cutoff = sizeMin * factor;
             for (int i = 0; i < CATEGORIES; i++) {
-                if (thisGraphsSize <= cutoff) {
+                if (thisGraphsSize < cutoff) {
                     return Math.pow(2, i);
                 } else {
                     cutoff *= factor;
