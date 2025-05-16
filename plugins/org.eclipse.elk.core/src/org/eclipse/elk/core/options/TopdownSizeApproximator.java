@@ -172,13 +172,24 @@ public enum TopdownSizeApproximator implements ITopdownSizeApproximator {
             
             // do size approximations for children
             for (ElkNode childNode : originalGraph.getChildren()) {
-                ITopdownSizeApproximator approximator = 
-                        childNode.getProperty(CoreOptions.TOPDOWN_SIZE_APPROXIMATOR);
-                KVector size = approximator.getSize(childNode);
-                ElkPadding padding = childNode.getProperty(CoreOptions.PADDING);
-                // never reuse the old size, always reset, otherwise calling layout multiple times leads to growing regions
-                childNode.setDimensions(size.x + padding.left + padding.right,
-                        size.y + padding.top + padding.bottom);
+                if (childNode.getProperty(CoreOptions.TOPDOWN_SIZE_APPROXIMATOR) != null 
+                        && childNode.getChildren() != null && childNode.getChildren().size() > 0) {
+                    ITopdownSizeApproximator approximator = 
+                            childNode.getProperty(CoreOptions.TOPDOWN_SIZE_APPROXIMATOR);
+                    KVector size = approximator.getSize(childNode);
+                    ElkPadding padding = childNode.getProperty(CoreOptions.PADDING);
+                    // never reuse the old size, always reset, otherwise calling layout multiple times leads to growing regions
+                    childNode.setDimensions(Math.max(childNode.getWidth(), size.x + padding.left + padding.right),
+                            Math.max(childNode.getHeight(), size.y + padding.top + padding.bottom));
+                } else {
+                    if (childNode.getChildren().size() != 0) {
+                        childNode.setDimensions(
+                                childNode.getProperty(CoreOptions.TOPDOWN_HIERARCHICAL_NODE_WIDTH),
+                                childNode.getProperty(CoreOptions.TOPDOWN_HIERARCHICAL_NODE_WIDTH) /
+                                childNode.getProperty(CoreOptions.TOPDOWN_HIERARCHICAL_NODE_ASPECT_RATIO)
+                        );
+                    }
+                }
             }
             
             // layout children
