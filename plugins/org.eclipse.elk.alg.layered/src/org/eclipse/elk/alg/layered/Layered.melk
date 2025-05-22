@@ -208,6 +208,7 @@ algorithm layered(LayeredLayoutProvider) {
     supports considerModelOrder.noModelOrder
     supports considerModelOrder.components
     supports considerModelOrder.portModelOrder
+    supports considerModelOrder.groupID
     supports generatePositionAndLayerIds
 }
 
@@ -1077,6 +1078,14 @@ group considerModelOrder {
         default = 0
         targets parents
         requires org.eclipse.elk.alg.layered.considerModelOrder.strategy
+    }
+    option groupID: int{
+      label "Group ID of the Node Type"
+      description
+        "Used to store information about the type of Node. (Used in languages that support different node types such as 
+         Lingua Franca)"
+      default = -1
+      targets nodes
     }
 }
 
