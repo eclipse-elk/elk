@@ -22,10 +22,8 @@ public class TopdownSizeApproximatorUtil {
      * of children (with and without hierarchy) it and its siblings have. The distribution is mapped to a log scale,
      * which is divided into a number of categories that determine the multiplier.
      * 
-     * Category i => 2^i
-     * 
-     * @param originalGraph
-     * @return
+     * @param originalGraph the graph to obtain the category multiplier for
+     * @return the sidelength multiplier according to the category i.e. Category i => 2^i
      */
     public static double getSizeCategoryMultiplier(final ElkNode originalGraph) {
         ElkNode parent = originalGraph.getParent();
