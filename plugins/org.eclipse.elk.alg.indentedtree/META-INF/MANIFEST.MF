@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ELK Indented Tree Layout Algorithm
+Bundle-SymbolicName: org.eclipse.elk.alg.indentedtree;singleton:=true
+Bundle-Vendor: Eclipse Modeling Project
+Bundle-Version: 0.10.0.qualifier
+Require-Bundle: org.eclipse.elk.core,
+ org.eclipse.elk.graph,
+ org.eclipse.elk.alg.common,
+ com.google.guava,
+ org.eclipse.emf.common
+Automatic-Module-Name: org.eclipse.elk.alg.indentedtree
+Bundle-RequiredExecutionEnvironment: JavaSE-11
