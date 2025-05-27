@@ -58,7 +58,14 @@ public class ModelOrderBarycenterHeuristic extends BarycenterHeuristic {
                         return transitiveComparison;
                     }
                     if (n1.hasProperty(InternalProperties.MODEL_ORDER)
-                            && n2.hasProperty(InternalProperties.MODEL_ORDER)) {
+                            && n2.hasProperty(InternalProperties.MODEL_ORDER)
+                            // Only use model order within the same group
+                            && n1.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_I_D) == 
+                            n2.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_I_D)
+                            // only use model order for group 4 (reactions)
+                            //&& n1.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_I_D) == 4
+                            //&& n2.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_I_D) == 4 
+                            ) {
                         int value = Integer.compare(n1.getProperty(InternalProperties.MODEL_ORDER),
                                 n2.getProperty(InternalProperties.MODEL_ORDER));
                         if (value < 0) {
