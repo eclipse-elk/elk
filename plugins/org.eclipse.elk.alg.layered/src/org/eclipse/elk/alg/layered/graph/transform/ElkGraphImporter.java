@@ -232,6 +232,7 @@ class ElkGraphImporter {
             if (!child.getProperty(LayeredOptions.NO_LAYOUT)) {
                 if (needsModelOrder(child)) {
                     child.setProperty(InternalProperties.MODEL_ORDER, index);
+                    // FIXME count the model orders assigned and also find the maximum model order group id.
                     index++;
                 }
                 transformNode(child, lgraph);
@@ -458,6 +459,7 @@ class ElkGraphImporter {
      * @return True, if model order should be set.
      */
     private boolean needsModelOrderBasedOnParent(final ElkNode elkgraph) {
+        // FIXME update this based on recent strategies
         return (elkgraph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY) != OrderingStrategy.NONE
                 || elkgraph.getProperty(LayeredOptions.CYCLE_BREAKING_STRATEGY) == CycleBreakingStrategy.MODEL_ORDER
                 || elkgraph

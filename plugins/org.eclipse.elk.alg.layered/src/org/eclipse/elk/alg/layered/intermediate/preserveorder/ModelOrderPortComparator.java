@@ -225,6 +225,7 @@ public class ModelOrderPortComparator implements Comparator<LPort> {
             LNode p2TargetNode = p2.getProperty(InternalProperties.LONG_EDGE_TARGET_NODE);
 
             // If node order is preferred and both edges have a target node use the model order of the long edge target.
+            // FIXME add group model order
             if (this.strategy == OrderingStrategy.PREFER_NODES && p1TargetNode != null && p2TargetNode != null
                     && p1TargetNode.hasProperty(InternalProperties.MODEL_ORDER)
                     && p2TargetNode.hasProperty(InternalProperties.MODEL_ORDER)) {
@@ -257,6 +258,7 @@ public class ModelOrderPortComparator implements Comparator<LPort> {
             
             int p1Order = 0;
             int p2Order = 0;
+            // FIXME also add group model order.
             if (p1.getOutgoingEdges().get(0).hasProperty(InternalProperties.MODEL_ORDER)) {
                 p1Order = p1.getOutgoingEdges().get(0).getProperty(InternalProperties.MODEL_ORDER);
             }
@@ -340,6 +342,7 @@ public class ModelOrderPortComparator implements Comparator<LPort> {
      *         second.
      */
     public int checkPortModelOrder(final LPort p1, final LPort p2) {
+        // FIXME add group model order.
         if (p1.hasProperty(InternalProperties.MODEL_ORDER)
                 && p2.hasProperty(InternalProperties.MODEL_ORDER)) {
             return Integer.compare(p1.getProperty(InternalProperties.MODEL_ORDER),

@@ -70,6 +70,7 @@ public final class BreadthFirstModelOrderLayerer implements ILayoutPhase<Layered
             }
         }
         // Sort real nodes by model order.
+        // FIXME group model order?
         Collections.sort(realNodes, (n1, n2) -> {
             if (n1.hasProperty(InternalProperties.MODEL_ORDER) && n2.hasProperty(InternalProperties.MODEL_ORDER)) {
                 return Integer.compare(n1.getProperty(InternalProperties.MODEL_ORDER),

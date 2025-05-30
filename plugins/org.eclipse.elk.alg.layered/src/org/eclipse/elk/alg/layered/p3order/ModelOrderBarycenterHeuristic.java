@@ -57,8 +57,12 @@ public class ModelOrderBarycenterHeuristic extends BarycenterHeuristic {
                     if (transitiveComparison != 0) {
                         return transitiveComparison;
                     }
+                    // FIXME consider the different ordering modes for group model order.
                     if (n1.hasProperty(InternalProperties.MODEL_ORDER)
-                            && n2.hasProperty(InternalProperties.MODEL_ORDER)) {
+                            && n2.hasProperty(InternalProperties.MODEL_ORDER)
+                            // Only use model order within the same group
+                            && n1.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CROSSING_MINIMIZATION_ID) == 
+                            n2.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CROSSING_MINIMIZATION_ID)) {
                         int value = Integer.compare(n1.getProperty(InternalProperties.MODEL_ORDER),
                                 n2.getProperty(InternalProperties.MODEL_ORDER));
                         if (value < 0) {

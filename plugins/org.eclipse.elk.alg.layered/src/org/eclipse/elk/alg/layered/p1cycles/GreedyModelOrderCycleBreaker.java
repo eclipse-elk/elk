@@ -31,6 +31,7 @@ public final class GreedyModelOrderCycleBreaker extends GreedyCycleBreaker {
             // In this step nodes without a model order are disregarded.
             // One could of course think of a different strategy regarding this aspect.
             // FUTURE WORK: If multiple model order groups exist, one has to chose based on the priority of the groups.
+            // FIXME
             if (node.hasProperty(InternalProperties.MODEL_ORDER)
                     && node.getProperty(InternalProperties.MODEL_ORDER) < minimumModelOrder) {
                 minimumModelOrder = node.getProperty(InternalProperties.MODEL_ORDER);
