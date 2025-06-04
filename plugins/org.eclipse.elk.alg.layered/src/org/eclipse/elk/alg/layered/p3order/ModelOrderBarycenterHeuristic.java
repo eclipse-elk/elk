@@ -16,7 +16,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
+import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.graph.LNode;
+import org.eclipse.elk.alg.layered.intermediate.preserveorder.CMGroupModelOrderCalculator;
 import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 
@@ -51,16 +53,23 @@ public class ModelOrderBarycenterHeuristic extends BarycenterHeuristic {
     public ModelOrderBarycenterHeuristic(final ForsterConstraintResolver constraintResolver, final Random random,
             final AbstractBarycenterPortDistributor portDistributor, final LNode[][] graph) {
         super(constraintResolver, random, portDistributor, graph);
+        // FIXME This may have the problem that the real nodes need to be compared first such that the dummy nodes do not
+        // overrule model order using the barycenter method.
         barycenterStateComparator = 
                 (n1, n2) -> {
+                    // FIXME what about only partly enforced for certain model order groups?
+                    // First check whether the transitive dependencies already determine the ordering.
                     int transitiveComparison = compareBasedOnTansitiveDependencies(n1, n2);
                     if (transitiveComparison != 0) {
                         return transitiveComparison;
                     }
+                    // If this is not the case, consider the different ordering modes for group model order for the comparator.
                     if (n1.hasProperty(InternalProperties.MODEL_ORDER)
                             && n2.hasProperty(InternalProperties.MODEL_ORDER)) {
-                        int value = Integer.compare(n1.getProperty(InternalProperties.MODEL_ORDER),
-                                n2.getProperty(InternalProperties.MODEL_ORDER));
+                        LGraph lgraph = n1.getGraph();
+                        int value = Integer.compare(
+                                CMGroupModelOrderCalculator.calculateModelOrderOrGroupModelOrder(n1, lgraph, lgraph.getProperty(InternalProperties.MAX_MODEL_ORDER_NODES)),
+                                CMGroupModelOrderCalculator.calculateModelOrderOrGroupModelOrder(n2, lgraph, lgraph.getProperty(InternalProperties.MAX_MODEL_ORDER_NODES)));
                         if (value < 0) {
                             updateBiggerAndSmallerAssociations(n1, n2);
                         } else if (value > 0) {
@@ -68,6 +77,7 @@ public class ModelOrderBarycenterHeuristic extends BarycenterHeuristic {
                         }
                         return value;
                     }
+                    // If one of the nodes has no model order, fall back to the barycenter method.
                     return compareBasedOnBarycenter(n1, n2);
                 };
     }

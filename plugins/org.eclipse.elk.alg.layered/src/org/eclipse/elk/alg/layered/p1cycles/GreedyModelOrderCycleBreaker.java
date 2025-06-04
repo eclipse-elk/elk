@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Kiel University and others.
+ * Copyright (c) 2022, 2025 Kiel University and others.
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,7 +12,9 @@ package org.eclipse.elk.alg.layered.p1cycles;
 import java.util.List;
 
 import org.eclipse.elk.alg.layered.graph.LNode;
+import org.eclipse.elk.alg.layered.options.GroupOrderStrategy;
 import org.eclipse.elk.alg.layered.options.InternalProperties;
+import org.eclipse.elk.alg.layered.options.LayeredOptions;
 
 /**
  * Greedy Cycle Breaker that behaves the same as {@link GreedyCycleBreaker} but does not randomly choose an edge to
@@ -27,14 +29,22 @@ public final class GreedyModelOrderCycleBreaker extends GreedyCycleBreaker {
     protected LNode chooseNodeWithMaxOutflow(final List<LNode> nodes) {
         LNode returnNode = null;
         int minimumModelOrder = Integer.MAX_VALUE;
+        int offset = Math.max(layeredGraph.getLayerlessNodes().size(), layeredGraph.getProperty(InternalProperties.MAX_MODEL_ORDER_NODES));
+        int bigOffset = offset * layeredGraph.getProperty(InternalProperties.CB_NUM_MODEL_ORDER_GROUPS);
+        GroupModelOrderCalculator moCalculator = new GroupModelOrderCalculator();
+        boolean enforceGroupModelOrder = layeredGraph.getProperty(
+                LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CB_GROUP_ORDER_STRATEGY) == GroupOrderStrategy.ENFORCED;
         for (LNode node : nodes) {
             // In this step nodes without a model order are disregarded.
             // One could of course think of a different strategy regarding this aspect.
-            // FUTURE WORK: If multiple model order groups exist, one has to chose based on the priority of the groups.
-            if (node.hasProperty(InternalProperties.MODEL_ORDER)
-                    && node.getProperty(InternalProperties.MODEL_ORDER) < minimumModelOrder) {
-                minimumModelOrder = node.getProperty(InternalProperties.MODEL_ORDER);
-                returnNode = node;
+            if (node.hasProperty(InternalProperties.MODEL_ORDER)) {
+                int modelOrder = enforceGroupModelOrder
+                ? moCalculator.computeConstraintGroupModelOrder(node, bigOffset, offset)
+                : moCalculator.computeConstraintModelOrder(node, offset);
+                if (minimumModelOrder > modelOrder) {                    
+                    minimumModelOrder = modelOrder;
+                    returnNode = node;
+                }
             }
         }
         if (returnNode == null) {

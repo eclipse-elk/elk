@@ -72,6 +72,11 @@ public class GreedyCycleBreaker implements ILayoutPhase<LayeredPhases, LGraph> {
     /** list of sink nodes. */
     private final LinkedList<LNode> sinks = Lists.newLinkedList();
     
+    /**
+     * The graph
+     */
+    protected LGraph layeredGraph;
+    
     private Random random;
     
     @Override
@@ -82,6 +87,8 @@ public class GreedyCycleBreaker implements ILayoutPhase<LayeredPhases, LGraph> {
     @Override
     public void process(final LGraph layeredGraph, final IElkProgressMonitor monitor) {
         monitor.begin("Greedy cycle removal", 1);
+        
+        this.layeredGraph = layeredGraph;
         
         List<LNode> nodes = layeredGraph.getLayerlessNodes();
 
