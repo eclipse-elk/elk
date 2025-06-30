@@ -84,7 +84,7 @@ public class AlternatingLayerUnzipper implements ILayoutProcessor<LGraph> {
                 
                 // apply heuristic
                 // TODO: this heuristic is for the decision between N=1 and N=2, it shouldn't be used with N > 2
-                if (maxWidth / averageHeight >= graph.getLayers().get(i).getNodes().size() / 4) {
+                if (maxWidth / averageHeight >= graph.getLayers().get(i).getNodes().size() / 4.0) {
                     // skip this layer and do not split it
                     continue;
                 }
