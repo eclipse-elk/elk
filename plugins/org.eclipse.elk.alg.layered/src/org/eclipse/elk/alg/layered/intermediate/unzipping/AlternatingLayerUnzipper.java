@@ -84,6 +84,11 @@ public class AlternatingLayerUnzipper implements ILayoutProcessor<LGraph> {
                 
                 // apply heuristic
                 // this heuristic is for the decision between N=1 and N=2, it shouldn't be used with N > 2
+                //
+                // the intuition behind this heuristic is that there is a growth term S_n, determined mostly by
+                // the growth of the vertical edge segments as more nodes are added to a layer
+                // S_n grows roughly like n^2 / 4 and the cross-over point where splitting becomes favorable lies
+                // approximately at box_width / box_height = S_n / n, the approximation is more accurate for larger n
                 if (maxWidth / averageHeight >= graph.getLayers().get(i).getNodes().size() / 4.0) {
                     // skip this layer and do not split it
                     continue;
