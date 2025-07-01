@@ -58,7 +58,7 @@ public class AlternatingLayerUnzipper implements ILayoutProcessor<LGraph> {
             
             int N = getLayerSplitProperty(graph.getLayers().get(i));
             boolean resetOnLongEdges = getResetOnLongEdgesProperty(graph.getLayers().get(i));
-            boolean minimizeEdgeLength = getminimizeEdgeLengthProperty(graph.getLayers().get(i));
+            boolean minimizeEdgeLength = getMinimizeEdgeLengthProperty(graph.getLayers().get(i));
             
             if (minimizeEdgeLength) {
                 // get maximum node width and average node height
@@ -83,7 +83,7 @@ public class AlternatingLayerUnzipper implements ILayoutProcessor<LGraph> {
                         graph.getProperty(LayeredOptions.SPACING_EDGE_NODE));
                 
                 // apply heuristic
-                // TODO: this heuristic is for the decision between N=1 and N=2, it shouldn't be used with N > 2
+                // this heuristic is for the decision between N=1 and N=2, it shouldn't be used with N > 2
                 if (maxWidth / averageHeight >= graph.getLayers().get(i).getNodes().size() / 4.0) {
                     // skip this layer and do not split it
                     continue;
@@ -186,7 +186,7 @@ public class AlternatingLayerUnzipper implements ILayoutProcessor<LGraph> {
      * @param layer The layer to determine the minimizeEdgeLength property for.
      * @return the minimizeEdgeLength value
      */
-    private boolean getminimizeEdgeLengthProperty(Layer layer) {
+    private boolean getMinimizeEdgeLengthProperty(Layer layer) {
         for (int i = 0; i < layer.getNodes().size(); i++) {
             if (layer.getNodes().get(i).hasProperty(LayeredOptions.LAYER_UNZIPPING_MINIMIZE_EDGE_LENGTH)) {
                 if (layer.getNodes().get(i).getProperty(LayeredOptions.LAYER_UNZIPPING_MINIMIZE_EDGE_LENGTH)) {
