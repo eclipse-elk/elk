@@ -454,6 +454,21 @@ public final class InternalProperties {
     public static final IProperty<Map<LNode, Integer>> TARGET_NODE_MODEL_ORDER = new Property<>("targetNode.modelOrder");
     
     /**
+     * The preliminary indentation for the Walker Node Placer
+     */
+    public static final IProperty<Double> WALKER_PRELIM = new Property<>("walkerNodePlacer.prelim", 0d);
+    
+    /**
+     * The modifier for the Walker Node Placer
+     */
+    public static final IProperty<Double> WALKER_MODIFIER = new Property<>("walkerNodePlacer.modifier", 0d);
+    
+    /**
+     * A node's (left/lower) sibling (direct neighbour in its layer)
+     */
+    public static final IProperty<LNode> WALKER_SIBLING = new Property<>("walkerNodePlacer.sibling");
+    
+    /**
      * Hidden default constructor.
      */
     private InternalProperties() {
