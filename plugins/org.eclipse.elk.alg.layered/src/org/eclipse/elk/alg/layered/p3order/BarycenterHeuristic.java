@@ -75,6 +75,7 @@ public class BarycenterHeuristic implements ICrossingMinimizationHeuristic {
         if (randomize) {
             // Randomize barycenters (we don't need to update the edge count in this case;
             // there are no edges of interest since we're only concerned with one layer)
+            // simply a permutation of nodes in layer
             randomizeBarycenters(layer);
         } else {
             // Calculate barycenters and assign barycenters to barycenterless node groups
@@ -88,6 +89,7 @@ public class BarycenterHeuristic implements ICrossingMinimizationHeuristic {
                 ModelOrderBarycenterHeuristic.insertionSort(layer, barycenterStateComparator,
                         (ModelOrderBarycenterHeuristic) this);
             } else {
+                // use comparator based on "<"
                 Collections.sort(layer, barycenterStateComparator);
             }
 
@@ -205,8 +207,6 @@ public class BarycenterHeuristic implements ICrossingMinimizationHeuristic {
      *            a node group consisting of a single node
      * @param forward
      *            {@code true} if the current sweep moves forward
-     * @param portPos
-     *            position array
      * @return a pair containing the summed port positions of the connected ports as the first, and
      *         the number of connected edges as the second entry.
      */
@@ -240,7 +240,7 @@ public class BarycenterHeuristic implements ICrossingMinimizationHeuristic {
                         // Update this node group's values
                         stateOf(node).degree += stateOf(fixedNode).degree;
                         stateOf(node).summedWeight += stateOf(fixedNode).summedWeight;
-                    }
+                    } // else { }
                 } else {
                     stateOf(node).summedWeight += portRanks[fixedPort.id];
                     stateOf(node).degree++;
@@ -351,10 +351,14 @@ public class BarycenterHeuristic implements ICrossingMinimizationHeuristic {
 
     @Override
     public boolean setFirstLayerOrder(final LNode[][] order, final boolean isForwardSweep) {
+        // if sweeping forward, startIndex = 0, else the last existing element of order
         int startIndex = startIndex(isForwardSweep, order.length);
+        // extract first layer into List<LNode>
         List<LNode> nodes = Lists.newArrayList(
                 order[startIndex]);
+        // randomize nodes' barycenters
         minimizeCrossings(nodes, false, true, isForwardSweep);
+        // fill first layer with nodes
         int index = 0;
         for (LNode nodeGroup : nodes) {
                 order[startIndex][index++] = nodeGroup;
