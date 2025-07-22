@@ -14,10 +14,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
+import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.graph.LNode;
 import org.eclipse.elk.alg.layered.graph.LNode.NodeType;
 import org.eclipse.elk.alg.layered.graph.LPort;
 import org.eclipse.elk.alg.layered.graph.Layer;
+import org.eclipse.elk.alg.layered.options.GroupOrderStrategy;
 import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.alg.layered.options.LongEdgeOrderingStrategy;
 import org.eclipse.elk.alg.layered.options.OrderingStrategy;
@@ -34,9 +36,19 @@ public class ModelOrderNodeComparator implements Comparator<LNode> {
     private LNode[] previousLayer;
     
     /**
+     * The graph.
+     */
+    private LGraph graph;
+    
+    /**
      * The ordering strategy.
      */
     private final OrderingStrategy orderingStrategy;
+    
+    /**
+     * The group ordering strategy.
+     */
+    private final GroupOrderStrategy groupOrderStrategy;
     
     /**
      * Each node has an entry of nodes for which it is bigger.
@@ -64,9 +76,10 @@ public class ModelOrderNodeComparator implements Comparator<LNode> {
      * @param orderingStrategy The ordering strategy
      * @param longEdgeOrderingStrategy The strategy to order dummy nodes and nodes with no connection the previous layer
      */
-    public ModelOrderNodeComparator(final Layer thePreviousLayer, final OrderingStrategy orderingStrategy,
-            final LongEdgeOrderingStrategy longEdgeOrderingStrategy, boolean beforePorts) {
-        this(orderingStrategy, longEdgeOrderingStrategy, beforePorts);
+    public ModelOrderNodeComparator(final LGraph graph, final Layer thePreviousLayer, final OrderingStrategy orderingStrategy,
+            final LongEdgeOrderingStrategy longEdgeOrderingStrategy, GroupOrderStrategy groupOrderStrategy,
+            boolean beforePorts) {
+        this(graph, orderingStrategy, longEdgeOrderingStrategy, groupOrderStrategy, beforePorts);
         this.previousLayer = new LNode[thePreviousLayer.getNodes().size()];
         thePreviousLayer.getNodes().toArray(this.previousLayer);
     }
@@ -78,15 +91,19 @@ public class ModelOrderNodeComparator implements Comparator<LNode> {
      * @param orderingStrategy The ordering strategy
      * @param longEdgeOrderingStrategy The strategy to order dummy nodes and nodes with no connection the previous layer
      */
-    public ModelOrderNodeComparator(final LNode[] previousLayer, final OrderingStrategy orderingStrategy,
-            final LongEdgeOrderingStrategy longEdgeOrderingStrategy, boolean beforePorts) {
-        this(orderingStrategy, longEdgeOrderingStrategy, beforePorts);
+    public ModelOrderNodeComparator(final LGraph graph, final LNode[] previousLayer, final OrderingStrategy orderingStrategy,
+            final LongEdgeOrderingStrategy longEdgeOrderingStrategy, final GroupOrderStrategy groupOrderStrategy,
+            boolean beforePorts) {
+        this(graph, orderingStrategy, longEdgeOrderingStrategy, groupOrderStrategy, beforePorts);
         this.previousLayer = previousLayer;
     }
     
-    private ModelOrderNodeComparator(final OrderingStrategy orderingStrategy,
-            final LongEdgeOrderingStrategy longEdgeOrderingStrategy, boolean beforePorts) {
+    private ModelOrderNodeComparator(final LGraph graph, final OrderingStrategy orderingStrategy,
+            final LongEdgeOrderingStrategy longEdgeOrderingStrategy, final GroupOrderStrategy groupOrderStrategy,
+            boolean beforePorts) {
+        this.graph = graph;
         this.orderingStrategy = orderingStrategy;
+        this.groupOrderStrategy = groupOrderStrategy;
         this.longEdgeNodeOrder = longEdgeOrderingStrategy;
         this.beforePorts = beforePorts;
     }
@@ -113,6 +130,7 @@ public class ModelOrderNodeComparator implements Comparator<LNode> {
         } else if (biggerThan.get(n2).contains(n1)) {
             return 1;
         }
+        
         // If no model order is set, the one node is a dummy node and the nodes should be ordered
         // by the connected edges.
         // This kind of ordering should be preferred, if the order of the edges has priority.
@@ -125,6 +143,7 @@ public class ModelOrderNodeComparator implements Comparator<LNode> {
                 if (!p.getIncomingEdges().isEmpty()) {
                     if (p.getIncomingEdges().get(0).getSource().getNode().getLayer().id == (n1.getLayer().id - 1)) {
                         p1SourcePort = p.getIncomingEdges().get(0).getSource();
+                        break;
                     }
                 }
             }
@@ -135,6 +154,7 @@ public class ModelOrderNodeComparator implements Comparator<LNode> {
                 if (!p.getIncomingEdges().isEmpty()) {
                     if (p.getIncomingEdges().get(0).getSource().getNode().getLayer().id == (n2.getLayer().id - 1)) {
                         p2SourcePort = p.getIncomingEdges().get(0).getSource();
+                        break;
                     }
                 }
             }
@@ -239,8 +259,9 @@ public class ModelOrderNodeComparator implements Comparator<LNode> {
         // Order nodes by their order in the model.
         // This is also the fallback case if one of the nodes is not connected to the previous layer.
         if (n1.hasProperty(InternalProperties.MODEL_ORDER) && n2.hasProperty(InternalProperties.MODEL_ORDER)) {
-            int n1ModelOrder = n1.getProperty(InternalProperties.MODEL_ORDER);
-            int n2ModelOrder = n2.getProperty(InternalProperties.MODEL_ORDER);
+            // Make a decision on group order if possible
+            int n1ModelOrder = CMGroupModelOrderCalculator.calculateModelOrderOrGroupModelOrder(n1, n2, graph, graph.getProperty(InternalProperties.MAX_MODEL_ORDER_NODES));
+            int n2ModelOrder = CMGroupModelOrderCalculator.calculateModelOrderOrGroupModelOrder(n2, n1, graph, graph.getProperty(InternalProperties.MAX_MODEL_ORDER_NODES));
             if (n1ModelOrder > n2ModelOrder) {
                 updateBiggerAndSmallerAssociations(n1, n2);
                 return 1;
@@ -268,6 +289,7 @@ public class ModelOrderNodeComparator implements Comparator<LNode> {
         if (sourcePort != null) {
             LEdge edge = sourcePort.getIncomingEdges().get(0);
             if (edge != null) {
+                // FIX ME I guess I should use group model order here.
                 return edge.getProperty(InternalProperties.MODEL_ORDER);
             }
         }
@@ -411,7 +433,7 @@ public class ModelOrderNodeComparator implements Comparator<LNode> {
                     // If both are target, I should not have this problem and can never be here, since these nodes
                     // should have a previous layer node.
                     if (n1SourceFeedbackNode && n2SourceFeedbackNode) {
-                        int returnValue = new ModelOrderPortComparator(previousLayer, orderingStrategy, null, n2TargetFeedbackNode)
+                        int returnValue = new ModelOrderPortComparator(graph, previousLayer, orderingStrategy, null, n2TargetFeedbackNode)
                             .compare(n1dummyNodeSourcePort, n2dummyNodeSourcePort);
                         if (returnValue > 0) {
                             updateBiggerAndSmallerAssociations(n2, n1);
