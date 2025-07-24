@@ -110,6 +110,18 @@
       </distributionManagement>
       <build>
         <plugins>
+	  <plugin>
+	    <groupId>org.sonatype.central</groupId>
+	    <artifactId>central-publishing-maven-plugin</artifactId>
+	    <version>0.8.0</version>
+	    <extensions>true</extensions>
+	    <configuration>
+	      <publishingServerId>central</publishingServerId>
+	      <autoPublish>true</autoPublish>
+              <waitUntil>published</waitUntil>
+              <centralSnapshotsUrl>https://central.sonatype.com/repository/maven-snapshots/</centralSnapshotsUrl>
+	    </configuration>
+	  </plugin>
           <!-- Create GPG signatures. -->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
