@@ -16,8 +16,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
+import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.graph.LNode;
+import org.eclipse.elk.alg.layered.intermediate.preserveorder.CMGroupModelOrderCalculator;
+import org.eclipse.elk.alg.layered.options.GroupOrderStrategy;
 import org.eclipse.elk.alg.layered.options.InternalProperties;
+import org.eclipse.elk.alg.layered.options.LayerConstraint;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 
 /**
@@ -51,23 +55,47 @@ public class ModelOrderBarycenterHeuristic extends BarycenterHeuristic {
     public ModelOrderBarycenterHeuristic(final ForsterConstraintResolver constraintResolver, final Random random,
             final AbstractBarycenterPortDistributor portDistributor, final LNode[][] graph) {
         super(constraintResolver, random, portDistributor, graph);
+        // This may have the problem that the real nodes need to be compared first such that the dummy nodes do not
+        // overrule model order using the barycenter method.
         barycenterStateComparator = 
                 (n1, n2) -> {
+                    if (n1.hasProperty(LayeredOptions.LAYERING_LAYER_CONSTRAINT) && (n1.getProperty(LayeredOptions.LAYERING_LAYER_CONSTRAINT) == LayerConstraint.FIRST_SEPARATE
+                            || n1.getProperty(LayeredOptions.LAYERING_LAYER_CONSTRAINT) == LayerConstraint.LAST_SEPARATE)
+                        || n2.hasProperty(LayeredOptions.LAYERING_LAYER_CONSTRAINT) && (n2.getProperty(LayeredOptions.LAYERING_LAYER_CONSTRAINT) == LayerConstraint.FIRST_SEPARATE
+                                || n2.getProperty(LayeredOptions.LAYERING_LAYER_CONSTRAINT) == LayerConstraint.LAST_SEPARATE)) {
+                        return 0;
+                    }
+                    LGraph lgraph = n1.getGraph();
+                    // First check whether the transitive dependencies already determine the ordering.
                     int transitiveComparison = compareBasedOnTansitiveDependencies(n1, n2);
                     if (transitiveComparison != 0) {
                         return transitiveComparison;
                     }
+                    // If this is not the case, consider the different ordering modes for group model order for the comparator.
                     if (n1.hasProperty(InternalProperties.MODEL_ORDER)
                             && n2.hasProperty(InternalProperties.MODEL_ORDER)) {
-                        int value = Integer.compare(n1.getProperty(InternalProperties.MODEL_ORDER),
-                                n2.getProperty(InternalProperties.MODEL_ORDER));
+                        // The value is either a comparison both model orders or both group model orders with
+                        // model order as secondary criterion.
+                        int value = Integer.compare(
+                                CMGroupModelOrderCalculator.calculateModelOrderOrGroupModelOrder(n1, n2, lgraph, lgraph.getProperty(InternalProperties.MAX_MODEL_ORDER_NODES)),
+                                CMGroupModelOrderCalculator.calculateModelOrderOrGroupModelOrder(n2, n1, lgraph, lgraph.getProperty(InternalProperties.MAX_MODEL_ORDER_NODES)));
+                        if (lgraph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CM_GROUP_ORDER_STRATEGY) == GroupOrderStrategy.ONLY_WITHIN_GROUP) {
+                            // Check list of enforced 
+                            // If two nodes are in separate model order groups, do not enforce their ordering and just use barycenter.
+                            if (n1.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CROSSING_MINIMIZATION_ID)
+                                != n2.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CROSSING_MINIMIZATION_ID)) {
+                                value = 0;
+                            }
+                        }
                         if (value < 0) {
                             updateBiggerAndSmallerAssociations(n1, n2);
+                            return value;
                         } else if (value > 0) {
                             updateBiggerAndSmallerAssociations(n2, n1);
+                            return value;
                         }
-                        return value;
                     }
+                    // If one of the nodes has no model order, fall back to the barycenter method.
                     return compareBasedOnBarycenter(n1, n2);
                 };
     }

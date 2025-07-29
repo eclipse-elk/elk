@@ -201,6 +201,7 @@ algorithm layered(LayeredLayoutProvider) {
     supports org.eclipse.elk.interactiveLayout
     supports layering.layerId
     supports crossingMinimization.positionId
+    
     supports considerModelOrder.strategy
     supports considerModelOrder.longEdgeStrategy
     supports considerModelOrder.crossingCounterNodeInfluence
@@ -208,6 +209,15 @@ algorithm layered(LayeredLayoutProvider) {
     supports considerModelOrder.noModelOrder
     supports considerModelOrder.components
     supports considerModelOrder.portModelOrder
+    supports considerModelOrder.groupModelOrder.cycleBreakingId
+    supports considerModelOrder.groupModelOrder.crossingMinimizationId
+    supports considerModelOrder.groupModelOrder.componentGroupId
+    supports considerModelOrder.groupModelOrder.cbGroupOrderStrategy
+    supports considerModelOrder.groupModelOrder.cmGroupOrderStrategy
+    supports considerModelOrder.groupModelOrder.cmEnforcedGroupOrders
+    supports considerModelOrder.groupModelOrder.cbPreferredSourceId
+    supports considerModelOrder.groupModelOrder.cbPreferredTargetId
+    
     supports generatePositionAndLayerIds
 }
 
@@ -1077,6 +1087,73 @@ group considerModelOrder {
         default = 0
         targets parents
         requires org.eclipse.elk.alg.layered.considerModelOrder.strategy
+    }
+    
+    group groupModelOrder {
+        option cycleBreakingId: int {
+            label "Group ID of the Node Type"
+            description
+                "Used to define partial ordering groups during cycle breaking. A lower group id means that the group is
+                 sorted before other groups. A group model order of 0 is the default group."
+            default = 0
+            targets nodes
+            requires noModelOrder == false
+        }
+        option crossingMinimizationId: int {
+            label "Group ID of the Node Type"
+            description
+                "Used to define partial ordering groups during crossing minimization. A lower group id means that the group is
+                 sorted before other groups. A group model order of 0 is the default group."
+            default = 0
+            targets nodes, edges, ports
+            requires noModelOrder == false
+        }
+        option componentGroupId: int {
+            label "Group ID of the Node Type"
+            description
+                "Used to define partial ordering groups during component packing. A lower group id means that the group is
+                 sorted before other groups. A group model order of 0 is the default group."
+            default = 0
+            targets nodes, edges, ports
+            requires noModelOrder == false
+        }
+        option cbGroupOrderStrategy: GroupOrderStrategy {
+            label "Cycle Breaking Group Ordering Strategy"
+            description "Determines how to count ordering violations during cycle breaking. NONE: They do not
+                         count. ENFORCED: A group with a higher model order is before a node with a smaller.
+                         MODEL_ORDER: The model order counts instead of the model order group id ordering."
+            default = GroupOrderStrategy.ONLY_WITHIN_GROUP
+            targets parents
+        }
+        option cbPreferredSourceId: int {
+            label "Cycle Breaking Preferred Source Id"
+            description "The model order group id for which should be preferred as a source if possible."
+            targets parents
+            requires cycleBreaking.strategy == CycleBreakingStrategy.SCC_NODE_TYPE
+        }
+        option cbPreferredTargetId: int {
+            label "Cycle Breaking Preferred Target Id"
+            description "The model order group id for which should be preferred as a target if possible."
+            targets parents
+            requires cycleBreaking.strategy == CycleBreakingStrategy.SCC_NODE_TYPE
+        }
+        option cmGroupOrderStrategy: GroupOrderStrategy {
+            label "Crossing Minimization Group Ordering Strategy"
+            description "Determines how to count ordering violations during crossing minimization. NONE: They do not
+                         count. ENFORCED: A group with a lower id is before a group with a higher id.
+                         MODEL_ORDER: The model order counts instead of the model order group id ordering."
+            default = GroupOrderStrategy.ONLY_WITHIN_GROUP
+            targets parents
+        }
+        option cmEnforcedGroupOrders: List<Integer> {
+            label "Crossing Minimization Enforced Group Orders"
+            description "Holds all group ids which are enforcing their order during crossing minimization strategies.
+                         E.g. if only groups 2 and -1 (default) enforce their ordering. Other groups e.g. the group of
+                         timer nodes can be ordered arbitrarily if it helps and the mentioned groups may not change
+                         their order."
+            targets parents
+            default = #[1, 2, 6, 7, 10, 11]
+        }
     }
 }
 
