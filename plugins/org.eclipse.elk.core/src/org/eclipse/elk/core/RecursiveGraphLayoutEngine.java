@@ -235,6 +235,7 @@ public class RecursiveGraphLayoutEngine implements IGraphLayoutEngine {
                             // provider if yes its size needs to be pre-computed before computing the layout
                             LayoutAlgorithmData localAlgorithmData = 
                                     childNode.getProperty(CoreOptions.RESOLVED_ALGORITHM);
+                            ElkPadding padding = childNode.getProperty(CoreOptions.PADDING);
                             if (childNode.getChildren().size() > 0
                                     && localAlgorithmData.getInstancePool().fetch() instanceof ITopdownLayoutProvider) {
                                 // topdownlayout providers should not be used on hierarchical nodes
@@ -254,18 +255,17 @@ public class RecursiveGraphLayoutEngine implements IGraphLayoutEngine {
                                 ITopdownSizeApproximator approximator = 
                                         childNode.getProperty(CoreOptions.TOPDOWN_SIZE_APPROXIMATOR);
                                 KVector size = approximator.getSize(childNode);
-                                ElkPadding padding = childNode.getProperty(CoreOptions.PADDING);
                                 childNode.setDimensions(Math.max(childNode.getWidth(), size.x + padding.left + padding.right),
                                         Math.max(childNode.getHeight(), size.y + padding.top + padding.bottom));
                             } else {
                                 // If no approximator is set, use the set sizes for atomic nodes and use the properties
                                 // that have been set for nodes containing further children
                                 if (childNode.getChildren().size() != 0) {
-                                    childNode.setDimensions(
-                                            childNode.getProperty(CoreOptions.TOPDOWN_HIERARCHICAL_NODE_WIDTH),
+                                    KVector size = new KVector(childNode.getProperty(CoreOptions.TOPDOWN_HIERARCHICAL_NODE_WIDTH), 
                                             childNode.getProperty(CoreOptions.TOPDOWN_HIERARCHICAL_NODE_WIDTH) /
-                                            childNode.getProperty(CoreOptions.TOPDOWN_HIERARCHICAL_NODE_ASPECT_RATIO)
-                                    );
+                                            childNode.getProperty(CoreOptions.TOPDOWN_HIERARCHICAL_NODE_ASPECT_RATIO));
+                                    childNode.setDimensions(Math.max(childNode.getWidth(), size.x + padding.left + padding.right),
+                                            Math.max(childNode.getHeight(), size.y + padding.top + padding.bottom));
                                 }
                             }
                         }
