@@ -85,6 +85,6 @@ class GraphTest {
         assertEquals("root", root.identifier)
         assertEquals(2, root.children.size)
         assertEquals("c", root.children.head.identifier)
-        assertEquals("c1", root.children.last.identifier)
+        assertEquals("c1", root.children.lastOrNull.identifier)
     }
 }
