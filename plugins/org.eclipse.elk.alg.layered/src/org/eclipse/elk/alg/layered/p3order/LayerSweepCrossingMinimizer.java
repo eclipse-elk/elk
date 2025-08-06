@@ -155,7 +155,7 @@ public class LayerSweepCrossingMinimizer
     }
 
     private void setPortOrderOnParentGraph(final GraphInfoHolder gData) {
-        if (gData.hasExternalPorts()) {
+        if (gData.hasExternalPorts() && gData.getBestSweep() != null) {
             SweepCopy bestSweep = gData.getBestSweep();
             // Sort ports on left and right side of the parent node
             sortPortsByDummyPositionsInLastLayer(bestSweep.nodes(), gData.parent(), true);
