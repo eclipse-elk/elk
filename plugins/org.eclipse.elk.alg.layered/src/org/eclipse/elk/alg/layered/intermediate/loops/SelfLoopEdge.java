@@ -10,6 +10,9 @@
 package org.eclipse.elk.alg.layered.intermediate.loops;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
+import org.eclipse.elk.alg.layered.graph.LLabel;
+import org.eclipse.elk.alg.layered.options.LayeredOptions;
+import org.eclipse.elk.core.options.PortSide;
 
 /**
  * Represents a single self loop edge.
@@ -81,6 +84,19 @@ public class SelfLoopEdge {
      */
     public SelfLoopPort getSLTarget() {
         return slTarget;
+    }
+    
+    public boolean isInline() {
+        for (LLabel label : lEdge.getLabels()) {
+            if (label.getProperty(LayeredOptions.EDGE_LABELS_INLINE)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public PortSide getLabelSide() {
+        return this.slHyperLoop.getSLLabels().getSide();
     }
 
 }
