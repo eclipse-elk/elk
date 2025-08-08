@@ -92,6 +92,7 @@ algorithm layered(LayeredLayoutProvider) {
     
     // layer unzipping
     supports layerUnzipping.strategy
+    supports layerUnzipping.minimizeEdgeLength
     supports layerUnzipping.layerSplit
     supports layerUnzipping.resetOnLongEdges
     
@@ -965,6 +966,19 @@ group layerUnzipping {
                  value is 'NONE'."
             default = LayerUnzippingStrategy.NONE
             targets parents
+        }
+        
+        option minimizeEdgeLength: boolean {
+            label "Minimize Edge Length Heuristic"
+            description
+                "Use a heuristic to decide whether or not to actually perform the layer split with the goal of 
+                 minimizing the total edge length. This option only works when layerSplit is set to 2.
+                 The property can be set to the nodes in a layer,
+                 which then applies the property for the layer. If any node sets the value to true, then the value is
+                 set to true for the entire layer."
+            default = false
+            targets nodes
+            requires layerSplit == 2
         }
         
         advanced option layerSplit: Integer {
