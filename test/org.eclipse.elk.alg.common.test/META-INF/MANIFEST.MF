@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Common Algorithms Tests
 Bundle-SymbolicName: org.eclipse.elk.alg.common.test;singleton:=true
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.11.0.qualifier
 Automatic-Module-Name: org.eclipse.elk.alg.common.test
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: Eclipse Modeling Project
 Require-Bundle: com.google.guava,
  org.eclipse.emf.common,

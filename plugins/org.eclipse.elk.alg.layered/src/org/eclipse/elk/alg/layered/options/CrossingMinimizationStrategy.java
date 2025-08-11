@@ -32,9 +32,15 @@ public enum CrossingMinimizationStrategy implements ILayoutPhaseFactory<LayeredP
      * {@link org.eclipse.elk.alg.layered.options.LayeredOptions.HIERARCHY_HANDLING} is set to
      * {@link org.eclipse.elk.core.options.HierarchyHandling.INCLUDE_CHILDREN}, it sweeps into hierarchical graphs
      * during the sweep.
+     * This uses the Barycenter heuristic, in constrast to MEDIAN_LAYER_SWEEP
      */
     LAYER_SWEEP,
 
+    /**
+     * This heuristic uses medians of node weights to calculate the correct ordering. 
+     * In all other aspects, it behaves like LAYER_SWEEP.
+     */
+    MEDIAN_LAYER_SWEEP,
     /**
      * Allow user interaction by considering the previous node positioning. The actual positions
      * as given in the input diagram are considered here. This means that if the user moves
@@ -48,12 +54,16 @@ public enum CrossingMinimizationStrategy implements ILayoutPhaseFactory<LayeredP
      */
     NONE;
     
+    
 
     @Override
     public ILayoutPhase<LayeredPhases, LGraph> create() {
         switch (this) {
         case LAYER_SWEEP:
             return new LayerSweepCrossingMinimizer(CrossMinType.BARYCENTER);
+            
+        case MEDIAN_LAYER_SWEEP:
+            return new LayerSweepCrossingMinimizer(CrossMinType.MEDIAN);
             
         case INTERACTIVE:
             return new InteractiveCrossingMinimizer();

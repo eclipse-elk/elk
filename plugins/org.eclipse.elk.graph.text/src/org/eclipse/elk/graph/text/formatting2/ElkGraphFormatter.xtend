@@ -154,7 +154,7 @@ class ElkGraphFormatter extends AbstractFormatter2 {
                 section.regionFor.keyword(elkEdgeSectionAccess.rightSquareBracketKeyword_5).prepend(no_space)
             }
         }
-        section.bendPoints.last.append(new_line)
+        section.bendPoints.lastOrNull.append(new_line)
         for (point : section.bendPoints) {
             point.format
         }

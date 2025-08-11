@@ -3,8 +3,8 @@ Automatic-Module-Name: org.eclipse.elk.alg.radial
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Radial Layout Algorithm
 Bundle-SymbolicName: org.eclipse.elk.alg.radial;singleton:=true
-Bundle-Version: 0.10.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-Version: 0.11.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: com.google.guava,
  org.eclipse.emf.common;bundle-version="2.10.0",
  org.eclipse.elk.core,

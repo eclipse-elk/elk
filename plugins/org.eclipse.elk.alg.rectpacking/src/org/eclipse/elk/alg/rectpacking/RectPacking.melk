@@ -208,7 +208,7 @@ option inNewRow: boolean {
 option orderBySize: boolean {
     label "Order nodes by height"
     description
-        "If set to true the nodes will be sorted by their height before computing the layout. The highest
+        "If set to true the nodes will be sorted by their height before computing the layout. The largest
          node will be in the first position."
     default = false
     targets parents

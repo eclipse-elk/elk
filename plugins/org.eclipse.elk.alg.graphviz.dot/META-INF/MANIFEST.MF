@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.elk.alg.graphviz.dot
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Graphviz Dot Language Parser
 Bundle-Vendor: Eclipse Modeling Project
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.11.0.qualifier
 Bundle-SymbolicName: org.eclipse.elk.alg.graphviz.dot;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext;bundle-version="2.9.0",
@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.xtext;bundle-version="2.9.0",
  org.antlr.runtime;bundle-version="[3.2.0,3.2.1)",
  org.eclipse.xtext.util,
  org.eclipse.emf.common
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.elk.alg.graphviz.dot,
  org.eclipse.elk.alg.graphviz.dot.formatting2,
  org.eclipse.elk.alg.graphviz.dot.serializer,

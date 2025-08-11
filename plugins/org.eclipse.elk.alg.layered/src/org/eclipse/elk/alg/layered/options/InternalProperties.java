@@ -413,6 +413,16 @@ public final class InternalProperties {
      * Set for nodes and edges to preserve the order in the model file.
      */
     public static final IProperty<Integer> MODEL_ORDER = new Property<>("modelOrder");
+    
+    /**
+     * Set on parents to save the maximum model order set on nodes.
+     */
+    public static final IProperty<Integer> MAX_MODEL_ORDER_NODES = new Property<>("modelOrder.maximum");
+    
+    /**
+     * Set on parents to save the number of model order groups for cycle breaking.
+     */
+    public static final IProperty<Integer> CB_NUM_MODEL_ORDER_GROUPS = new Property<>("modelOrderGroups.cb.number");
 
     /**
      * Set on ports to save their (long edge) target node.
@@ -452,6 +462,35 @@ public final class InternalProperties {
      * This is used to cache this once it was calculated.
      */
     public static final IProperty<Map<LNode, Integer>> TARGET_NODE_MODEL_ORDER = new Property<>("targetNode.modelOrder");
+    
+
+    /**
+     * Tarjans lowlink. The low-link value is initially equal to which number the node has during the initial DFS.
+     * If it's the first node visited, the value will be 0.
+     * If it's the second node, it will be 1.
+     * The third node has value 2, the fourth value 3, etc.
+     */
+    public static final IProperty<Integer> TARJAN_LOWLINK = new Property<>("tarjan.lowlink", Integer.MAX_VALUE);
+
+    /**
+     * Tarjan node index.
+     */
+    public static final IProperty<Integer> TARJAN_ID = new Property<>("tarjan.id", -1);
+
+    /**
+     * Trajan on stack property. Marks if a node is on the current depth-first stack.
+     */
+    public static final IProperty<Boolean> TARJAN_ON_STACK = new Property<>("tarjan.onstack", false);
+
+    /**
+     * Set during tarjan's algorithm. Indicates that a node is part of a cycle.
+     */
+    public static final IProperty<Boolean> IS_PART_OF_CYCLE = new Property<>("partOfCycle", false);
+    
+    /**
+     * The weight of a node as used by the MedianHeuristic class.
+     */
+    public static final IProperty<Double> WEIGHT = new Property<>("medianHeuristic.weight");
     
     /**
      * Hidden default constructor.

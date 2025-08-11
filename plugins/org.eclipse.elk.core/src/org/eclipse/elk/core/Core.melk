@@ -904,6 +904,30 @@ advanced option topdownLayout: boolean {
 }
 
 group topdown {
+    
+    advanced option sizeCategories: int {
+        label "Number of size categories"
+        description
+            "Defines the number of categories to use for the FIXED_INTEGER_RATIO_BOXES size approximator."
+        default = 3
+        lowerBound = 1
+        targets parents
+        requires sizeApproximator == TopdownSizeApproximator.FIXED_INTEGER_RATIO_BOXES
+    }
+    
+    advanced option sizeCategoriesHierarchicalNodeWeight: int {
+        label "Weight of a node containing children for determining the graph size"
+        description
+            "When determining the graph size for the size categorisation, this value determines how many times a node 
+             containing children is weighted more than a simple node. For example setting this value to four would 
+             result in a graph containing a simple node and a hierarchical node to be counted as having a size of five."
+        default = 4
+        lowerBound = 1
+        targets parents
+        requires sizeCategories
+        
+    }
+    
     programmatic option scaleFactor: double {
         label "Topdown Scale Factor"
         description
@@ -916,7 +940,7 @@ group topdown {
         requires nodeType == TopdownNodeTypes.HIERARCHICAL_NODE
     }
     
-    advanced option sizeApproximator: TopdownSizeApproximator {
+    advanced option sizeApproximator: ITopdownSizeApproximator {
         label "Topdown Size Approximator"
         description
             "The size approximator to be used to set sizes of hierarchical nodes during topdown layout. The default

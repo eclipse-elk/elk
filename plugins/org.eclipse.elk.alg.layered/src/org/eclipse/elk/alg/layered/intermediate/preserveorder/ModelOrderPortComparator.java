@@ -16,10 +16,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.graph.LNode;
+import org.eclipse.elk.alg.layered.graph.LNode.NodeType;
 import org.eclipse.elk.alg.layered.graph.LPort;
 import org.eclipse.elk.alg.layered.graph.Layer;
-import org.eclipse.elk.alg.layered.graph.LNode.NodeType;
 import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.alg.layered.options.OrderingStrategy;
 import org.eclipse.elk.core.options.PortSide;
@@ -49,6 +50,11 @@ public class ModelOrderPortComparator implements Comparator<LPort> {
      * The previous layer.
      */
     private LNode[] previousLayer;
+
+    /**
+     * The graph.
+     */
+    private LGraph graph;
     
     private OrderingStrategy strategy;
     
@@ -67,8 +73,9 @@ public class ModelOrderPortComparator implements Comparator<LPort> {
      * @param previousLayer The previous layer
      * @param targetNodeModelOrder The minimal model order connecting to a target node.
      */
-    public ModelOrderPortComparator(final Layer previousLayer, final OrderingStrategy strategy,
+    public ModelOrderPortComparator(final LGraph graph, final Layer previousLayer, final OrderingStrategy strategy,
             final Map<LNode, Integer> targetNodeModelOrder, final boolean portModelOrder) {
+        this.graph = graph;
         this.previousLayer = new LNode[previousLayer.getNodes().size()];
         this.strategy = strategy;
         previousLayer.getNodes().toArray(this.previousLayer);
@@ -82,8 +89,9 @@ public class ModelOrderPortComparator implements Comparator<LPort> {
      * @param previousLayer The previous layer
      * @param targetNodeModelOrder The minimal model order connecting to a target node.
      */
-    public ModelOrderPortComparator(final LNode[] previousLayer, final OrderingStrategy strategy,
+    public ModelOrderPortComparator(final LGraph graph, final LNode[] previousLayer, final OrderingStrategy strategy,
             final Map<LNode, Integer> targetNodeModelOrder, final boolean portModelOrder) {
+        this.graph = graph;
         this.previousLayer = previousLayer;
         this.strategy = strategy;
         this.targetNodeModelOrder = targetNodeModelOrder;
@@ -228,8 +236,10 @@ public class ModelOrderPortComparator implements Comparator<LPort> {
             if (this.strategy == OrderingStrategy.PREFER_NODES && p1TargetNode != null && p2TargetNode != null
                     && p1TargetNode.hasProperty(InternalProperties.MODEL_ORDER)
                     && p2TargetNode.hasProperty(InternalProperties.MODEL_ORDER)) {
-                int p1MO = p1TargetNode.getProperty(InternalProperties.MODEL_ORDER);
-                int p2MO = p2TargetNode.getProperty(InternalProperties.MODEL_ORDER);
+                int p1MO = CMGroupModelOrderCalculator.calculateModelOrderOrGroupModelOrder(p1TargetNode, p2TargetNode,
+                        graph, graph.getProperty(InternalProperties.MAX_MODEL_ORDER_NODES));
+                int p2MO = CMGroupModelOrderCalculator.calculateModelOrderOrGroupModelOrder(p2TargetNode, p1TargetNode,
+                        graph, graph.getProperty(InternalProperties.MAX_MODEL_ORDER_NODES));
                 if (p1MO > p2MO) {
                     updateBiggerAndSmallerAssociations(p1, p2, reverseOrder);
                     return reverseOrder;
@@ -258,10 +268,12 @@ public class ModelOrderPortComparator implements Comparator<LPort> {
             int p1Order = 0;
             int p2Order = 0;
             if (p1.getOutgoingEdges().get(0).hasProperty(InternalProperties.MODEL_ORDER)) {
-                p1Order = p1.getOutgoingEdges().get(0).getProperty(InternalProperties.MODEL_ORDER);
+                p1Order = CMGroupModelOrderCalculator.calculateModelOrderOrGroupModelOrder(p1.getOutgoingEdges().get(0),
+                        p2.getOutgoingEdges().get(0), graph, p1.getOutgoingEdges().size() + p1.getIncomingEdges().size());
             }
             if (p2.getOutgoingEdges().get(0).hasProperty(InternalProperties.MODEL_ORDER)) {
-                p2Order = p2.getOutgoingEdges().get(0).getProperty(InternalProperties.MODEL_ORDER);
+                p2Order = CMGroupModelOrderCalculator.calculateModelOrderOrGroupModelOrder(p2.getOutgoingEdges().get(0),
+                        p1.getOutgoingEdges().get(0), graph, p2.getOutgoingEdges().size() + p2.getIncomingEdges().size());
             }
             
             // If both ports have the same target nodes, make sure that the backward edge is below the normal edge.
@@ -307,8 +319,11 @@ public class ModelOrderPortComparator implements Comparator<LPort> {
             // Use the port model order to compare them. This can always be very bad since these unconnected ports
             // can transitively order nodes that should be ordered differently.
             // This can only be prevented, if one handles the sorting such that unconnected ports are handled last.
-            int p1MO = p1.getProperty(InternalProperties.MODEL_ORDER);
-            int p2MO = p2.getProperty(InternalProperties.MODEL_ORDER);
+            int numberOfPorts = p1.getNode().getPorts().size();
+            int p1MO = CMGroupModelOrderCalculator.calculateModelOrderOrGroupModelOrder(p1, p2,
+                    graph, numberOfPorts);
+            int p2MO = CMGroupModelOrderCalculator.calculateModelOrderOrGroupModelOrder(p2, p1,
+                    graph, numberOfPorts);
             // Still check the side, since WEST and SOUTH must be the other way around.
             if (p1.getSide() == PortSide.WEST && p2.getSide() == PortSide.WEST
                     || p1.getSide() == PortSide.SOUTH && p2.getSide() == PortSide.SOUTH) {
@@ -340,10 +355,15 @@ public class ModelOrderPortComparator implements Comparator<LPort> {
      *         second.
      */
     public int checkPortModelOrder(final LPort p1, final LPort p2) {
+        int numberOfPorts = p1.getNode().getPorts().size();
         if (p1.hasProperty(InternalProperties.MODEL_ORDER)
                 && p2.hasProperty(InternalProperties.MODEL_ORDER)) {
-            return Integer.compare(p1.getProperty(InternalProperties.MODEL_ORDER),
-                    p2.getProperty(InternalProperties.MODEL_ORDER));
+            int p1Order = CMGroupModelOrderCalculator.calculateModelOrderOrGroupModelOrder(p1, p2,
+                    graph, numberOfPorts);
+            int p2Order = CMGroupModelOrderCalculator.calculateModelOrderOrGroupModelOrder(p2, p1,
+                    graph, numberOfPorts);
+            return Integer.compare(p1Order,
+                    p2Order);
         }
         return 0;
     }

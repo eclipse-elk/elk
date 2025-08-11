@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.elk.libavoid.feature"
       label="Libavoid Integration for ELK (includes LGPL code)"
-      version="0.10.0.qualifier"
+      version="0.11.0.qualifier"
       provider-name="Eclipse Layout Kernel"
       plugin="org.eclipse.elk.core"
       os="linux,macosx,win32"

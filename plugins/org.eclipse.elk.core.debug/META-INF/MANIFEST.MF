@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.elk.core.debug
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Debugging Utilities
 Bundle-SymbolicName: org.eclipse.elk.core.debug;singleton:=true
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.11.0.qualifier
 Bundle-Activator: org.eclipse.elk.core.debug.ElkDebugPlugin
 Require-Bundle: com.google.guava,
  org.eclipse.emf.ecore;bundle-version="2.10.0",
@@ -18,6 +18,6 @@ Require-Bundle: com.google.guava,
  org.eclipse.xtend.lib,
  org.eclipse.xtend.lib.macro,
  org.eclipse.xtext.xbase.lib
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Eclipse Modeling Project

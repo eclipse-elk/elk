@@ -62,9 +62,10 @@ public class SortByInputModelProcessor implements ILayoutProcessor<LGraph> {
             final int previousLayerIndex = layerIndex == 0 ? 0 : layerIndex - 1;
             Layer previousLayer = graph.getLayers().get(previousLayerIndex);
             // Sort nodes before port sorting to have sorted nodes for in-layer feedback edge dummies.
-            ModelOrderNodeComparator comparator = new ModelOrderNodeComparator(previousLayer,
+            ModelOrderNodeComparator comparator = new ModelOrderNodeComparator(graph, previousLayer,
                     graph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY),
-                    graph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_LONG_EDGE_STRATEGY), true);
+                    graph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_LONG_EDGE_STRATEGY),
+                    graph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CM_GROUP_ORDER_STRATEGY), true);
             SortByInputModelProcessor.insertionSort(layer.getNodes(), comparator);
             for (LNode node : layer.getNodes()) {
                 if (node.getProperty(LayeredOptions.PORT_CONSTRAINTS) != PortConstraints.FIXED_ORDER
@@ -75,7 +76,7 @@ public class SortByInputModelProcessor implements ILayoutProcessor<LGraph> {
                     // (their minimal) model order.
                     // Get minimal model order for target node
                     Collections.sort(node.getPorts(),
-                            new ModelOrderPortComparator(previousLayer,
+                            new ModelOrderPortComparator(graph, previousLayer,
                                     graph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY),
                                     longEdgeTargetNodePreprocessing(node),
                                     graph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_PORT_MODEL_ORDER)));
@@ -83,9 +84,10 @@ public class SortByInputModelProcessor implements ILayoutProcessor<LGraph> {
                 }
             }
             // Sort nodes after port sorting to also sort dummy feedback nodes from the current layer correctly.
-            comparator = new ModelOrderNodeComparator(previousLayer,
+            comparator = new ModelOrderNodeComparator(graph, previousLayer,
                     graph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY),
-                    graph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_LONG_EDGE_STRATEGY), false);
+                    graph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_LONG_EDGE_STRATEGY),
+                    graph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CM_GROUP_ORDER_STRATEGY), false);
             SortByInputModelProcessor.insertionSort(layer.getNodes(), comparator);
                     
             progressMonitor.log("Layer " + layerIndex + ": " + layer);

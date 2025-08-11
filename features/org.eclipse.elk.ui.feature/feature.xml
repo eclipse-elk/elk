@@ -11,7 +11,7 @@
 <feature
       id="org.eclipse.elk.ui.feature"
       label="Eclipse Layout Kernel (Incubation) - UI Components"
-      version="0.10.0.qualifier"
+      version="0.11.0.qualifier"
       provider-name="Eclipse Layout Kernel"
       plugin="org.eclipse.elk.core">
 

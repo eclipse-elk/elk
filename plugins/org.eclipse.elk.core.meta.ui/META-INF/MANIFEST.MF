@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.elk.core.meta.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Layout Meta Data Language (UI Components)
 Bundle-Vendor: Eclipse Modeling Project
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.11.0.qualifier
 Bundle-SymbolicName: org.eclipse.elk.core.meta.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.elk.core.meta,
@@ -22,7 +22,7 @@ Require-Bundle: org.eclipse.elk.core.meta,
  org.eclipse.jdt.debug.ui,
  org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
 Import-Package: org.apache.log4j
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.elk.core.meta.ui.internal,
  org.eclipse.elk.core.meta.ui.quickfix,
  org.eclipse.elk.core.meta.ui.contentassist,

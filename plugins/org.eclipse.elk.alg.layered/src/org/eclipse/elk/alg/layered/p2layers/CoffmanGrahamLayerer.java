@@ -227,9 +227,9 @@ public class CoffmanGrahamLayerer implements ILayoutPhase<LayeredPhases, LGraph>
     
     private int compareNodesInTopo(final LNode u, final LNode v) {
         List<Integer> inListU = inTopo.get(u);
-        List<Integer> inLsitV = inTopo.get(v);
+        List<Integer> inListV = inTopo.get(v);
         ListIterator<Integer> itU = inListU.listIterator(inListU.size());
-        ListIterator<Integer> itV = inLsitV.listIterator(inLsitV.size());
+        ListIterator<Integer> itV = inListV.listIterator(inListV.size());
         
         // find the node with the lower associated maximum value in 'inTopo'
         // break ties by ignoring all equal maxima
@@ -242,6 +242,14 @@ public class CoffmanGrahamLayerer implements ILayoutPhase<LayeredPhases, LGraph>
         }
         
         if (!itU.hasNext() && !itV.hasNext()) {
+            // If the two nodes are the same, a secondary criterion is needed.
+            // Else use the node id as a last resort.
+            if (u.id < v.id) {
+                return -1; // u < v
+            } else if (u.id > v.id) {
+                return 1; // u > v
+            }
+            // Else they are equal.
             return 0; // u == v
         } else if (!itU.hasNext()) {
             return -1; // u < v

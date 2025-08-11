@@ -3,9 +3,9 @@ Automatic-Module-Name: org.eclipse.elk.conn.gmf
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Layout Connector for GMF
 Bundle-SymbolicName: org.eclipse.elk.conn.gmf;singleton:=true
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.11.0.qualifier
 Bundle-Vendor: Eclipse Modeling Project
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.elk.conn.gmf
 Require-Bundle: org.eclipse.gef;bundle-version="3.5.0",
  org.eclipse.gmf.runtime.diagram.ui;bundle-version="1.2.0",

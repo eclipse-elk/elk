@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.elk.graph.text.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Textual Graph Format UI
 Bundle-Vendor: Eclipse Modeling Project
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.11.0.qualifier
 Bundle-SymbolicName: org.eclipse.elk.graph.text.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.elk.core,
@@ -23,7 +23,7 @@ Require-Bundle: org.eclipse.elk.core,
  org.eclipse.xtend.lib;resolution:=optional,
  org.eclipse.xtext.xbase.lib
 Import-Package: org.apache.log4j
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.elk.graph.text.ui,
  org.eclipse.elk.graph.text.ui.contentassist,
  org.eclipse.elk.graph.text.ui.internal,

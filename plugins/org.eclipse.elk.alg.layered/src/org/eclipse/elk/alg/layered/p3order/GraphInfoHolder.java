@@ -62,7 +62,6 @@ public class GraphInfoHolder implements IInitializable {
     private AllCrossingsCounter crossingsCounter;
     private int nPorts;
 
-
     /**
      * Create object collecting information about a graph.
      * 
@@ -76,7 +75,7 @@ public class GraphInfoHolder implements IInitializable {
     public GraphInfoHolder(final LGraph graph, final CrossMinType crossMinType, final List<GraphInfoHolder> graphs) {
         lGraph = graph;
         currentNodeOrder = graph.toNodeArray();
-        
+
         // Hierarchy information.
         parent = lGraph.getParentNode();
         hasParent = parent != null;
@@ -92,7 +91,7 @@ public class GraphInfoHolder implements IInitializable {
         layerSweepTypeDecider = new LayerSweepTypeDecider(this);
         List<IInitializable> initializables =
                 Lists.newArrayList(this, crossingsCounter, layerSweepTypeDecider, portDistributor);
-        
+
         if (crossMinType == CrossMinType.BARYCENTER
                 && !graph.getProperty(LayeredOptions.CROSSING_MINIMIZATION_FORCE_NODE_MODEL_ORDER)) {
             ForsterConstraintResolver constraintResolver = new ForsterConstraintResolver(currentNodeOrder);
@@ -105,6 +104,8 @@ public class GraphInfoHolder implements IInitializable {
             initializables.add(constraintResolver);
             crossMinimizer = new ModelOrderBarycenterHeuristic(constraintResolver, random,
                     (AbstractBarycenterPortDistributor) portDistributor, currentNodeOrder);
+        } else if (crossMinType == CrossMinType.MEDIAN) {
+            crossMinimizer = new MedianHeuristic(random);
         } else {
             crossMinimizer = new GreedySwitchHeuristic(crossMinType, this);
         }

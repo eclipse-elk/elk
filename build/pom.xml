@@ -14,19 +14,19 @@
   <groupId>org.eclipse.elk</groupId>
   <name>Eclipse Layout Kernel</name>
   <url>https://www.eclipse.org/elk/</url>
-  <version>0.10.0-SNAPSHOT</version>
+  <version>0.11.0-SNAPSHOT</version>
   <description>An infrastructure for automatic graph layout and implementations of different layout algorithms.</description>
   <packaging>pom</packaging>
 
 
   <!-- Define a few properties used throughout all build profiles. -->
   <properties>
-    <targetJdk>11</targetJdk>
+    <targetJdk>17</targetJdk>
     <maven.compiler.release>${targetJdk}</maven.compiler.release>
     <maven.compiler.source>${targetJdk}</maven.compiler.source>
     <maven.compiler.target>${targetJdk}</maven.compiler.target>
-    <tycho-version>2.7.3</tycho-version>
-    <xtext-version>2.28.0</xtext-version>
+    <tycho-version>4.0.12</tycho-version>
+    <xtext-version>2.36.0</xtext-version>
     <elk-version>${project.version}</elk-version>
 
     <!-- chsch: copied from https://eclipse.googlesource.com/recommenders/org.eclipse.recommenders/+/3dae4575d3370da2da25a1cbce3dfcff198f0611/features/pom.xml -->
@@ -110,6 +110,18 @@
       </distributionManagement>
       <build>
         <plugins>
+	  <plugin>
+	    <groupId>org.sonatype.central</groupId>
+	    <artifactId>central-publishing-maven-plugin</artifactId>
+	    <version>0.8.0</version>
+	    <extensions>true</extensions>
+	    <configuration>
+	      <publishingServerId>central</publishingServerId>
+	      <autoPublish>true</autoPublish>
+              <waitUntil>published</waitUntil>
+              <centralSnapshotsUrl>https://central.sonatype.com/repository/maven-snapshots/</centralSnapshotsUrl>
+	    </configuration>
+	  </plugin>
           <!-- Create GPG signatures. -->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -171,6 +183,7 @@
         <artifactId>target-platform-configuration</artifactId>
         <version>${tycho-version}</version>
         <configuration>
+          <requireEagerResolve>true</requireEagerResolve>
           <target>
             <artifact>
               <groupId>org.eclipse.elk</groupId>
@@ -200,17 +213,6 @@
               <arch>x86_64</arch>
             </environment>
           </environments>
-          <dependency-resolution>
-            <extraRequirements>
-              <!-- to force the same version of jdt.compiler.apt
-                and jdt.core (for xtext-maven-plugin) -->
-              <requirement>
-                <type>eclipse-plugin</type>
-                <id>org.eclipse.jdt.compiler.apt</id>
-                <versionRange>0.0.0</versionRange>
-              </requirement>
-            </extraRequirements>
-          </dependency-resolution>
         </configuration>
       </plugin>
 
@@ -396,6 +398,7 @@
                       <goal>build-qualifier-aggregator</goal>
                       <goal>validate-id</goal>
                       <goal>validate-version</goal>
+                      <goal>package-plugin</goal>
                     </goals>
                   </pluginExecutionFilter>
                   <action>
@@ -419,7 +422,7 @@
                   <pluginExecutionFilter>
                     <groupId>org.eclipse.tycho</groupId>
                     <artifactId>target-platform-configuration</artifactId>
-                    <versionRange>[2.7.3,)</versionRange>
+                    <versionRange>[4.0.12,)</versionRange>
                     <goals>
                       <goal>target-platform</goal>
                     </goals>

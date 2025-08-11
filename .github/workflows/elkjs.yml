@@ -12,10 +12,9 @@ jobs:
     strategy:
       matrix:
         # We check against LTSs supported by GWT
-        # 11  - LTS 
         # 17 - LTS
-        java-version: [ 11, 17 ]
-        node-version: [ 12.x, 18.x ]
+        node-version: [ 14.x, 22.x ]
+        java-version: [ 17 ] 
 
     steps:
     # Checkout the repository of both elk and elkjs, place them next to each other. 

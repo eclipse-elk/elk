@@ -23,6 +23,7 @@ import org.eclipse.elk.core.math.KVectorChain;
 import org.eclipse.elk.core.options.ContentAlignment;
 import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.core.options.HierarchyHandling;
+import org.eclipse.elk.core.options.ITopdownSizeApproximator;
 import org.eclipse.elk.core.options.TopdownNodeTypes;
 import org.eclipse.elk.core.options.TopdownSizeApproximator;
 import org.eclipse.elk.core.testing.TestController;
@@ -248,8 +249,9 @@ public class RecursiveGraphLayoutEngine implements IGraphLayoutEngine {
                                 KVector requiredSize = topdownLayoutProvider.getPredictedGraphSize(childNode);
                                 childNode.setDimensions(Math.max(childNode.getWidth(), requiredSize.x), 
                                         Math.max(childNode.getHeight(), requiredSize.y));
-                            } else if (childNode.getProperty(CoreOptions.TOPDOWN_SIZE_APPROXIMATOR) != null) {
-                                TopdownSizeApproximator approximator = 
+                            } else if (childNode.getProperty(CoreOptions.TOPDOWN_SIZE_APPROXIMATOR) != null 
+                                    && childNode.getChildren() != null && childNode.getChildren().size() > 0) {
+                                ITopdownSizeApproximator approximator = 
                                         childNode.getProperty(CoreOptions.TOPDOWN_SIZE_APPROXIMATOR);
                                 KVector size = approximator.getSize(childNode);
                                 ElkPadding padding = childNode.getProperty(CoreOptions.PADDING);

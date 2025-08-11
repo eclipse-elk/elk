@@ -2,13 +2,13 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Layout DisCo Tests
 Bundle-SymbolicName: org.eclipse.elk.alg.disco.test;singleton:=true
-Bundle-Version: 0.10.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: com.google.guava;bundle-version="18.0.0",
+Bundle-Version: 0.11.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Require-Bundle: com.google.guava,
  org.eclipse.elk.core,
  org.eclipse.elk.graph,
  org.eclipse.elk.alg.common,
  org.eclipse.elk.alg.disco,
- org.junit;bundle-version="4.12.0"
+ org.junit
 Bundle-Vendor: Eclipse Modeling Project
 Automatic-Module-Name: org.eclipse.elk.alg.disco.test

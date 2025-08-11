@@ -11,7 +11,7 @@
 <feature
       id="org.eclipse.elk.algorithms.feature"
       label="Eclipse Layout Kernel (Incubation) - Layout Algorithms"
-      version="0.10.0.qualifier"
+      version="0.11.0.qualifier"
       provider-name="Eclipse Layout Kernel"
       plugin="org.eclipse.elk.core">
 
@@ -36,7 +36,7 @@ SPDX-License-Identifier: EPL-2.0
    </license>
 
    <requires>
-      <import feature="org.eclipse.elk.feature" version="0.10.0.qualifier"/>
+      <import feature="org.eclipse.elk.feature" version="0.11.0.qualifier"/>
    </requires>
 
    <plugin

@@ -11,52 +11,52 @@
    <description name="Eclipse Layout Kernel (Nightly Builds)" url="http://build.eclipse.org/modeling/elk/updates/nightly">
       Nightly build update site for the Eclipse Layout Kernel.
    </description>
-   <feature url="features/org.eclipse.elk_0.10.0.qualifier.jar" id="org.eclipse.elk.feature" version="0.10.0.qualifier">
+   <feature url="features/org.eclipse.elk_0.11.0.qualifier.jar" id="org.eclipse.elk.feature" version="0.11.0.qualifier">
       <category name="elk"/>
    </feature>
-   <feature url="features/org.eclipse.elk.source_0.10.0.qualifier.jar" id="org.eclipse.elk.feature.source" version="0.10.0.qualifier">
+   <feature url="features/org.eclipse.elk.source_0.11.0.qualifier.jar" id="org.eclipse.elk.feature.source" version="0.11.0.qualifier">
       <category name="elk"/>
    </feature>
-   <feature url="features/org.eclipse.elk.sdk_0.10.0.qualifier.jar" id="org.eclipse.elk.sdk.feature" version="0.10.0.qualifier">
+   <feature url="features/org.eclipse.elk.sdk_0.11.0.qualifier.jar" id="org.eclipse.elk.sdk.feature" version="0.11.0.qualifier">
       <category name="elk"/>
    </feature>
-   <feature url="features/org.eclipse.elk.sdk.source_0.10.0.qualifier.jar" id="org.eclipse.elk.sdk.feature.source" version="0.10.0.qualifier">
+   <feature url="features/org.eclipse.elk.sdk.source_0.11.0.qualifier.jar" id="org.eclipse.elk.sdk.feature.source" version="0.11.0.qualifier">
       <category name="elk"/>
    </feature>
-   <feature url="features/org.eclipse.elk.algorithms_0.10.0.qualifier.jar" id="org.eclipse.elk.algorithms.feature" version="0.10.0.qualifier">
+   <feature url="features/org.eclipse.elk.algorithms_0.11.0.qualifier.jar" id="org.eclipse.elk.algorithms.feature" version="0.11.0.qualifier">
       <category name="elk"/>
    </feature>
-   <feature url="features/org.eclipse.elk.algorithms.source_0.10.0.qualifier.jar" id="org.eclipse.elk.algorithms.feature.source" version="0.10.0.qualifier">
+   <feature url="features/org.eclipse.elk.algorithms.source_0.11.0.qualifier.jar" id="org.eclipse.elk.algorithms.feature.source" version="0.11.0.qualifier">
       <category name="elk"/>
    </feature>
-   <feature url="features/org.eclipse.elk.libavoid_0.10.0.qualifier.jar" id="org.eclipse.elk.libavoid.feature" version="0.10.0.qualifier">
+   <feature url="features/org.eclipse.elk.libavoid_0.11.0.qualifier.jar" id="org.eclipse.elk.libavoid.feature" version="0.11.0.qualifier">
       <category name="elk"/>
    </feature>
-   <feature url="features/org.eclipse.elk.libavoid.source_0.10.0.qualifier.jar" id="org.eclipse.elk.libavoid.feature.source" version="0.10.0.qualifier">
+   <feature url="features/org.eclipse.elk.libavoid.source_0.11.0.qualifier.jar" id="org.eclipse.elk.libavoid.feature.source" version="0.11.0.qualifier">
       <category name="elk"/>
    </feature>
-   <feature url="features/org.eclipse.elk.gmf_0.10.0.qualifier.jar" id="org.eclipse.elk.gmf.feature" version="0.10.0.qualifier">
+   <feature url="features/org.eclipse.elk.gmf_0.11.0.qualifier.jar" id="org.eclipse.elk.gmf.feature" version="0.11.0.qualifier">
       <category name="elk"/>
    </feature>
-   <feature url="features/org.eclipse.elk.gmf.source_0.10.0.qualifier.jar" id="org.eclipse.elk.gmf.feature.source" version="0.10.0.qualifier">
+   <feature url="features/org.eclipse.elk.gmf.source_0.11.0.qualifier.jar" id="org.eclipse.elk.gmf.feature.source" version="0.11.0.qualifier">
       <category name="elk"/>
    </feature>
-   <feature url="features/org.eclipse.elk.graphviz_0.10.0.qualifier.jar" id="org.eclipse.elk.graphviz.feature" version="0.10.0.qualifier">
+   <feature url="features/org.eclipse.elk.graphviz_0.11.0.qualifier.jar" id="org.eclipse.elk.graphviz.feature" version="0.11.0.qualifier">
       <category name="elk"/>
    </feature>
-   <feature url="features/org.eclipse.elk.graphviz.source_0.10.0.qualifier.jar" id="org.eclipse.elk.graphviz.feature.source" version="0.10.0.qualifier">
+   <feature url="features/org.eclipse.elk.graphviz.source_0.11.0.qualifier.jar" id="org.eclipse.elk.graphviz.feature.source" version="0.11.0.qualifier">
       <category name="elk"/>
    </feature>
-   <feature url="features/org.eclipse.elk.ui_0.10.0.qualifier.jar" id="org.eclipse.elk.ui.feature" version="0.10.0.qualifier">
+   <feature url="features/org.eclipse.elk.ui_0.11.0.qualifier.jar" id="org.eclipse.elk.ui.feature" version="0.11.0.qualifier">
       <category name="elk"/>
    </feature>
-   <feature url="features/org.eclipse.elk.ui.source_0.10.0.qualifier.jar" id="org.eclipse.elk.ui.feature.source" version="0.10.0.qualifier">
+   <feature url="features/org.eclipse.elk.ui.source_0.11.0.qualifier.jar" id="org.eclipse.elk.ui.feature.source" version="0.11.0.qualifier">
       <category name="elk"/>
    </feature>
-   <feature url="features/org.eclipse.elk.graph.json_0.10.0.qualifier.jar" id="org.eclipse.elk.graph.json.feature" version="0.10.0.qualifier">
+   <feature url="features/org.eclipse.elk.graph.json_0.11.0.qualifier.jar" id="org.eclipse.elk.graph.json.feature" version="0.11.0.qualifier">
       <category name="elk"/>
    </feature>
-   <feature url="features/org.eclipse.elk.graph.json.source_0.10.0.qualifier.jar" id="org.eclipse.elk.graph.json.feature.source" version="0.10.0.qualifier">
+   <feature url="features/org.eclipse.elk.graph.json.source_0.11.0.qualifier.jar" id="org.eclipse.elk.graph.json.feature.source" version="0.11.0.qualifier">
       <category name="elk"/>
    </feature>
    <category-def name="elk" label="Eclipse Layout Kernel">

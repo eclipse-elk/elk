@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.elk.core.debug.grandom
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Random Graph Generator
 Bundle-Vendor: Eclipse Modeling Project
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.11.0.qualifier
 Bundle-SymbolicName: org.eclipse.elk.core.debug.grandom; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext,
@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.xtext,
  org.eclipse.emf.common,
  org.eclipse.elk.graph,
  org.eclipse.elk.core
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.elk.core.debug.grandom,
  org.eclipse.elk.core.debug.grandom.gRandom,
  org.eclipse.elk.core.debug.grandom.gRandom.impl,

@@ -14,6 +14,7 @@ import java.util.Map;
 
 import org.eclipse.elk.core.AbstractLayoutProvider;
 import org.eclipse.elk.core.data.LayoutAlgorithmData;
+import org.eclipse.elk.core.data.LayoutAlgorithmResolver;
 import org.eclipse.elk.core.math.ElkPadding;
 import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.util.ElkUtil;
@@ -27,7 +28,7 @@ import org.eclipse.elk.graph.ElkNode;
  * of hierarchical nodes. This allows the use of a size approximation strategy to minimize white space
  * in the final result.
  */
-public enum TopdownSizeApproximator {
+public enum TopdownSizeApproximator implements ITopdownSizeApproximator {
     
     /**
      * Computes the square root of the number of children and uses that as a multiplier for the base size
@@ -57,13 +58,11 @@ public enum TopdownSizeApproximator {
             final LayoutAlgorithmData algorithmData = originalGraph.getProperty(CoreOptions.RESOLVED_ALGORITHM);
             
             // clone the current hierarchy
-//            ElkNode node = ElkGraphUtil.createGraph();
             ElkNode node = ElkGraphFactory.eINSTANCE.createElkNode();
             node.copyProperties(originalGraph);
             Map<ElkNode, ElkNode> oldToNewNodeMap = new HashMap<>();
             // copy children
             for (ElkNode child : originalGraph.getChildren()) {
-//                ElkNode newChild = ElkGraphUtil.createNode(node);
                 ElkNode newChild = ElkGraphFactory.eINSTANCE.createElkNode();
                 newChild.setParent(node);
                 newChild.copyProperties(child);
@@ -78,7 +77,6 @@ public enum TopdownSizeApproximator {
                 for (ElkEdge edge : child.getOutgoingEdges()) {
                     ElkNode newSrc = oldToNewNodeMap.get(child);
                     ElkNode newTar = oldToNewNodeMap.get(edge.getTargets().get(0));
-//                    ElkEdge newEdge = ElkGraphUtil.createSimpleEdge(newSrc, newTar);
                     ElkEdge newEdge = ElkGraphFactory.eINSTANCE.createElkEdge();
                     newEdge.getSources().add(newSrc);
                     newEdge.getTargets().add(newTar);
@@ -135,13 +133,91 @@ public enum TopdownSizeApproximator {
             // return new KVector(Math.max(minWidth, childAreaDesiredWidth), Math.max(minHeight, childAreaDesiredHeight));
             
         }
-    };
+    },
     
     /**
-     * Returns an approximated required size for a given node.
-     * @param node the node
-     * @return the size as a vector
+     * Fixed Integer Ratio Approximator
+     * Dependent on the size of the child graphs, rectangles of fixed ratios are produced.
+     * The goal is to enable good packings and also give bigger subgraphs more space.
      */
-    public abstract KVector getSize(ElkNode node);
+    FIXED_INTEGER_RATIO_BOXES {
+        @Override
+        public KVector getSize(final ElkNode originalGraph) {
+            
+            double baseWidth = originalGraph.getProperty(CoreOptions.TOPDOWN_HIERARCHICAL_NODE_WIDTH);
+            double baseHeight = baseWidth / originalGraph.getProperty(CoreOptions.TOPDOWN_HIERARCHICAL_NODE_ASPECT_RATIO);
+            
+            // four categories of box sizes, tiny = half-width, small = base-width, medium = double-width, large = quadruple-width
+            // how graph sizes are distributed into these categories has a great effect on the final result
+            double multiplier = TopdownSizeApproximatorUtil.getSizeCategoryMultiplier(originalGraph);
+            
+            // Combine multiplier, spacings and base size to compute final size
+            ElkPadding padding = originalGraph.getProperty(CoreOptions.PADDING);
+            double nodeNodeSpacing = CoreOptions.SPACING_NODE_NODE.getDefault();
+            if (originalGraph.getParent() != null) {
+                nodeNodeSpacing = originalGraph.getParent().getProperty(CoreOptions.SPACING_NODE_NODE);
+            }
+            KVector resultSize = new KVector(baseWidth, baseHeight).scale(multiplier);
+            return resultSize.add(new KVector(
+                    -(padding.left + padding.right) - nodeNodeSpacing,
+                    -(padding.top + padding.bottom) - nodeNodeSpacing));
+        }
+    },
+    
+    /**
+     * This approximator simply lays out the next level and sets its algorithm to fixed so that it is later skipped.
+     */
+    LAYOUT_NEXT_LEVEL {
+        @Override public KVector getSize(final ElkNode originalGraph) {
+            
+            // do size approximations for children
+            for (ElkNode childNode : originalGraph.getChildren()) {
+                if (childNode.getProperty(CoreOptions.TOPDOWN_SIZE_APPROXIMATOR) != null 
+                        && childNode.getChildren() != null && childNode.getChildren().size() > 0) {
+                    ITopdownSizeApproximator approximator = 
+                            childNode.getProperty(CoreOptions.TOPDOWN_SIZE_APPROXIMATOR);
+                    KVector size = approximator.getSize(childNode);
+                    ElkPadding padding = childNode.getProperty(CoreOptions.PADDING);
+                    // never reuse the old size, always reset, otherwise calling layout multiple times leads to growing regions
+                    childNode.setDimensions(Math.max(childNode.getWidth(), size.x + padding.left + padding.right),
+                            Math.max(childNode.getHeight(), size.y + padding.top + padding.bottom));
+                } else {
+                    if (childNode.getChildren().size() != 0) {
+                        childNode.setDimensions(
+                                childNode.getProperty(CoreOptions.TOPDOWN_HIERARCHICAL_NODE_WIDTH),
+                                childNode.getProperty(CoreOptions.TOPDOWN_HIERARCHICAL_NODE_WIDTH) /
+                                childNode.getProperty(CoreOptions.TOPDOWN_HIERARCHICAL_NODE_ASPECT_RATIO)
+                        );
+                    }
+                }
+            }
+            
+            // layout children
+            // Get an instance of the layout provider
+            final LayoutAlgorithmData algorithmData = originalGraph.getProperty(CoreOptions.RESOLVED_ALGORITHM);
+            AbstractLayoutProvider layoutProvider = algorithmData.getInstancePool().fetch();
+            
+            try {
+                // Perform layout on the current hierarchy level
+                layoutProvider.layout(originalGraph, new NullElkProgressMonitor());
+                algorithmData.getInstancePool().release(layoutProvider);
+            } catch (Exception exception) {
+                // The layout provider has failed - destroy it slowly and painfully
+                layoutProvider.dispose();
+                throw exception;
+            }
+            
+            // set layout to fixed layout
+            originalGraph.setProperty(CoreOptions.ALGORITHM, FixedLayouterOptions.ALGORITHM_ID);
+            new LayoutAlgorithmResolver().visit(originalGraph);
+            
+            ElkUtil.computeChildAreaDimensions(originalGraph);
+            double childAreaDesiredWidth = originalGraph.getProperty(CoreOptions.CHILD_AREA_WIDTH);
+            double childAreaDesiredHeight = originalGraph.getProperty(CoreOptions.CHILD_AREA_HEIGHT);
+            
+            // apply size to graph
+            return new KVector(childAreaDesiredWidth, childAreaDesiredHeight);
+        }
+    };
 
 }

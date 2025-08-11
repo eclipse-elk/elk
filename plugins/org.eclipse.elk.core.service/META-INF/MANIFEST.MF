@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.elk.core.service
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Layout Service Layer
 Bundle-SymbolicName: org.eclipse.elk.core.service;singleton:=true
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.11.0.qualifier
 Bundle-Vendor: Eclipse Modeling Project
 Require-Bundle: com.google.guava,
  com.google.inject;bundle-version="3.0.0",
@@ -15,7 +15,7 @@ Require-Bundle: com.google.guava,
  org.eclipse.elk.core,
  org.eclipse.e4.ui.css.core;bundle-version="0.13.300"
 Eclipse-RegisterBuddy: org.eclipse.elk.core
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.elk.core.service,
  org.eclipse.elk.core.service.internal;x-internal:=true,
  org.eclipse.elk.core.service.util

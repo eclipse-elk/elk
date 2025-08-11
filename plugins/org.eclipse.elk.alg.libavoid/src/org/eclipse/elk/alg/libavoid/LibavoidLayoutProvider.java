@@ -9,6 +9,8 @@
  *******************************************************************************/
 package org.eclipse.elk.alg.libavoid;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.eclipse.elk.alg.common.NodeMicroLayout;
 import org.eclipse.elk.alg.common.nodespacing.NodeDimensionCalculation;
 import org.eclipse.elk.alg.libavoid.options.LibavoidOptions;
@@ -32,6 +34,8 @@ import org.eclipse.elk.graph.ElkPort;
  * @author uru
  */
 public class LibavoidLayoutProvider extends AbstractLayoutProvider {
+    
+    private final ConcurrentHashMap<ElkNode, LibavoidServer> parentNodeToServer = new ConcurrentHashMap<>();
 
     private LibavoidServerCommunicator comm = new LibavoidServerCommunicator();
 
@@ -54,8 +58,10 @@ public class LibavoidLayoutProvider extends AbstractLayoutProvider {
         
         // create an Libavoid server process instance or use an existing one
         LibavoidServer lvServer = LibavoidServerPool.INSTANCE.fetch();
+        this.parentNodeToServer.putIfAbsent(parentNode, lvServer);
         // send a layout request to the server process and apply the layout
         comm.requestLayout(parentNode, progressMonitor, lvServer);
+        this.parentNodeToServer.remove(parentNode);
         // if everything worked well, release the used process instance
         LibavoidServerPool.INSTANCE.release(lvServer);
 
@@ -77,4 +83,13 @@ public class LibavoidLayoutProvider extends AbstractLayoutProvider {
     	}
     }
 
+    public boolean cancelLayouting(final ElkNode parentNode) {
+        final LibavoidServer responsibleServer = this.parentNodeToServer.get(parentNode);
+        if (responsibleServer != null) {
+            this.parentNodeToServer.remove(parentNode);
+            responsibleServer.cancelProcess();
+            return true;
+        }
+        return false;
+    }
 }

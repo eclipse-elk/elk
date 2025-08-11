@@ -27,6 +27,7 @@ import org.eclipse.elk.alg.layered.intermediate.IntermediateProcessorStrategy;
 import org.eclipse.elk.alg.layered.intermediate.SortByInputModelProcessor;
 import org.eclipse.elk.alg.layered.intermediate.preserveorder.ModelOrderNodeComparator;
 import org.eclipse.elk.alg.layered.intermediate.preserveorder.ModelOrderPortComparator;
+import org.eclipse.elk.alg.layered.options.GroupOrderStrategy;
 import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 import org.eclipse.elk.alg.layered.options.LongEdgeOrderingStrategy;
@@ -154,7 +155,7 @@ public class LayerSweepCrossingMinimizer
     }
 
     private void setPortOrderOnParentGraph(final GraphInfoHolder gData) {
-        if (gData.hasExternalPorts()) {
+        if (gData.hasExternalPorts() && gData.getBestSweep() != null) {
             SweepCopy bestSweep = gData.getBestSweep();
             // Sort ports on left and right side of the parent node
             sortPortsByDummyPositionsInLastLayer(bestSweep.nodes(), gData.parent(), true);
@@ -319,16 +320,21 @@ public class LayerSweepCrossingMinimizer
     /**
      * Compares all nodes in a each layer and counts how often they are not in model order.
      * This requires that the {@code SortByInputModelProcessor} ran previously.
+     * @param graph the graph
      * @param layers layers to check
      * @param strategy the ordering strategy to compare the nodes
+     * @param cmGroupOrderStrategy the strategy of the group model order
      * @return The number of model order conflicts
      */
-    private int countModelOrderNodeChanges(final LNode[][] layers, final OrderingStrategy strategy) {
+    private int countModelOrderNodeChanges(final LGraph graph, final LNode[][] layers, final OrderingStrategy strategy,
+            final GroupOrderStrategy cmGroupOrderStrategy) {
         int previousLayer = -1;
         int wrongModelOrder = 0;
         for (LNode[] layer : layers) {
-            ModelOrderNodeComparator comp = new ModelOrderNodeComparator(
-                    previousLayer == -1 ? layers[0] : layers[previousLayer], strategy, LongEdgeOrderingStrategy.EQUAL, false);
+            // FIXME I do not think that the NONE cmGroupOrderStrategy is respected here.
+            ModelOrderNodeComparator comp = new ModelOrderNodeComparator(graph,
+                    previousLayer == -1 ? layers[0] : layers[previousLayer], strategy, LongEdgeOrderingStrategy.EQUAL,
+                    cmGroupOrderStrategy, false);
             for (int i = 0; i < layer.length; i++) {
                 for (int j = i + 1; j < layer.length; j++) {
                     if (layer[i].hasProperty(InternalProperties.MODEL_ORDER)
@@ -346,15 +352,17 @@ public class LayerSweepCrossingMinimizer
     /**
      * Compares all ports in a each layer and counts how often they are not in model order.
      * This requires that the {@code SortByInputModelProcessor} ran previously.
+     * @param graph the graph
      * @param layers layers to check
+     * @param cmGroupOrderStrategy the strategy of the group model order
      * @return The number of model order conflicts
      */
-    private int countModelOrderPortChanges(final LNode[][] layers) {
+    private int countModelOrderPortChanges(final LGraph graph, final LNode[][] layers, GroupOrderStrategy groupOrderStrategy) {
         int previousLayer = -1;
         int wrongModelOrder = 0;
         for (LNode[] layer : layers) {
             for (LNode lNode : layer) {
-                Comparator<LPort> comp = new ModelOrderPortComparator(
+                Comparator<LPort> comp = new ModelOrderPortComparator(graph,
                         previousLayer == -1 ? layers[0] : layers[previousLayer],
                                 lNode.getGraph().getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY),
                                 SortByInputModelProcessor.longEdgeTargetNodePreprocessing(lNode),
@@ -410,15 +418,17 @@ public class LayerSweepCrossingMinimizer
             // The influence of port and node order can be configured.
             OrderingStrategy modelOrderStrategy = currentGraph.lGraph()
                     .getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY);
+            GroupOrderStrategy cmGroupOrderStrategy = currentGraph.lGraph()
+                    .getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CM_GROUP_ORDER_STRATEGY);
             double crossingCounterNodeInfluence = currentGraph.lGraph()
                     .getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_CROSSING_COUNTER_NODE_INFLUENCE);
             double crossingCounterPortInfluence = currentGraph.lGraph()
                     .getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_CROSSING_COUNTER_PORT_INFLUENCE);
             if (modelOrderStrategy != OrderingStrategy.NONE) {
                 modelOrderInfluence += crossingCounterNodeInfluence
-                        * countModelOrderNodeChanges(gD.currentNodeOrder(), modelOrderStrategy);
+                        * countModelOrderNodeChanges(currentGraph.lGraph(), gD.currentNodeOrder(), modelOrderStrategy, cmGroupOrderStrategy);
                 modelOrderInfluence += crossingCounterPortInfluence
-                        * countModelOrderPortChanges(gD.currentNodeOrder());
+                        * countModelOrderPortChanges(currentGraph.lGraph(), gD.currentNodeOrder(), cmGroupOrderStrategy);
             }
             totalCrossings += gD.crossCounter().countAllCrossings(gD.currentNodeOrder()) + modelOrderInfluence;
             for (LGraph childLGraph : gD.childGraphs()) {
@@ -649,7 +659,9 @@ public class LayerSweepCrossingMinimizer
         /** Use one-sided GreedySwitchHeuristic. */
         ONE_SIDED_GREEDY_SWITCH,
         /** Use two-sided GreedySwitchHeuristic. */
-        TWO_SIDED_GREEDY_SWITCH
+        TWO_SIDED_GREEDY_SWITCH,
+        /** Use MedianHeuristic */
+        MEDIAN
     }
 
     /** intermediate processing configuration. */

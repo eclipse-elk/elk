@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Rectpacking Algorithms Tests
 Bundle-SymbolicName: org.eclipse.elk.alg.rectpacking.test;singleton:=true
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.11.0.qualifier
 Automatic-Module-Name: org.eclipse.elk.alg.rectpacking.test
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: Eclipse Modeling Project
 Require-Bundle: com.google.guava,
  org.eclipse.elk.core,

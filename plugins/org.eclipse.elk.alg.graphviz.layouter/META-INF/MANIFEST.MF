@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.elk.alg.graphviz.layouter
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Layout Bridge for Graphviz
 Bundle-SymbolicName: org.eclipse.elk.alg.graphviz.layouter;singleton:=true
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.11.0.qualifier
 Bundle-Activator: org.eclipse.elk.alg.graphviz.layouter.GraphvizLayouterPlugin
 Require-Bundle: org.eclipse.ui;resolution:=optional,
  org.eclipse.core.runtime,
@@ -16,5 +16,5 @@ Require-Bundle: org.eclipse.ui;resolution:=optional,
  org.eclipse.elk.alg.graphviz.dot
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Eclipse Modeling Project
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.elk.alg.graphviz.layouter

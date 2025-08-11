@@ -3,9 +3,9 @@ Automatic-Module-Name: org.eclipse.elk.alg.layered
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Layered Layout Algorithm
 Bundle-SymbolicName: org.eclipse.elk.alg.layered;singleton:=true
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.11.0.qualifier
 Bundle-Vendor: Eclipse Modeling Project
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: com.google.guava,
  org.eclipse.emf.ecore;bundle-version="2.10.0",
  org.eclipse.xtext.xbase.lib;bundle-version="2.10.0",

@@ -100,7 +100,7 @@ public final class InitialPlacement {
                 block.addChild(rect);
                 return true;
             } else if (block.getX() + rect.getWidth() <= boundingWidth &&
-                    (block.getY() + block.getHeight() + rect.getHeight() + nodeNodeSpacing <= row.getHeight() || row.getChildren().size() == 1)) {
+                    (block.getY() + block.getHeight() + rect.getHeight() + nodeNodeSpacing <= row.getY() + row.getHeight())) {
                 // Case a new row in the block can be opened
                 block.addChildInNewRow(rect);
                 return true;

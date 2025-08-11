@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.elk.graph
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Graph Model
 Bundle-SymbolicName: org.eclipse.elk.graph;singleton:=true
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.11.0.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: Eclipse Modeling Project
 Export-Package: org.eclipse.elk.graph,
@@ -13,4 +13,4 @@ Export-Package: org.eclipse.elk.graph,
 Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.10.0",
  com.google.guava
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17

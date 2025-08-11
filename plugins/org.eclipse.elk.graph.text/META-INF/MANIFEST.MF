@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.elk.graph.text
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Textual Graph Format
 Bundle-Vendor: Eclipse Modeling Project
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.11.0.qualifier
 Bundle-SymbolicName: org.eclipse.elk.graph.text; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.elk.core,
@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.elk.core,
  org.eclipse.xtext.util,
  org.eclipse.xtend.lib,
  org.antlr.runtime
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.elk.graph.text,
  org.eclipse.elk.graph.text.conversion,
  org.eclipse.elk.graph.text.formatting2,
