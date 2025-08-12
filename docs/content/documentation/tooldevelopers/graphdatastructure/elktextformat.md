@@ -20,7 +20,7 @@ The id is a string that has to begin with a letter.
 All elements furthermore can have [_layout options_]({{< relref "reference/options.md" >}}).
 Layout options are basically a list of key-value pairs that are used to assign layout option values to the element.
 Layout options can be an enum value, an enum set, an integer, a double, or other more complex objects.
-For each layout option the type is specified in the [_reference_]({{< relref "reference/options.html" >}})
+For each layout option the type is specified in the [_reference_]({{< relref "reference/options.html" >}}).
 
 ```elkt
 layoutOption1: ENUM_VALUE
@@ -42,10 +42,9 @@ spacing.individual: "TODO"
 
 ## Nodes, Ports, and Labels
 
-Nodes, ports, and labels have a two-dimensional location and size. Each of these elements
-can also have an arbitrary number of labels to describe them properly. Yes, even labels can
-have labels, although it depends on the layout algorithm whether or not it supports labeled
-labels.
+Nodes, ports, and labels have a two-dimensional location and size.
+Each of these elements can also have an arbitrary number of labels to describe them properly.
+Yes, even labels can have labels, although it depends on the layout algorithm whether or not it supports labeled labels.
 The optional `layout` block may be used to specify the size and positions of these elements.
 
 ```elkt
@@ -86,8 +85,7 @@ Ports do not have any more interesting properties. Ports are boring.
 ## Labels
 
 Labels contain text.
-Note that layout algorithms
-generally don't perform any size estimation of the text.
+Note that layout algorithms generally don't perform any size estimation of the text.
 Therefore you should specify a reasonable width and height.
 
 ```elkt
@@ -98,13 +96,12 @@ label "A magnificent text"
 
 There are two types of edges: primitive edges and extended edges.
 Primitive edges are solely supported for legacy models to work.
-Exported graphs will always be made up of extended edges. Both kind 
-of edges support labels.
+Exported graphs will always be made up of extended edges.
+Both kind of edges support labels.
 
 ### Primitive Edges
 
-Primitive edges have a source and target node and can optionally connect
-to a source port and target port.
+Primitive edges have a source and target node and can optionally connect to a source port and target port.
 
 ```elkt
 edge source_node_id.source_port_id -> target_node_id.target_port_id {
@@ -124,7 +121,8 @@ One array defines the edge's source elements, the other defines its target eleme
 Edges may well connect more than one source to more than one target, making them hyperedges.
 Note that many layout algorithms don't support hyperedges.
 If an edge has a layout, it can specify an arbitrary number of edge sections
-that define said layout. A simple edge with one source and one target only needs a single section.
+that define said layout.
+A simple edge with one source and one target only needs a single section.
 
 ```elkt
 edge source_node_id.source_port_id, another_source -> target_node_id.target_port_id, another_target {
@@ -137,7 +135,8 @@ edge source_node_id.source_port_id, another_source -> target_node_id.target_port
 
 ## Edge Sections
 
-Edge sections are only used in conjunction with extended edges and capture the routing of an edge through a drawing. Each section connects two end points.
+Edge sections are only used in conjunction with extended edges and capture the routing of an edge through a drawing.
+Each section connects two end points.
 An end point can be one of the end points of the section's edge (a node or a port), or one or more other edge sections.
 The points where edge sections meet are _junction points_ where one part of the edge branches off.
 An edge section can only have either an incoming shape or incoming edge sections (the same is true of course for outgoing shapes and outgoing edge sections).
