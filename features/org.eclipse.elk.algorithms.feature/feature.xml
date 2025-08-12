@@ -101,5 +101,12 @@ SPDX-License-Identifier: EPL-2.0
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="org.eclipse.elk.alg.vertiflex"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
   
 </feature>

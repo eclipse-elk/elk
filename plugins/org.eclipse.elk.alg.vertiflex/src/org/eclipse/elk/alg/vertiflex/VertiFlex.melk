@@ -1,0 +1,80 @@
+/*******************************************************************************
+ * Copyright (c) 2023 Kiel University and others.
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *******************************************************************************/
+package org.eclipse.elk.alg.vertiflex
+
+import org.eclipse.elk.alg.vertiflex.EdgeRoutingStrategy
+import org.eclipse.elk.alg.vertiflex.VertiFlexLayoutProvider
+import org.eclipse.elk.core.math.ElkPadding
+
+/**
+ * Declarations for the ELK VertiFlex tree layout algorithm.
+ */
+bundle {
+    metadataClass options.VertiFlexMetaDataProvider
+    idPrefix org.eclipse.elk.vertiflex
+}
+
+algorithm vertiflex(VertiFlexLayoutProvider) {
+    label "ELK VertiFlex"
+    description
+        "Tree layout algorithm that allows defining set vertical positions for nodes
+         rather than automatically placing nodes on levels according to their topology."
+    metadataClass options.VertiFlexOptions
+    category org.eclipse.elk.tree
+    features multi_edges, edge_labels
+    supports org.eclipse.elk.spacing.nodeNode = 20
+    supports org.eclipse.elk.padding = new ElkPadding(5)
+    supports org.eclipse.elk.interactive
+    supports org.eclipse.elk.portConstraints
+    supports org.eclipse.elk.edgeLabels.inline = false
+    // Common node micro layout
+    supports org.eclipse.elk.omitNodeMicroLayout
+    supports org.eclipse.elk.margins
+    // Algorithm specific properties
+    supports verticalConstraint
+    supports layoutStrategy
+    supports layerDistance
+    supports considerNodeModelOrder
+    
+}
+
+option verticalConstraint: double {
+    label "Fixed vertical position"
+    description
+        "The Y position that the node should be fixed at."
+    targets nodes
+}
+
+option layoutStrategy: EdgeRoutingStrategy {
+    label "Edge layout strategy"
+    description
+        "Strategy for the layout of the children. 'straight' for straight line drawings, 'bend' for a possible bend.
+         When straight edges are prioritized the nodes will be reordered in order to guarantee that straight edges are
+         possible. If bend points are enabled on the other hand, the given model order of the nodes is maintained and 
+         bend points are introduced to prevent edge node overlaps."
+    targets nodes
+    default = EdgeRoutingStrategy.STRAIGHT
+}
+
+option layerDistance: double {
+    label "Layer distance"
+    description
+        "The distance to use between nodes of different layers if no vertical constraints are set."
+    targets parents
+    default = 50.0
+}
+
+option considerNodeModelOrder: boolean {
+    label "Consider node model order"
+    description
+        "Consider node model as a secondary criterion when using straight line routing."
+    targets parents
+    default = true
+}

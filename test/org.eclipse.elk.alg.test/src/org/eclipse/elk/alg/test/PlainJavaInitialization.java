@@ -17,6 +17,7 @@ import org.eclipse.elk.alg.mrtree.options.MrTreeMetaDataProvider;
 import org.eclipse.elk.alg.radial.options.RadialMetaDataProvider;
 import org.eclipse.elk.alg.rectpacking.options.RectPackingMetaDataProvider;
 import org.eclipse.elk.alg.spore.options.SporeMetaDataProvider;
+import org.eclipse.elk.alg.vertiflex.options.VertiFlexMetaDataProvider;
 import org.eclipse.elk.core.data.ILayoutMetaDataProvider;
 import org.eclipse.elk.core.data.LayoutMetaDataService;
 import org.eclipse.elk.core.debug.grandom.GRandomStandaloneSetup;
@@ -42,7 +43,8 @@ public final class PlainJavaInitialization {
         new RadialMetaDataProvider(),
         new RectPackingMetaDataProvider(),
         new SporeMetaDataProvider(),
-        new StressMetaDataProvider()
+        new StressMetaDataProvider(),
+        new VertiFlexMetaDataProvider()
     };
     
     /**
