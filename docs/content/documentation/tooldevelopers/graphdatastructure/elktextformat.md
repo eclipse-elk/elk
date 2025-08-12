@@ -9,19 +9,18 @@ menu:
 
 The ELK text format has five basic elements: nodes, ports, labels, edges and edge sections.
 Details about each element can be found below.
-Note that the ELK text format uses default values for some things such as node sizes if they are not specified to make writing elkt files more convenient.
+Note that the ELK text format uses default node sizes if they are not specified to make writing elkt files more convenient.
 This is different from the JSON format, where no such defaults are assumed.
 
 ## Nodes, Ports, Labels, Edges, and Edge Sections
 
-All elements, except labels, must have an _id_ that uniquely identifies them.
-Labels are usually not referred to from other parts of the graph,
-which is why the id is optional.
+Nodes and ports must have an _id_ that uniquely identifies them.
+Labels are usually not referred to from other parts of the graph, which is why the id is optional.
 The id is a string that has to begin with a letter.
 All elements furthermore can have [_layout options_]({{< relref "reference/options.md" >}}).
-Layout options are basically a list of key-value pairs that are used to
-assign layout option values to the element.
+Layout options are basically a list of key-value pairs that are used to assign layout option values to the element.
 Layout options can be an enum value, an enum set, an integer, a double, or other more complex objects.
+For each layout option the type is specified in the [_reference_]({{< relref "reference/options.html" >}})
 
 ```elkt
 layoutOption1: ENUM_VALUE
@@ -35,13 +34,19 @@ A special case is [_padding_]({{< relref "reference/options/org-eclipse-elk-padd
 padding: "[top=20.0,left=20.0,bottom=20.0,right=20.0]"
 ```
 
+[_Individual spacings_]({{< relref "reference/options/org-eclipse-elk-spacing-individual.html" >}}) are essentially a map of options.
+
+```elkt
+spacing.individual: "TODO"
+```
+
 ## Nodes, Ports, and Labels
 
 Nodes, ports, and labels have a two-dimensional location and size. Each of these elements
 can also have an arbitrary number of labels to describe them properly. Yes, even labels can
 have labels, although it depends on the layout algorithm whether or not it supports labeled
 labels.
-The `layout block is used to specify the size and positions of these elements.
+The optional `layout` block may be used to specify the size and positions of these elements.
 
 ```elkt
 layout [
@@ -57,11 +62,10 @@ Edges can connect to a node either directly or through one of its ports.
 A node can also contain an arbitrary number of child nodes.
 A graph is actually nothing more than a simple node whose children are the top-level nodes of the graph.
 Finally, a node can contain edges.
-While it is common to define those edges under a given node that connect that node's children, in fact any edge may be defined under any node, regardless of its
-end points. This allows for flexibility when defining hierarchy-crossing edges, as well as for
-alternative schemes, such as defining all edges at the root level.
-See [_Coordinate System_]({{< relref "documentation/tooldevelopers/graphdatastructure/coordinatesystem.md" >}})
-for the rules for interpreting edge coordinates.
+While it is common to define those edges under a given node that connect that node's children, in fact any edge may be defined under any node, regardless of its end points.
+This allows for flexibility when defining hierarchy-crossing edges, as well as for alternative schemes, such as defining all edges at the root level.
+Note that this is not recommended and in some cases poorly supported.
+See [_Coordinate System_]({{< relref "documentation/tooldevelopers/graphdatastructure/coordinatesystem.md" >}}) for the rules for interpreting edge coordinates.
 
 ```elkt
 node n {
@@ -81,7 +85,7 @@ Ports do not have any more interesting properties. Ports are boring.
 
 ## Labels
 
-Labels can additionally contain text.
+Labels contain text.
 Note that layout algorithms
 generally don't perform any size estimation of the text.
 Therefore you should specify a reasonable width and height.
@@ -152,4 +156,4 @@ section incoming_sections -> outgoing_sections [
 ```
 
 ## Examples
-Many examples can be found in [elklive](https://rtsys.informatik.uni-kiel.de/elklive/examples.html).
+Many examples can be found in [_elklive_](https://rtsys.informatik.uni-kiel.de/elklive/examples.html).
