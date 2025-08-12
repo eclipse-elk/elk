@@ -34,10 +34,10 @@ A special case is [_padding_]({{< relref "reference/options/org-eclipse-elk-padd
 padding: "[top=20.0,left=20.0,bottom=20.0,right=20.0]"
 ```
 
-[_Individual spacings_]({{< relref "reference/options/org-eclipse-elk-spacing-individual.html" >}}) are essentially a map of options.
+[_Individual spacings_]({{< relref "reference/options/org-eclipse-elk-spacing-individual.html" >}}) are essentially a map of options that use a special syntax.
 
 ```elkt
-spacing.individual: "TODO"
+spacing.individual: "spacing.nodeNode: 10.0 :: spacing portsSurrounding: [top=40.0,left=10.0,bottom=10.0,right=30.0]"
 ```
 
 ## Nodes, Ports, and Labels
