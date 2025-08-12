@@ -9,11 +9,16 @@
  *******************************************************************************/
 package org.eclipse.elk.alg.layered.intermediate;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
+import org.eclipse.elk.alg.layered.graph.LNode;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 import org.eclipse.elk.core.alg.ILayoutProcessor;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
@@ -51,6 +56,8 @@ public class PartitionPreprocessor implements ILayoutProcessor<LGraph> {
 
     /** The priority to set on added constraint edges (arbitrary, large value). */
     private static final int PARTITION_CONSTRAINT_EDGE_PRIORITY = 1_000;
+    
+    
 
     @Override
     public void process(final LGraph lGraph, final IElkProgressMonitor monitor) {
@@ -58,10 +65,14 @@ public class PartitionPreprocessor implements ILayoutProcessor<LGraph> {
         
         // Find all edges that must be reversed, and then reverse them (this needs to be a two-step process to avoid
         // ConcurrentModificationExceptions)
+        List<LNode> partitionedNodes = lGraph.getLayerlessNodes()
+            .stream()
+            .filter(lNode -> lNode.hasProperty(LayeredOptions.PARTITIONING_PARTITION))
+            .collect(Collectors.toList());
         List<LEdge> edgesToBeReversed = lGraph.getLayerlessNodes().stream()
             .filter(lNode -> lNode.hasProperty(LayeredOptions.PARTITIONING_PARTITION))
             .flatMap(lNode -> Streams.stream(lNode.getOutgoingEdges()))
-            .filter(lEdge -> mustBeReversed(lEdge))
+            .filter(lEdge -> mustBeReversed(lEdge, partitionedNodes))
             .collect(Collectors.toList());
             
         edgesToBeReversed.stream()
@@ -70,11 +81,12 @@ public class PartitionPreprocessor implements ILayoutProcessor<LGraph> {
         monitor.done();
     }
 
-    private boolean mustBeReversed(final LEdge lEdge) {
+    private boolean mustBeReversed(final LEdge lEdge, List<LNode> partitionedNodes) {
         assert lEdge.getSource().getNode().hasProperty(LayeredOptions.PARTITIONING_PARTITION);
         
         if (lEdge.getTarget().getNode().hasProperty(LayeredOptions.PARTITIONING_PARTITION)) {
             // Avoid the performance overhead unboxing would incur since we're only comparing the two values
+            // This is the easy mode, the partitions are connected directly.
             Integer sourcePartition = lEdge.getSource().getNode().getProperty(LayeredOptions.PARTITIONING_PARTITION);
             Integer targetPartition = lEdge.getTarget().getNode().getProperty(LayeredOptions.PARTITIONING_PARTITION);
             
@@ -82,6 +94,41 @@ public class PartitionPreprocessor implements ILayoutProcessor<LGraph> {
             return sourcePartition.compareTo(targetPartition) > 0;
             
         } else {
+            // You need to check further in the graph to see if the is a connected partitioned node.
+            // The node  order matters here, but I guess it is correct.
+            // Traverse the graph breath first and check if there are partitioned nodes.
+            // While doing so save the path to the partitioned node and reverse all edges leading to it if the target
+            // partition is lower than the source partition.
+            int sourcePartition = lEdge.getSource().getNode().getProperty(LayeredOptions.PARTITIONING_PARTITION);
+            // Remove all partitioned nodes with a higher partition ID than the source partition.
+            List<LNode> partitionedNodesWithLowerPartition = partitionedNodes.stream()
+                .filter(lNode -> lNode.getProperty(LayeredOptions.PARTITIONING_PARTITION) < sourcePartition)
+                .collect(Collectors.toList());
+            
+            // Find the paths between the source node and all partitioned nodes with a lower partition ID.
+            Queue<LNode> queue = new LinkedList<>();
+            HashSet<LNode> visited = new HashSet<>();
+            queue.add(lEdge.getSource().getNode());
+            visited.add(lEdge.getSource().getNode());
+            while (!queue.isEmpty()) {
+                LNode currentNode = queue.poll();
+                if (partitionedNodesWithLowerPartition.contains(currentNode)) {
+                    // We found a partitioned node with a lower partition ID, so we need to reverse the edge
+                    // connecting it to the source node.
+                    // Currently, we only reverse the outgoing edge from a partitioned node that at some points leads
+                    // to a partitioned node with a lower partition ID and not the full path.
+                    return true;
+                }
+                // Doing bfs to find all partitioned nodes with a lower partition ID if they can be reached.
+                for (LEdge outgoingEdge : currentNode.getOutgoingEdges()) {
+                    LNode targetNode = outgoingEdge.getTarget().getNode();
+                    if (!visited.contains(targetNode)) {
+                        visited.add(targetNode);
+                        queue.add(targetNode);
+                    }
+                }
+            }
+            // No node with a lower partition ID was found, so we do not need to reverse any edges.
             return false;
         }
     }
