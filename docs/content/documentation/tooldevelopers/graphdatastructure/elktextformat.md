@@ -119,6 +119,7 @@ edge source_node_id.source_port_id -> target_node_id.target_port_id {
 Extended edges have two mandatory arrays consisting of the identifiers of nodes and ports.
 One array defines the edge's source elements, the other defines its target elements.
 Edges may well connect more than one source to more than one target, making them hyperedges.
+It should be noted that currently none of the algorithms implemented in ELK explicitly support hyperedges.
 Note that many layout algorithms don't support hyperedges.
 If an edge has a layout, it can specify an arbitrary number of edge sections
 that define said layout.
@@ -143,6 +144,7 @@ An edge section can only have either an incoming shape or incoming edge sections
 In the simplest case, an edge only has a single edge section which runs from the edge's single source to its single target.
 In this case, it is enough to define the section's start and end point and possibly bendpoints.
 Incoming and outgoing shapes are then filled in automatically by the importer.
+Specifying edge sections in the elkt format is unnecessary in all normal use cases, because the layout algorithms will create them where necessary.
 
 ```elkt
 section incoming_sections -> outgoing_sections [
