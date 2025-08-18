@@ -26,6 +26,7 @@ algorithm vertiflex(VertiFlexLayoutProvider) {
     description
         "Tree layout algorithm that allows defining set vertical positions for nodes
          rather than automatically placing nodes on levels according to their topology."
+    documentation "@vertiflex.md"
     metadataClass options.VertiFlexOptions
     category org.eclipse.elk.tree
     features multi_edges, edge_labels
