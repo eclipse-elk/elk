@@ -10,6 +10,7 @@
 package org.eclipse.elk.alg.layered.p2layers;
 
 import java.util.List;
+import java.util.Stack;
 
 import org.eclipse.elk.alg.layered.LayeredPhases;
 import org.eclipse.elk.alg.layered.graph.LEdge;
@@ -73,7 +74,6 @@ public final class LongestPathLayerer implements ILayoutPhase<LayeredPhases, LGr
         for (LNode node : nodes) {
             visit(node);
         }
-        
         // empty the list of unlayered nodes
         nodes.clear();
         
@@ -89,29 +89,41 @@ public final class LongestPathLayerer implements ILayoutPhase<LayeredPhases, LGr
      * Visit a node: if not already visited, find the longest path to a sink.
      * 
      * @param node node to visit
-     * @return height of the given node in the layered graph
      */
-    private int visit(final LNode node) {
-        int height = nodeHeights[node.id];
-        if (height >= 0) {
-            // the node was already visited (the case height == 0 should never occur)
-            return height;
-        } else {
-            int maxHeight = 1;
-            for (LPort port : node.getPorts()) {
+    private void visit(final LNode node) {
+        
+        int [] internalNodeHeights = new int [nodeHeights.length];
+        for (int i = 0; i < internalNodeHeights.length; i++) {
+            internalNodeHeights[i] = nodeHeights[i];
+        }
+        Stack<LNode> stack = new Stack<>();
+        stack.push(node);
+        while (stack.size() > 0) { 
+            LNode top = stack.pop();
+            boolean outgoingEdges = false;
+            for (LPort port : top.getPorts()) {
                 for (LEdge edge : port.getOutgoingEdges()) {
                     LNode targetNode = edge.getTarget().getNode();
-                    
-                    // ignore self-loops
-                    if (node != targetNode) {
-                        int targetHeight = visit(targetNode);
-                        maxHeight = Math.max(maxHeight, targetHeight + 1);
+                    outgoingEdges = true;
+                    if (node != targetNode && top != targetNode && internalNodeHeights[targetNode.id] < 0) {
+                        // push unsolved problem back onto stack
+                        stack.push(top);
+                        stack.push(targetNode);
+                    } else {
+                        internalNodeHeights[top.id] = 
+                                Math.max(internalNodeHeights[top.id], internalNodeHeights[targetNode.id] + 1);
                     }
                 }
             }
-            putNode(node, maxHeight);
-            return maxHeight;
+            if (!outgoingEdges) {
+                internalNodeHeights[top.id] = 1;
+            }
         }
+        // I think this is slower than the recursive function, because we have to 
+        // call the outer visit method for each node and are not storing intermediate results
+        // TODO: this should be able to be improved
+        // it's not trivial though, because we need to keep track of the longest path somehow
+        putNode(node, internalNodeHeights[node.id]);
     }
     
     /**
