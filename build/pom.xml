@@ -500,17 +500,9 @@
     </developer>
 
     <developer>
-      <id>christoph.schulze</id>
-      <name>Christoph Daniel Schulze</name>
-      <email>cds@informatik.uni-kiel.de</email>
-      <organization>Kiel University</organization>
-      <organizationUrl>https://www.rtsys.informatik.uni-kiel.de/</organizationUrl>
-    </developer>
-
-    <developer>
-      <id>ulf.rueegg</id>
-      <name>Ulf Rüegg</name>
-      <email>uru@informatik.uni-kiel.de</email>
+      <id>maximilian.kasperowski</id>
+      <name>Maximilian Kasperowski</name>
+      <email>mka@informatik.uni-kiel.de</email>
       <organization>Kiel University</organization>
       <organizationUrl>https://www.rtsys.informatik.uni-kiel.de/</organizationUrl>
     </developer>
