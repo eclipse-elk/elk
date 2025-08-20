@@ -242,25 +242,6 @@ spec:
       }
     }
 
-    stage('Website') {
-      steps {
-        container('hugo') {
-          dir ('elk/docs') {
-            sh "hugo"
-          }
-        }
-
-        container('jnlp') {
-          // Deploy the website
-          dir ('elk/build/releng') {
-            sshagent(['	github-bot-ssh']) {
-              sh "bash publish-website.sh"
-            }
-          }
-        }
-      }
-    }
-
     stage('Publish') {
       steps {
         // Zip the update site
