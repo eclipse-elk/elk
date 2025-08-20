@@ -198,7 +198,7 @@
                   test
                 </excludeArtifact>
                 <excludeArtifact>
-                  feature
+                  features
                 </excludeArtifact>
                 <excludeArtifact>
                   plugins
