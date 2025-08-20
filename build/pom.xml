@@ -194,6 +194,39 @@
                 <excludeArtifact>
                   org.eclipse.elk.shared.test
                 </excludeArtifact>
+                <excludeArtifact>
+                  test
+                </excludeArtifact>
+                <excludeArtifact>
+                  feature
+                </excludeArtifact>
+                <excludeArtifact>
+                  plugins
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.algorithms.feature
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.graphviz.feature
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.gmf.feature
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.ui.feature
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.graph.json.feature
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.feature
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.libavoid.feature
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.sdk.feature
+                </excludeArtifact>
               </excludeArtifacts>
             </configuration>
           </plugin>
