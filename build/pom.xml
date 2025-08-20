@@ -117,10 +117,84 @@
 	    <extensions>true</extensions>
 	    <configuration>
 	      <publishingServerId>central</publishingServerId>
-	      <autoPublish>true</autoPublish>
+	      <autoPublish>false</autoPublish>
               <waitUntil>published</waitUntil>
               <centralSnapshotsUrl>https://central.sonatype.com/repository/maven-snapshots/</centralSnapshotsUrl>
-	    </configuration>
+        <excludeArtifacts>
+								<excludeArtifact>
+									org.eclipse.elk.alg.disco.debug
+								</excludeArtifact>
+								<excludeArtifact>
+									org.eclipse.elk.conn.gmf
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.core.debug.grandom.ide
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.core.debug.grandom.ui
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.core.debug.grandom
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.core.debug
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.core.meta.ui
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.core.ui
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.graph.json.text.ui
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.graph.text.ui
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.alg.common.test
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.alg.disco.test
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.alg.force.test
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.alg.layered.test
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.alg.mrtree.test
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.alg.radial.test
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.alg.rectpacking.test
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.alg.spore.test
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.alg.test
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.alg.topdown.test
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.core.test
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.graph.json.test
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.graph.test
+								</excludeArtifact>
+								<excludeArtifact>
+                  org.eclipse.elk.shared.test
+								</excludeArtifact>
+        </excludeArtifacts>
+      </configuration>
 	  </plugin>
           <!-- Create GPG signatures. -->
           <plugin>
