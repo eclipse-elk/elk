@@ -25,10 +25,9 @@
     <plugins>
       <!-- Don't publish this artifact to Maven repositories. -->
       <plugin>
-        <groupId>org.sonatype.central</groupId>
-        <artifactId>central-publishing-maven-plugin</artifactId>
+        <artifactId>maven-deploy-plugin</artifactId>
         <configuration>
-          <skipPublishing>true</skipPublishing>
+          <skip>true</skip>
         </configuration>
       </plugin>
     </plugins>

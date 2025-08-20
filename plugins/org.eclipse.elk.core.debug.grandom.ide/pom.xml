@@ -31,11 +31,9 @@
 
       <!-- Don't publish this bundle to Maven repositories. -->
       <plugin>
-        <groupId>org.sonatype.central</groupId>
-        <artifactId>central-publishing-maven-plugin</artifactId>
-        <version>0.8.0</version>
+        <artifactId>maven-deploy-plugin</artifactId>
         <configuration>
-          <skipPublishing>true</skipPublishing>
+          <skip>true</skip>
         </configuration>
       </plugin>
     </plugins>
