@@ -75,9 +75,11 @@
 
       <!-- Don't publish any Eclipse feature to Maven repositories. -->
       <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
+        <version>0.8.0</version>
         <configuration>
-          <skip>true</skip>
+          <skipPublishing>true</skipPublishing>
         </configuration>
       </plugin>
     </plugins>
