@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.elk.graph.json
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Graph JSON
 Bundle-Vendor: Eclipse Modeling Project
-Bundle-Version: 0.11.0.qualifier
+Bundle-Version: 0.11.0
 Bundle-SymbolicName: org.eclipse.elk.graph.json;singleton:=true
 Require-Bundle: com.google.guava,
  com.google.gson;bundle-version="2.8.2",

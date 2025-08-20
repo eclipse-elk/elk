@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.elk.graph.text.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Textual Graph Format UI
 Bundle-Vendor: Eclipse Modeling Project
-Bundle-Version: 0.11.0.qualifier
+Bundle-Version: 0.11.0
 Bundle-SymbolicName: org.eclipse.elk.graph.text.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.elk.core,

@@ -13,14 +13,14 @@
   <parent>
     <groupId>org.eclipse.elk</groupId>
     <artifactId>parent</artifactId>
-    <version>0.11.0-SNAPSHOT</version>
+    <version>0.11.0</version>
     <relativePath>../../build/pom.xml</relativePath>
   </parent>
 
   <groupId>org.eclipse.elk</groupId>
   <artifactId>org.eclipse.elk.alg.vertiflex</artifactId>
   <name>ELK Y Constraint Tree Layout Algorithm</name>
-  <version>0.11.0-SNAPSHOT</version>
+  <version>0.11.0</version>
   <description>Tree drawing algorithm with y-level constraints.</description>
   <packaging>eclipse-plugin</packaging>
 
@@ -28,12 +28,12 @@
     <dependency>
       <groupId>org.eclipse.elk</groupId>
       <artifactId>org.eclipse.elk.core</artifactId>
-      <version>0.11.0-SNAPSHOT</version>
+      <version>0.11.0</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.elk</groupId>
       <artifactId>org.eclipse.elk.alg.common</artifactId>
-      <version>0.11.0-SNAPSHOT</version>
+      <version>0.11.0</version>
     </dependency>
   </dependencies>
 

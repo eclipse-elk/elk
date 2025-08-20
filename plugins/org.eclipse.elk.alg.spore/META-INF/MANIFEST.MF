@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.elk.alg.spore
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK SPOrE
 Bundle-SymbolicName: org.eclipse.elk.alg.spore;singleton:=true
-Bundle-Version: 0.11.0.qualifier
+Bundle-Version: 0.11.0
 Bundle-Vendor: Eclipse Modeling Project
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: com.google.guava,
