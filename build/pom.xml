@@ -110,92 +110,93 @@
       </distributionManagement>
       <build>
         <plugins>
-	  <plugin>
-	    <groupId>org.sonatype.central</groupId>
-	    <artifactId>central-publishing-maven-plugin</artifactId>
-	    <version>0.8.0</version>
-	    <extensions>true</extensions>
-	    <configuration>
-	      <publishingServerId>central</publishingServerId>
-	      <autoPublish>false</autoPublish>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.8.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>central</publishingServerId>
+              <autoPublish>false</autoPublish>
               <waitUntil>published</waitUntil>
-              <centralSnapshotsUrl>https://central.sonatype.com/repository/maven-snapshots/</centralSnapshotsUrl>
-        <excludeArtifacts>
-								<excludeArtifact>
-									org.eclipse.elk.alg.disco.debug
-								</excludeArtifact>
-								<excludeArtifact>
-									org.eclipse.elk.conn.gmf
-								</excludeArtifact>
-								<excludeArtifact>
+              <centralSnapshotsUrl>
+                https://central.sonatype.com/repository/maven-snapshots/</centralSnapshotsUrl>
+              <excludeArtifacts>
+                <excludeArtifact>
+                  org.eclipse.elk.alg.disco.debug
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.conn.gmf
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.core.debug.grandom.ide
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.core.debug.grandom.ui
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.core.debug.grandom
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.core.debug
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.core.meta.ui
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.core.ui
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.graph.json.text.ui
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.graph.text.ui
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.alg.common.test
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.alg.disco.test
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.alg.force.test
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.alg.layered.test
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.alg.mrtree.test
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.alg.radial.test
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.alg.rectpacking.test
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.alg.spore.test
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.alg.test
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.alg.topdown.test
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.core.test
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.graph.json.test
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.graph.test
-								</excludeArtifact>
-								<excludeArtifact>
+                </excludeArtifact>
+                <excludeArtifact>
                   org.eclipse.elk.shared.test
-								</excludeArtifact>
-        </excludeArtifacts>
-      </configuration>
-	  </plugin>
+                </excludeArtifact>
+              </excludeArtifacts>
+            </configuration>
+          </plugin>
           <!-- Create GPG signatures. -->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -235,10 +236,10 @@
         <version>1.1.0</version>
         <executions>
           <execution>
-          <id>license-check</id>
-          <goals>
-            <goal>license-check</goal>
-          </goals>
+            <id>license-check</id>
+            <goals>
+              <goal>license-check</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
@@ -524,7 +525,7 @@
         <enabled>true</enabled>
       </snapshots>
     </pluginRepository>
-	  
+
     <pluginRepository>
       <id>central</id>
       <name>Maven Plugin Repository</name>
