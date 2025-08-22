@@ -1,0 +1,32 @@
+<?xml version="1.0" standalone="no"?>
+
+<svg 
+     version="1.1"
+     baseProfile="full"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:ev="http://www.w3.org/2001/xml-events"
+     xmlns:klighd="http://de.cau.cs.kieler/klighd"
+     x="0px"
+     y="0px"
+     width="175px"
+     height="34px"
+     viewBox="0 0 175 34"
+     >
+<title></title>
+<desc>Creator: FreeHEP Graphics2D Driver Producer: de.cau.cs.kieler.klighd.piccolo.freehep.SemanticSVGGraphics2D Revision Source:  Date: Friday, August 22, 2025, 2:26:54 PM Central European Summer Time</desc>
+<g stroke-dashoffset="0" stroke-linejoin="miter" stroke-dasharray="none" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10">
+<g fill="#ffffff" fill-rule="nonzero" fill-opacity="1" stroke="none">
+  <path d="M 0 0 L 175 0 L 175 34 L 0 34 L 0 0 z"/>
+</g>
+<g stroke-opacity="1" fill="none" stroke="#000000">
+  <path d="M 0.5 0.5 L 174.5 0.5 L 174.5 33.5 L 0.5 33.5 L 0.5 0.5 z"/>
+</g>
+<g transform="matrix(1, 0, 0, 1, 6, 5)">
+  <text x="0" y="9.0" font-weight="normal" font-size="10.666666984558105px" font-style="normal" fill="#000000" stroke="none" font-family="Helvetica" style="white-space: pre" fill-opacity="1">childWithLabelTopLeftAsymmetric</text>
+</g>
+<g transform="matrix(1, 0, 0, 1, 5.5, 17)">
+  <text x="0" y="9.0" font-weight="normal" font-size="10.666666984558105px" font-style="normal" fill="#000000" stroke="none" font-family="Helvetica" style="white-space: pre" fill-opacity="1">childWithLabelTopLeftAsymmetric2</text>
+</g>
+</g>
+</svg>
