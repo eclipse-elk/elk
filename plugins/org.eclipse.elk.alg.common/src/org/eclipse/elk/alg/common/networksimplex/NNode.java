@@ -115,6 +115,11 @@ public final class NNode {
         return allEdges;
     }
     
+    @Override
+    public String toString() {
+        return this.origin.toString();
+    }
+    
     /**
      * Builder class for {@link NNode}s. 
      */
