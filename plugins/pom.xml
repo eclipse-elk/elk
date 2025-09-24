@@ -28,6 +28,7 @@
     <module>org.eclipse.elk.alg.radial</module>
     <module>org.eclipse.elk.alg.graphviz.dot</module>
     <module>org.eclipse.elk.alg.graphviz.layouter</module>
+    <module>org.eclipse.elk.alg.indentedtree</module>
     <module>org.eclipse.elk.alg.layered</module>
     <module>org.eclipse.elk.alg.libavoid</module>
     <module>org.eclipse.elk.alg.mrtree</module>
