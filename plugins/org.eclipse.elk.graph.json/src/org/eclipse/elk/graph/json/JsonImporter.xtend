@@ -753,8 +753,13 @@ final class JsonImporter {
      */
      
     private def ElkNode register(ElkNode node, Object obj) {
-        val id = obj.toJsonObject.id
-
+        var id = obj.toJsonObject.id
+        // If the id is an integer or begins with a number, construct a string id with a leading 'n' character.
+        if (id instanceof Integer) {
+            id = 'n' + id.toString
+        } else if (id instanceof String && (id as String).matches("^[0-9].*")) {
+            id = 'n' + id
+        }
         nodeIdMap.put(id, node)
         nodeJsonMap.put(node, obj)
 
@@ -762,7 +767,13 @@ final class JsonImporter {
     }
 
     private def ElkPort register(ElkPort port, Object obj) {
-        val id = obj.toJsonObject.id
+        var id = obj.toJsonObject.id
+        // If the id is an integer or begins with a number, construct a string id with a leading 'p' character.
+        if (id instanceof Integer) {
+            id = 'p' + id.toString
+        } else if (id instanceof String && (id as String).matches("^[0-9].*")) {
+            id = 'p' + id
+        }
 
         portIdMap.put(id, port)
         portJsonMap.put(port, obj)
@@ -771,7 +782,13 @@ final class JsonImporter {
     }
 
     private def ElkEdge register(ElkEdge edge, Object obj) {
-        val id = obj.toJsonObject.id
+        var id = obj.toJsonObject.id
+        // If the id is an integer or begins with a number, construct a string id with a leading 'e' character.
+        if (id instanceof Integer) {
+            id = 'e' + id.toString
+        } else if (id instanceof String && (id as String).matches("^[0-9].*")) {
+            id = 'e' + id
+        }
 
         edgeIdMap.put(id, edge)
         edgeJsonMap.put(edge, obj)
