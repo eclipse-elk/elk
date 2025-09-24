@@ -1,5 +1,7 @@
 # To verify that changes of a PR do not break elkjs. 
 name: elkjs
+permissions:
+  contents: read
 
 on: 
   pull_request:

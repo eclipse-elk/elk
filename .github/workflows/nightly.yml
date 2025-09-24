@@ -3,6 +3,8 @@
 # since PRs are not blocked by unsuccesful 'ci.yml' builds
 # and direct pushes to master are allowed.
 name: ELK Nightly CI
+permissions:
+  contents: read
 
 on:
   schedule:

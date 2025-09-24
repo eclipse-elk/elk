@@ -1,5 +1,7 @@
 # To verify that the changes of a PR do not break the build and pass the tests.
 name: ELK CI
+permissions:
+  contents: read
 
 on:
   pull_request:
