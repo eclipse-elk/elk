@@ -12,6 +12,9 @@ package org.eclipse.elk.alg.layered.p5edges.splines;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LNode;
@@ -24,10 +27,6 @@ import org.eclipse.elk.alg.layered.p5edges.splines.SplineEdgeRouter.SideToProces
 import org.eclipse.elk.core.math.ElkRectangle;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.Pair;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 /**
  * Represents a segment of a spline that is to be created. A segment represents one or more {@link LEdge}s between
@@ -56,13 +55,13 @@ public final class SplineSegment implements Comparable<SplineSegment> {
     
     // the following variables are used during cycle breaking and topological sorting
     /** A sets of ports, determining the ports left of the hyper-edge. */  
-    public final Set<LPort> leftPorts = Sets.newHashSet();
+    public final Set<LPort> leftPorts = new HashSet<>();
     /** A sets of ports, determining the ports right of the hyper-edge. */  
-    public final Set<LPort> rightPorts = Sets.newHashSet();
+    public final Set<LPort> rightPorts = new HashSet<>();
     /** Outgoing dependencies are pointing to hyper-edges that must lay right of this hyper edge. */
-    public final List<Dependency> outgoing = Lists.newArrayList();
+    public final List<Dependency> outgoing = new ArrayList<>();
     /** Incoming dependencies are pointing to hyper-edges that must lay left of this hyper edge. */
-    public final List<Dependency> incoming = Lists.newArrayList();
+    public final List<Dependency> incoming = new ArrayList<>();
     /** Used to mark nodes in the cycle breaker. */
     public int mark;
     /** Determines how many elements are depending on this. */
@@ -74,7 +73,7 @@ public final class SplineSegment implements Comparable<SplineSegment> {
     
     // variables representing the characteristics of the segment 
     /** A set of all LEdges that are combined in this hyper-edge. */
-    public final Set<LEdge> edges = Sets.newHashSet();
+    public final Set<LEdge> edges = new HashSet<>();
     /** If true, the spline segment has no vertical segment, connecting two ports by a horizontal edge path. */
     public final boolean isStraight;
     /** An imaginary bounding box in which this spline segment should reside. */
@@ -134,7 +133,7 @@ public final class SplineSegment implements Comparable<SplineSegment> {
     }
     
     /** Map holding for each {@link LEdge} information that was valid during the edge routing phase. */
-    public Map<LEdge, EdgeInformation> edgeInformation = Maps.newHashMap();
+    public Map<LEdge, EdgeInformation> edgeInformation = new HashMap<>();
     
     /**
      * Constructor for a 1:n hyper-edge.

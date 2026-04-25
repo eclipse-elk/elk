@@ -13,12 +13,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.compaction.recthull.Point.Quadrant;
 import org.eclipse.elk.alg.layered.compaction.recthull.Scanline.EventHandler;
 import org.eclipse.elk.core.math.ElkRectangle;
+import org.eclipse.elk.alg.layered.graph.LGraphUtil;
 
-import com.google.common.collect.Lists;
 
 /**
  * The rectilinear convex hull is represented by four staircases.
@@ -30,7 +31,7 @@ import com.google.common.collect.Lists;
 public final class RectilinearConvexHull {
 
     /** This hull's determined points. */
-    private List<Point> hull = Lists.newArrayList();
+    private List<Point> hull = new ArrayList<>();
 
     @SuppressWarnings("unused")
     private Point xMax1 = null, xMax2 = null;
@@ -97,9 +98,9 @@ public final class RectilinearConvexHull {
             // print clockwise
             System.out.println("The four stairs (no concaves):");
             System.out.println(q1.points);
-            System.out.println(Lists.reverse(q2.points));
+            System.out.println(LGraphUtil.reversed(q2.points));
             System.out.println(q3.points);
-            System.out.println(Lists.reverse(q4.points));
+            System.out.println(LGraphUtil.reversed(q4.points));
         }
         
         // the scanline algorithm detected all convex corners, 
@@ -113,18 +114,18 @@ public final class RectilinearConvexHull {
         if (DEBUG) {
             System.out.println("The four stairs (with concaves):");
             System.out.println(q1.points);
-            System.out.println(Lists.reverse(q2.points));
+            System.out.println(LGraphUtil.reversed(q2.points));
             System.out.println(q3.points);
-            System.out.println(Lists.reverse(q4.points));
+            System.out.println(LGraphUtil.reversed(q4.points));
         }
         
         // ... and add everything to the hull list
         // (in clockwise order, q1..q4)
         rch.getHull().clear();
         rch.getHull().addAll(q1.points);
-        rch.getHull().addAll(Lists.reverse(q2.points));
+        rch.getHull().addAll(LGraphUtil.reversed(q2.points));
         rch.getHull().addAll(q3.points);
-        rch.getHull().addAll(Lists.reverse(q4.points));
+        rch.getHull().addAll(LGraphUtil.reversed(q4.points));
 
         return rch;
     }
@@ -218,7 +219,7 @@ public final class RectilinearConvexHull {
         // SUPPRESS CHECKSTYLE NEXT 10 VisibilityModifier
         private Quadrant quadrant;
         /** The points this handler determined after the execution of the scanline. */
-        public List<Point> points = Lists.newArrayList();
+        public List<Point> points = new ArrayList<>();
         private double maximalY;
         private Comparator<Double> compare;
 
@@ -300,7 +301,7 @@ public final class RectilinearConvexHull {
      */
     private class RectangleEventHandler implements EventHandler<Point> {
 
-        private List<ElkRectangle> rects = Lists.newArrayList();
+        private List<ElkRectangle> rects = new ArrayList<>();
 
         private Point minY = null;
         private Point maxY = null;

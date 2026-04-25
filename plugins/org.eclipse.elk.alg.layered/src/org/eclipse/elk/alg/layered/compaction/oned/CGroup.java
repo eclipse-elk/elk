@@ -10,8 +10,9 @@
 package org.eclipse.elk.alg.layered.compaction.oned;
 
 import java.util.Set;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 
-import com.google.common.collect.Sets;
 
 /**
  * Represents a group of {@link CNode}s whose relative distances to each other are preserved.
@@ -59,8 +60,8 @@ public final class CGroup {
      *            the {@link CNode}s to add
      */
     public CGroup(final CNode... inputCNodes) {
-        cNodes = Sets.newLinkedHashSet();
-        incomingConstraints = Sets.newHashSet();
+        cNodes = new LinkedHashSet<>();
+        incomingConstraints = new HashSet<>();
         outDegree = 0;
         for (CNode cNode : inputCNodes) {
             if (reference == null) {

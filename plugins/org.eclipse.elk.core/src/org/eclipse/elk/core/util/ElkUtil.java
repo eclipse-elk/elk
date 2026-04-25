@@ -12,12 +12,17 @@ package org.eclipse.elk.core.util;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.regex.Pattern;
+import java.util.stream.StreamSupport;
 
 import org.eclipse.elk.core.math.ElkMargin;
 import org.eclipse.elk.core.math.ElkRectangle;
@@ -50,12 +55,6 @@ import org.eclipse.elk.graph.ElkPort;
 import org.eclipse.elk.graph.ElkShape;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
 import org.eclipse.emf.ecore.EObject;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * Utility methods for layout-related things.
@@ -384,9 +383,13 @@ public final class ElkUtil {
 
         node.setDimensions(scalingFactor * node.getWidth(), scalingFactor * node.getHeight());
 
-        final Iterable<ElkLabel> portLabels = Iterables.concat(
-                Iterables.transform(node.getPorts(), p -> p.getLabels()));
-        for (ElkShape shape : Iterables.concat(node.getLabels(), node.getPorts(), portLabels)) {
+        List<ElkShape> scalingShapes = new ArrayList<>();
+        scalingShapes.addAll(node.getLabels());
+        scalingShapes.addAll(node.getPorts());
+        for (ElkPort p : node.getPorts()) {
+            scalingShapes.addAll(p.getLabels());
+        }
+        for (ElkShape shape : scalingShapes) {
             shape.setLocation(scalingFactor * shape.getX(), scalingFactor * shape.getY());
             shape.setDimensions(scalingFactor * shape.getWidth(), scalingFactor * shape.getHeight());
 
@@ -411,11 +414,13 @@ public final class ElkUtil {
         double maxY = 0.0;
         
         // iterate over all nodes and labels and get their coordinate bounds
-        Iterable<ElkLabel> edgeLabels = new ArrayList<>();
+        List<ElkShape> areaShapes = new ArrayList<>();
+        areaShapes.addAll(node.getLabels());
+        areaShapes.addAll(node.getChildren());
         for (ElkEdge edge : node.getContainedEdges()) {
-            edgeLabels = Iterables.concat(edgeLabels, edge.getLabels());
+            areaShapes.addAll(edge.getLabels());
         }
-        for (ElkShape shape : Iterables.concat(node.getLabels(), node.getChildren(), edgeLabels)) {
+        for (ElkShape shape : areaShapes) {
 
             ElkMargin margins = shape.getProperty(CoreOptions.MARGINS);
             if (minX > shape.getX() - margins.left) {
@@ -520,15 +525,15 @@ public final class ElkUtil {
         KVectorChain junctionPoints = new KVectorChain();
 
         // Store the points of the edge in a map for efficiency
-        Map<ElkEdgeSection, ArrayList<KVector>> pointsMap = Maps.newHashMap();
+        Map<ElkEdgeSection, ArrayList<KVector>> pointsMap = new HashMap<>();
         ArrayList<KVector> sectionPoints = getPoints(section);
         pointsMap.put(section, sectionPoints);
 
         // Store the offset of the other edges
-        Map<ElkEdgeSection, KVector> offsetMap = Maps.newHashMap();
+        Map<ElkEdgeSection, KVector> offsetMap = new HashMap<>();
 
         // let allConnectedEdges be the set of edge sections connected to port without the main edge
-        List<ElkEdgeSection> allConnectedSections = Lists.newLinkedList();
+        List<ElkEdgeSection> allConnectedSections = new LinkedList<>();
         for (ElkEdge otherEdge : ElkGraphUtil.allIncidentEdges(port)) {
             if (edge.getSections().size() != 1) {
                 throw new IllegalArgumentException(
@@ -979,12 +984,12 @@ public final class ElkUtil {
      *            the graph to configure.
      */
     public static void configureDefaultsRecursively(final ElkNode graph) {
-        // note that Iterators#filter(Iterator, Class) isn't used on purpose since
-        // it's incompatible with gwt
-        Iterator<EObject> kgeIt = Iterators.filter(graph.eAllContents(),
-            e -> e instanceof ElkGraphElement);
-        while (kgeIt.hasNext()) {
-            EObject kge = kgeIt.next();
+        Iterator<EObject> allIt = graph.eAllContents();
+        while (allIt.hasNext()) {
+            EObject kge = allIt.next();
+            if (!(kge instanceof ElkGraphElement)) {
+                continue;
+            }
             if (kge instanceof ElkNode) {
                 configureWithDefaultValues((ElkNode) kge);
             } else if (kge instanceof ElkPort) {
@@ -1059,7 +1064,7 @@ public final class ElkUtil {
      */
     private static void ensureLabel(final ElkGraphElement klge) {
         if (klge.getLabels().isEmpty()) {
-            if (!Strings.isNullOrEmpty(klge.getIdentifier())) {
+            if (klge.getIdentifier() != null && !klge.getIdentifier().isEmpty()) {
                 ElkLabel label = ElkGraphUtil.createLabel(klge);
                 label.setText(klge.getIdentifier());
             }
@@ -1165,21 +1170,21 @@ public final class ElkUtil {
 
         // Print the identifier if present
         String identifier = element.getIdentifier();
-        if (!Strings.isNullOrEmpty(identifier)) {
+        if (identifier != null && !identifier.isEmpty()) {
             builder.append(' ').append(identifier);
             return;
         }
         // Print the label if present
         if (element instanceof ElkLabel) {
             String text = ((ElkLabel) element).getText();
-            if (!Strings.isNullOrEmpty(text)) {
+            if (text != null && !text.isEmpty()) {
                 builder.append(' ').append(text);
                 return;
             }
         }
         for (ElkLabel label : element.getLabels()) {
             String text = label.getText();
-            if (!Strings.isNullOrEmpty(text)) {
+            if (text != null && !text.isEmpty()) {
                 builder.append(' ').append(text);
                 return;
             }

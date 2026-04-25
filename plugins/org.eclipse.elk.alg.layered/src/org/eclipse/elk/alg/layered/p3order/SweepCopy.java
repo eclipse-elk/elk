@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 
 import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.graph.LNode;
@@ -26,8 +27,6 @@ import org.eclipse.elk.alg.layered.options.LayeredOptions;
 import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.options.PortSide;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * Stores node and port order for a sweep.
@@ -90,8 +89,8 @@ class SweepCopy {
         // the {@link LayeredOptions.ALLOW_NON_FLOW_PORTS_TO_SWITCH_SIDES} option allows the crossing minimizer 
         // to decide the side a corresponding dummy node is placed on in order to reduce the number of crossings
         // as a consequence the configured port side may not be valid anymore and has to be corrected
-        List<LNode> northSouthPortDummies = Lists.newArrayList();
-        Set<LNode> updatePortOrder = Sets.newHashSet();
+        List<LNode> northSouthPortDummies = new ArrayList<>();
+        Set<LNode> updatePortOrder = new HashSet<>();
         
         // iterate the layers
         List<Layer> layers = lGraph.getLayers();

@@ -10,6 +10,7 @@
 package org.eclipse.elk.core.data;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,8 +20,6 @@ import org.eclipse.elk.core.util.InstancePool;
 import org.eclipse.elk.core.validation.IValidatingGraphElementVisitor;
 import org.eclipse.elk.graph.properties.GraphFeature;
 import org.eclipse.elk.graph.properties.IProperty;
-
-import com.google.common.collect.Maps;
 
 /**
  * Data type used to store information for a layout algorithm.
@@ -51,7 +50,7 @@ public final class LayoutAlgorithmData implements ILayoutMetaData {
     private final Class<? extends IValidatingGraphElementVisitor> validatorClass;
     
     /** Map of known layout options. Keys are option IDs, values are the default values. */
-    private final Map<String, Object> knownOptions = Maps.newHashMap();
+    private final Map<String, Object> knownOptions = new HashMap<>();
     
     /**
      * Create a layout algorithm data entry.

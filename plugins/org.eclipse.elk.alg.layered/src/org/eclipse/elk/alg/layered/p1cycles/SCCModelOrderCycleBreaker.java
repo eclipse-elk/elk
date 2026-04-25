@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.LayeredPhases;
 import org.eclipse.elk.alg.layered.graph.LEdge;
@@ -27,7 +28,6 @@ import org.eclipse.elk.core.alg.ILayoutPhase;
 import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
 
 /**
  * This Cycle Breaking Strategy relies on Tarjan's algorithm to find strongly connected components.
@@ -57,7 +57,7 @@ public abstract class SCCModelOrderCycleBreaker implements ILayoutPhase<LayeredP
     /**
      * The edges to reverse.
      */
-    protected List<LEdge> revEdges = Lists.newArrayList();
+    protected List<LEdge> revEdges = new ArrayList<>();
     
     /**
      * The graph.
@@ -82,7 +82,7 @@ public abstract class SCCModelOrderCycleBreaker implements ILayoutPhase<LayeredP
         this.graph = layeredGraph;
 
         // gather edges that point to the wrong direction
-        revEdges = Lists.newArrayList();
+        revEdges = new ArrayList<>();
 
         // One needs an offset to make sure that the model order of nodes with port constraints is
         // always lower/higher than that of other nodes.

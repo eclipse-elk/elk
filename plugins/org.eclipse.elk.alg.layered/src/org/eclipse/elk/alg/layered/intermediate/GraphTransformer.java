@@ -12,6 +12,7 @@ package org.eclipse.elk.alg.layered.intermediate;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -36,7 +37,6 @@ import org.eclipse.elk.core.options.NodeLabelPlacement;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
 
 /**
  * A layout processor that is able to perform transformations on the coordinates of a graph.
@@ -69,7 +69,7 @@ public final class GraphTransformer implements ILayoutProcessor<LGraph> {
         
         // We need to add all layerless nodes as well as all nodes in layers since this processor
         // is run twice -- once before layering, and once afterwards
-        List<LNode> nodes = Lists.newArrayList(layeredGraph.getLayerlessNodes());
+        List<LNode> nodes = new ArrayList<>(layeredGraph.getLayerlessNodes());
         for (Layer layer : layeredGraph.getLayers()) {
             nodes.addAll(layer.getNodes());
         }

@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.common.nodespacing.cellsystem.HorizontalLabelAlignment;
 import org.eclipse.elk.alg.common.nodespacing.cellsystem.LabelCell;
@@ -37,7 +38,6 @@ import org.eclipse.elk.core.options.LabelSide;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
 
 /**
  * <p>Puts all end labels into {@link LabelCell label cells} stored for each node using the
@@ -162,7 +162,7 @@ public final class EndLabelPreprocessor implements ILayoutProcessor<LGraph> {
      * <p>This method is also used by {@link LabelSideSelector}.</p>
      */
     static List<LLabel> gatherLabels(final LPort port) {
-        List<LLabel> labels = Lists.newArrayList();
+        List<LLabel> labels = new ArrayList<>();
         
         // Gather labels of the port itself
         double maxEdgeThickness = gatherLabels(port, labels);

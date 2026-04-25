@@ -14,7 +14,6 @@ import org.eclipse.elk.alg.layered.graph.LNode;
 import org.eclipse.elk.alg.layered.options.GroupOrderStrategy;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 
-import com.google.common.collect.Iterables;
 
 /**
  * This cycle breaking strategy extends the {@link org.eclipse.elk.alg.layered.p1cycles.SCCModelOrderCycleBreaker}.
@@ -90,7 +89,7 @@ public class SCCNodeTypeCycleBreaker extends SCCModelOrderCycleBreaker {
                 }
             } else {
                 // Use connectivity to decide.
-                if (Iterables.size(min.getIncomingEdges()) > Iterables.size(max.getOutgoingEdges())) {
+                if (((int) java.util.stream.StreamSupport.stream(min.getIncomingEdges().spliterator(), false).count()) > ((int) java.util.stream.StreamSupport.stream(max.getOutgoingEdges().spliterator(), false).count())) {
                     for (LEdge edge : min.getIncomingEdges()) {
                         if (stronglyConnectedComponents.get(i).contains(edge.getSource().getNode())) {
                             revEdges.add(edge);

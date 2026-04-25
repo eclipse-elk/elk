@@ -13,6 +13,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.graph.LNode;
@@ -25,9 +28,8 @@ import org.eclipse.elk.alg.layered.p4nodes.bk.BKAlignedLayout.VDirection;
 import org.eclipse.elk.alg.layered.p4nodes.bk.ThresholdStrategy.NullThresholdStrategy;
 import org.eclipse.elk.alg.layered.p4nodes.bk.ThresholdStrategy.SimpleThresholdStrategy;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
+import org.eclipse.elk.alg.layered.graph.LGraphUtil;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * For documentation see {@link BKNodePlacer}.
@@ -47,7 +49,7 @@ public class BKCompactor implements ICompactor {
     /** Spacings. */
     private Spacings spacings;
     /** Representation of the class graph. */
-    private Map<LNode, ClassNode> sinkNodes = Maps.newHashMap();
+    private Map<LNode, ClassNode> sinkNodes = new HashMap<>();
     
     /**
      * @param layeredGraph the graph to handle.
@@ -96,7 +98,7 @@ public class BKCompactor implements ICompactor {
         // a reverse iterator is needed (note that this does not change the original list of layers)
         List<Layer> layers = layeredGraph.getLayers();
         if (bal.hdir == HDirection.LEFT) {
-            layers = Lists.reverse(layers);
+            layers = LGraphUtil.reversed(layers);
         }
 
         // init threshold strategy
@@ -108,7 +110,7 @@ public class BKCompactor implements ICompactor {
             // As with layers, we need a reversed iterator for blocks for different directions
             List<LNode> nodes = layer.getNodes();
             if (bal.vdir == VDirection.UP) {
-                nodes = Lists.reverse(nodes);
+                nodes = LGraphUtil.reversed(nodes);
             }
             
             // Do an initial placement for all blocks
@@ -332,7 +334,7 @@ public class BKCompactor implements ICompactor {
     private void placeClasses(final BKAlignedLayout bal) {
         
         // collect sinks of the class graph
-        Queue<ClassNode> sinks = Lists.newLinkedList();
+        Queue<ClassNode> sinks = new LinkedList<>();
         for (ClassNode n : sinkNodes.values()) {
             if (n.indegree == 0) {
                 sinks.add(n);
@@ -392,7 +394,7 @@ public class BKCompactor implements ICompactor {
         // SUPPRESS CHECKSTYLE NEXT 5 VisibilityModifier
         Double classShift = null;
         LNode node;
-        List<ClassEdge> outgoing = Lists.newArrayList();
+        List<ClassEdge> outgoing = new ArrayList<>();
         int indegree = 0;
         
         private void addEdge(final ClassNode target, final double separation) {

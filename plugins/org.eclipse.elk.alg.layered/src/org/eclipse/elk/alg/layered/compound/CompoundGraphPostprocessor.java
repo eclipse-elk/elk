@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
@@ -29,10 +30,8 @@ import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.math.KVectorChain;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
+import java.util.HashSet;
+import java.util.function.Predicate;
 
 /**
  * Postprocess a compound graph by restoring cross-hierarchy edges that have previously been split
@@ -55,14 +54,9 @@ public class CompoundGraphPostprocessor implements ILayoutProcessor<LGraph> {
     /**
      * A predicate that checks if a given cross hierarchy edge has junction points.
      */
-    private static final Predicate<CrossHierarchyEdge> HAS_JUNCTION_POINTS_PREDICATE =
-            new Predicate<CrossHierarchyEdge>() {
-        
-        public boolean apply(final CrossHierarchyEdge chEdge) {
-            KVectorChain jps = chEdge.getEdge().getProperty(LayeredOptions.JUNCTION_POINTS);
-            return jps != null && !jps.isEmpty();
-        }
-        
+    private static final Predicate<CrossHierarchyEdge> HAS_JUNCTION_POINTS_PREDICATE = chEdge -> {
+        KVectorChain jps = chEdge.getEdge().getProperty(LayeredOptions.JUNCTION_POINTS);
+        return jps != null && !jps.isEmpty();
     };
     
     
@@ -74,11 +68,11 @@ public class CompoundGraphPostprocessor implements ILayoutProcessor<LGraph> {
         boolean addUnnecessaryBendpoints = graph.getProperty(LayeredOptions.UNNECESSARY_BENDPOINTS);
         
         // restore the cross-hierarchy map that was built by the preprocessor
-        Multimap<LEdge, CrossHierarchyEdge> crossHierarchyMap = graph.getProperty(
+        Map<LEdge, Set<CrossHierarchyEdge>> crossHierarchyMap = graph.getProperty(
                 InternalProperties.CROSS_HIERARCHY_MAP);
         
         // remember all dummy edges we encounter; these need to be removed at the end
-        Set<LEdge> dummyEdges = Sets.newHashSet();
+        Set<LEdge> dummyEdges = new HashSet<>();
         
         // iterate over all original edges
         for (LEdge origEdge : crossHierarchyMap.keySet()) {
@@ -200,7 +194,7 @@ public class CompoundGraphPostprocessor implements ILayoutProcessor<LGraph> {
             final List<CrossHierarchyEdge> crossHierarchyEdges) {
         
         KVectorChain junctionPoints = origEdge.getProperty(LayeredOptions.JUNCTION_POINTS);
-        if (Iterables.any(crossHierarchyEdges, HAS_JUNCTION_POINTS_PREDICATE)) {
+        if (java.util.stream.StreamSupport.stream(crossHierarchyEdges.spliterator(), false).anyMatch(HAS_JUNCTION_POINTS_PREDICATE)) {
             // if so, make sure the original edge has an empty non-null junction point list
             if (junctionPoints == null) {
                 junctionPoints = new KVectorChain();

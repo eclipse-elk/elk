@@ -14,8 +14,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
-
 /**
  * An implementation of {@link IPropertyHolder} based on a {@link HashMap}.
  *
@@ -107,7 +105,7 @@ public class MapPropertyHolder implements IPropertyHolder, Serializable {
      */
     private Map<IProperty<?>, Object> getProperties() {
         if (propertyMap == null) {
-            propertyMap = Maps.newHashMap();
+            propertyMap = new HashMap<>();
         }
         return propertyMap;
     }

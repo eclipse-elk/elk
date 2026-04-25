@@ -12,6 +12,7 @@ package org.eclipse.elk.alg.layered.p2layers;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.ArrayList;
 import org.eclipse.elk.alg.layered.LayeredPhases;
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -24,7 +25,6 @@ import org.eclipse.elk.core.alg.ILayoutPhase;
 import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
 
 /**
  * A node layerer that allows user interaction by respecting previous node positions.
@@ -54,7 +54,7 @@ public final class InteractiveLayerer implements ILayoutPhase<LayeredPhases, LGr
     private static class LayerSpan {
         private double start;
         private double end;
-        private List<LNode> nodes = Lists.newArrayList();
+        private List<LNode> nodes = new ArrayList<>();
     }
 
     @Override
@@ -62,7 +62,7 @@ public final class InteractiveLayerer implements ILayoutPhase<LayeredPhases, LGr
         monitor.begin("Interactive node layering", 1);
 
         // create layers with a start and an end position, merging when they overlap with others
-        List<LayerSpan> currentSpans = Lists.newArrayList();
+        List<LayerSpan> currentSpans = new ArrayList<>();
         for (LNode node : layeredGraph.getLayerlessNodes()) {
             double minx = node.getPosition().x;
             double maxx = minx + node.getSize().x;

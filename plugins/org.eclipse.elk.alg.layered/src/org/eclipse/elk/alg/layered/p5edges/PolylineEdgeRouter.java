@@ -31,9 +31,8 @@ import org.eclipse.elk.core.math.KVectorChain;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
+import java.util.function.Predicate;
+import java.util.HashSet;
 
 /**
  * Edge router module that draws edges with non-orthogonal line segments.
@@ -57,12 +56,10 @@ public final class PolylineEdgeRouter implements ILayoutPhase<LayeredPhases, LGr
     /**
      * Predicate that checks whether nodes represent external ports.
      */
-    public static final Predicate<LNode> PRED_EXTERNAL_WEST_OR_EAST_PORT = new Predicate<LNode>() {
-        public boolean apply(final LNode node) {
-            PortSide extPortSide = node.getProperty(InternalProperties.EXT_PORT_SIDE);
-            return node.getType() == NodeType.EXTERNAL_PORT
-                    && (extPortSide == PortSide.WEST || extPortSide == PortSide.EAST);
-        }
+    public static final Predicate<LNode> PRED_EXTERNAL_WEST_OR_EAST_PORT = node -> {
+        PortSide extPortSide = node.getProperty(InternalProperties.EXT_PORT_SIDE);
+        return node.getType() == NodeType.EXTERNAL_PORT
+                && (extPortSide == PortSide.WEST || extPortSide == PortSide.EAST);
     };
     
     /* The basic processing strategy for this phase is empty. Depending on the graph features,
@@ -180,7 +177,7 @@ public final class PolylineEdgeRouter implements ILayoutPhase<LayeredPhases, LGr
     private static final double LAYER_SPACE_FAC = 0.4;
 
     /** Set of already created junction points, to avoid multiple points at the same position. */
-    private final Set<KVector> createdJunctionPoints = Sets.newHashSet();
+    private final Set<KVector> createdJunctionPoints = new HashSet<>();
     
     
     /* Implementation Note:
@@ -216,7 +213,7 @@ public final class PolylineEdgeRouter implements ILayoutPhase<LayeredPhases, LGr
         ListIterator<Layer> layerIter = layeredGraph.getLayers().listIterator();
         while (layerIter.hasNext()) {
             Layer layer = layerIter.next();
-            boolean externalLayer = Iterables.all(layer, PRED_EXTERNAL_WEST_OR_EAST_PORT);
+            boolean externalLayer = java.util.stream.StreamSupport.stream(layer.spliterator(), false).allMatch(PRED_EXTERNAL_WEST_OR_EAST_PORT);
             
             // The rightmost layer is not given any node spacing if it's an external port layer
             if (externalLayer && xpos > 0) {

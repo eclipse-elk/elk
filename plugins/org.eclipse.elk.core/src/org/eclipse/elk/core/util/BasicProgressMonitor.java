@@ -22,9 +22,6 @@ import java.util.List;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-
 /**
  * Base class for implementations of progress monitors. This class performs execution time measurement, logs debug
  * output, keeps track of the amount of completed work, and handles sub-tasks properly.
@@ -403,7 +400,7 @@ public class BasicProgressMonitor implements IElkProgressMonitor {
                     try {
                         Files.write(
                                 outputFile,
-                                Lists.newArrayList(logMessage),
+                                new ArrayList<>(java.util.Arrays.asList(logMessage)),
                                 StandardOpenOption.APPEND,
                                 StandardOpenOption.CREATE);
                     } catch (IOException e) {
@@ -438,7 +435,7 @@ public class BasicProgressMonitor implements IElkProgressMonitor {
             // elkjs-exclude-start
             if (persistLogs) {
                 // Find out which file to write to
-                String actualTag = Strings.isNullOrEmpty(tag) ? "Unnamed" : tag;
+                String actualTag = (tag == null || tag.isEmpty()) ? "Unnamed" : tag;
                 Path filePath = retrieveFilePath(actualTag, graphType.getFileExtension());
                 
                 // Write to the file
@@ -446,7 +443,7 @@ public class BasicProgressMonitor implements IElkProgressMonitor {
                     try {
                         Files.write(
                                 filePath,
-                                Lists.newArrayList(loggedGraph.serialize()),
+                                new ArrayList<>(java.util.Arrays.asList(loggedGraph.serialize())),
                                 StandardOpenOption.WRITE,
                                 StandardOpenOption.CREATE);
                     } catch (IOException e) {
@@ -537,7 +534,7 @@ public class BasicProgressMonitor implements IElkProgressMonitor {
         char randChar2 = (char) ('a' + (int) (Math.random() * validCharacterRange));
         
         String name = getTaskName();
-        if (com.google.common.base.Strings.isNullOrEmpty(name)) {
+        if (name == null || name.isEmpty()) {
             name = "Unnamed";
         }
 
@@ -562,7 +559,7 @@ public class BasicProgressMonitor implements IElkProgressMonitor {
         int index = getParentMonitor().getSubMonitors().indexOf(this);
         
         String name = getTaskName();
-        if (com.google.common.base.Strings.isNullOrEmpty(name)) {
+        if (name == null || name.isEmpty()) {
             name = "Unnamed";
         }
         // elkjs-exclude-start

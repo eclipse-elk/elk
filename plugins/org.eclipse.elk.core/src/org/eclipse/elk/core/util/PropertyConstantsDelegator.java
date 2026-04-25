@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.eclipse.elk.core.util;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.elk.core.data.LayoutAlgorithmData;
@@ -20,8 +21,6 @@ import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.properties.IProperty;
 import org.eclipse.elk.graph.properties.IPropertyHolder;
 import org.eclipse.elk.graph.properties.Property;
-
-import com.google.common.collect.Maps;
 
 /**
  * Allows to reroute access to properties through other property constants which may provide different default values.
@@ -50,7 +49,7 @@ import com.google.common.collect.Maps;
 public final class PropertyConstantsDelegator {
     
     /** Set of property constants to be used for accessing their respective property. */
-    private Map<IProperty<?>, IProperty<?>> propertyDelegates = Maps.newHashMap();
+    private Map<IProperty<?>, IProperty<?>> propertyDelegates = new HashMap<>();
 
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////

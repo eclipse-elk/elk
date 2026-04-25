@@ -14,6 +14,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.eclipse.elk.alg.layered.LayeredPhases;
 import org.eclipse.elk.alg.layered.graph.LEdge;
@@ -27,9 +29,6 @@ import org.eclipse.elk.core.alg.ILayoutPhase;
 import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * This class implements the StretchWidth layering algorithm described in In Search for Efficient
@@ -58,9 +57,9 @@ public class StretchWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph> 
     /** Sorted list of layerless nodes. */
     private List<LNode> sortedLayerlessNodes;
     /** Set of nodes placed in the current layer. */
-    private Set<LNode> alreadyPlacedNodes = Sets.newHashSet();
+    private Set<LNode> alreadyPlacedNodes = new HashSet<>();
     /** Set of nodes in all layers except the current. */
-    private Set<LNode> alreadyPlacedInOtherLayers = Sets.newHashSet();
+    private Set<LNode> alreadyPlacedInOtherLayers = new HashSet<>();
     /**
      * List of layerless nodes to be used in one layering approach, will be sorted after
      * initialization.
@@ -158,7 +157,7 @@ public class StretchWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph> 
         // add first layer to the graph
         currentGraph.getLayers().add(currentLayer);
         // Copy the sorted layerless nodes so we don't overwrite it in the reset case
-        tempLayerlessNodes = Lists.newArrayList(sortedLayerlessNodes);
+        tempLayerlessNodes = new ArrayList<>(sortedLayerlessNodes);
         // Copy the outDegree Array
         remainingOutGoing = Arrays.copyOf(outDegree, outDegree.length);
 
@@ -198,7 +197,7 @@ public class StretchWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph> 
                     // increase maxWidth
                     maxWidth++;
                     // reset layerless nodes
-                    tempLayerlessNodes = Lists.newArrayList(sortedLayerlessNodes);
+                    tempLayerlessNodes = new ArrayList<>(sortedLayerlessNodes);
                     // reset successors
                     remainingOutGoing = Arrays.copyOf(outDegree, outDegree.length);
 
@@ -261,7 +260,7 @@ public class StretchWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph> 
      */
     private void computeSortedNodes() {
         List<LNode> unsortedNodes = currentGraph.getLayerlessNodes();
-        sortedLayerlessNodes = Lists.newArrayList(unsortedNodes);
+        sortedLayerlessNodes = new ArrayList<>(unsortedNodes);
         // the id-field is reused later on, be careful
         for (LNode node : unsortedNodes) {
             node.id = getRank(node);
@@ -290,14 +289,14 @@ public class StretchWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph> 
      * @return rank of the node
      */
     private Integer getRank(final LNode node) {
-        int max = Iterables.size(node.getOutgoingEdges());
+        int max = ((int) java.util.stream.StreamSupport.stream(node.getOutgoingEdges().spliterator(), false).count());
         int temp;
         LNode pre;
 
         // compute max of predecessors out-degree and out-degree of the current node
         for (LEdge preEdge : node.getIncomingEdges()) {
             pre = preEdge.getSource().getNode();
-            temp = Iterables.size(pre.getOutgoingEdges());
+            temp = ((int) java.util.stream.StreamSupport.stream(pre.getOutgoingEdges().spliterator(), false).count());
             max = Math.max(max, temp);
         }
 
@@ -310,8 +309,8 @@ public class StretchWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph> 
      */
     private void computeSuccessors() {
         int i = 0;
-        successors = Lists.newArrayList();
-        Set<LNode> currSucc = Sets.newHashSet();
+        successors = new ArrayList<>();
+        Set<LNode> currSucc = new HashSet<>();
 
         for (LNode node : sortedLayerlessNodes) {
             node.id = i;
@@ -320,7 +319,7 @@ public class StretchWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph> 
             }
             // remove current node from accSucc to deal with self-loops
             currSucc.remove(node);
-            successors.add(Sets.newHashSet(currSucc));
+            successors.add(new HashSet<>(currSucc));
             currSucc.clear();
             i++;
         }
@@ -335,8 +334,8 @@ public class StretchWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph> 
         outDegree = new int[sortedLayerlessNodes.size()];
 
         for (LNode node : sortedLayerlessNodes) {
-            inDegree[node.id] = Iterables.size(node.getIncomingEdges());
-            outDegree[node.id] = Iterables.size(node.getOutgoingEdges());
+            inDegree[node.id] = ((int) java.util.stream.StreamSupport.stream(node.getIncomingEdges().spliterator(), false).count());
+            outDegree[node.id] = ((int) java.util.stream.StreamSupport.stream(node.getOutgoingEdges().spliterator(), false).count());
         }
     }
 
@@ -394,7 +393,7 @@ public class StretchWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph> 
     private float getAverageOutDegree() {
         float allOut = 0;
         for (LNode node : currentGraph.getLayerlessNodes()) {
-            allOut += Iterables.size(node.getOutgoingEdges());
+            allOut += ((int) java.util.stream.StreamSupport.stream(node.getOutgoingEdges().spliterator(), false).count());
         }
         return allOut / currentGraph.getLayerlessNodes().size();
     }

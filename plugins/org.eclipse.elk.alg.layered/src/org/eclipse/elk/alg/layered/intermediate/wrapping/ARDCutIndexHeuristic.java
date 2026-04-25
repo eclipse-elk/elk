@@ -10,10 +10,10 @@
 package org.eclipse.elk.alg.layered.intermediate.wrapping;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LGraph;
 
-import com.google.common.collect.Lists;
 
 /**
  * Calculates cut indexes based on a desired aspect ratio. Given a layering and estimations on the width and height of
@@ -26,7 +26,7 @@ public class ARDCutIndexHeuristic implements ICutIndexCalculator {
         int rows = getChunkCount(gs);
 
         // the number of cuts is one less than the number of rows
-        List<Integer> cuts = Lists.newArrayList();
+        List<Integer> cuts = new ArrayList<>();
         double step = gs.longestPath / (double) rows;
         for (int idx = 1; idx < rows; ++idx) {
             cuts.add((int) Math.round(idx * step));

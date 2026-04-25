@@ -14,7 +14,6 @@ import org.eclipse.elk.alg.layered.graph.LNode;
 import org.eclipse.elk.alg.layered.options.GroupOrderStrategy;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 
-import com.google.common.collect.Iterables;
 
 /**
  * Based on the SCCModelOrderCycleBreaker. This finds the nodes with minimum and maximum model order and reverses the 
@@ -78,7 +77,7 @@ public class SCConnectivity extends SCCModelOrderCycleBreaker {
             // If the minimum node has more incoming edges than the maximum node has outgoing edges,
             // reverse all edges to the minimum node and remove it from the strongly connected component.
             // If it is the other way around, reverse all outgoing edges of the maximum node.
-            if (Iterables.size(min.getIncomingEdges()) > Iterables.size(max.getOutgoingEdges())) {
+            if (((int) java.util.stream.StreamSupport.stream(min.getIncomingEdges().spliterator(), false).count()) > ((int) java.util.stream.StreamSupport.stream(max.getOutgoingEdges().spliterator(), false).count())) {
                 for (LEdge edge : min.getIncomingEdges()) {
                     if (stronglyConnectedComponents.get(i).contains(edge.getSource().getNode())) {
                         revEdges.add(edge);

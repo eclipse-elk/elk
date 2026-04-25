@@ -10,6 +10,7 @@
 package org.eclipse.elk.core.data;
 
 import java.util.EnumSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -18,8 +19,6 @@ import org.eclipse.elk.core.util.Pair;
 import org.eclipse.elk.graph.properties.IProperty;
 import org.eclipse.elk.graph.properties.Property;
 import org.eclipse.elk.graph.util.ElkReflect;
-
-import com.google.common.collect.Lists;
 
 /**
  * Data type used to store information for a layout option.
@@ -92,7 +91,7 @@ public final class LayoutOptionData implements ILayoutMetaData, IProperty<Object
     /** configured targets. */
     private final Set<Target> targets;
     /** dependencies to other layout options. */
-    private final List<Pair<LayoutOptionData, Object>> dependencies = Lists.newLinkedList();
+    private final List<Pair<LayoutOptionData, Object>> dependencies = new LinkedList<>();
     /** cached value of the available choices. */
     private String[] choices;
     /** visibility in the UI. */

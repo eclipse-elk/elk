@@ -9,35 +9,55 @@
  *******************************************************************************/
 package org.eclipse.elk.alg.layered.compaction.oned;
 
-import com.google.common.math.DoubleMath;
 
 /**
  * Internal Class for tolerance affected double comparisons.
  */
 public final class CompareFuzzy {
-    static final double TOLERANCE = 0.0001;
-    
+    /** Default fuzzy comparison tolerance. */
+    public static final double TOLERANCE = 0.0001;
+
     private CompareFuzzy() {
+    }
+
+    /** Tolerance-aware equality: {@code true} iff |a-b| &le; tolerance, with NaN handling. */
+    public static boolean fuzzyEquals(final double a, final double b, final double tolerance) {
+        return Math.abs(a - b) <= tolerance
+                || Double.valueOf(a).equals(Double.valueOf(b));
+    }
+
+    /** Tolerance-aware comparison consistent with {@link #fuzzyEquals}. */
+    public static int fuzzyCompare(final double a, final double b, final double tolerance) {
+        if (fuzzyEquals(a, b, tolerance)) {
+            return 0;
+        }
+        if (a < b) {
+            return -1;
+        }
+        if (a > b) {
+            return 1;
+        }
+        return Boolean.compare(Double.isNaN(a), Double.isNaN(b));
     }
 
     // SUPPRESS CHECKSTYLE NEXT 20 Javadoc
     public static boolean eq(final double d1, final double d2) {
-        return DoubleMath.fuzzyEquals(d1, d2, TOLERANCE);
+        return fuzzyEquals(d1, d2, TOLERANCE);
     }
 
     public static boolean gt(final double d1, final double d2) {
-        return DoubleMath.fuzzyCompare(d1, d2, TOLERANCE) > 0;
+        return fuzzyCompare(d1, d2, TOLERANCE) > 0;
     }
 
     public static boolean lt(final double d1, final double d2) {
-        return DoubleMath.fuzzyCompare(d1, d2, TOLERANCE) < 0;
+        return fuzzyCompare(d1, d2, TOLERANCE) < 0;
     }
 
     public static boolean ge(final double d1, final double d2) {
-        return DoubleMath.fuzzyCompare(d1, d2, TOLERANCE) >= 0;
+        return fuzzyCompare(d1, d2, TOLERANCE) >= 0;
     }
 
     public static boolean le(final double d1, final double d2) {
-        return DoubleMath.fuzzyCompare(d1, d2, TOLERANCE) <= 0;
+        return fuzzyCompare(d1, d2, TOLERANCE) <= 0;
     }
 }

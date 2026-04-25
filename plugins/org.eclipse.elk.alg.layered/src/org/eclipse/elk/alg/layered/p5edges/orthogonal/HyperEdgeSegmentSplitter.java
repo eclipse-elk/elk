@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 
 import org.eclipse.elk.core.util.Pair;
 
-import com.google.common.collect.Streams;
 
 /**
  * Responsible for splitting {@link HyperEdgeSegment}s in order to avoid overlaps. This class assumes that critical
@@ -83,7 +82,7 @@ public final class HyperEdgeSegmentSplitter {
         Stream<Double> inCoordinates = segments.stream().flatMap(s -> s.getIncomingConnectionCoordinates().stream());
         Stream<Double> outCoordinates = segments.stream().flatMap(s -> s.getOutgoingConnectionCoordinates().stream());
         
-        double[] sortedCoordinates = Streams.concat(inCoordinates, outCoordinates)
+        double[] sortedCoordinates = Stream.concat(inCoordinates, outCoordinates)
             .mapToDouble(coordinate -> coordinate.doubleValue())
             .sorted()
             .toArray();

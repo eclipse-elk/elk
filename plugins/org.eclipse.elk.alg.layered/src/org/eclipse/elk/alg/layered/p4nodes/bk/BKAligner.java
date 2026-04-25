@@ -24,8 +24,8 @@ import org.eclipse.elk.alg.layered.graph.LNode.NodeType;
 import org.eclipse.elk.alg.layered.p4nodes.bk.BKAlignedLayout.HDirection;
 import org.eclipse.elk.alg.layered.p4nodes.bk.BKAlignedLayout.VDirection;
 import org.eclipse.elk.core.util.Pair;
+import org.eclipse.elk.alg.layered.graph.LGraphUtil;
 
-import com.google.common.collect.Lists;
 
 /**
  * For documentation see {@link BKNodePlacer}.
@@ -77,7 +77,7 @@ public class BKAligner {
         // If the horizontal direction is LEFT, the layers are traversed from
         // right to left, thus a reverse iterator is needed
         if (bal.hdir == HDirection.LEFT) {
-            layers = Lists.reverse(layers);
+            layers = LGraphUtil.reversed(layers);
         }
 
         for (Layer layer : layers) {
@@ -90,7 +90,7 @@ public class BKAligner {
                 // If the alignment direction is UP, the nodes in a layer are traversed
                 // reversely, thus we start at INT_MAX and with the reversed list of nodes.
                 r = Integer.MAX_VALUE;
-                nodes = Lists.reverse(nodes);
+                nodes = LGraphUtil.reversed(nodes);
             }
             
             // Variable names here are again taken from the paper mentioned above.

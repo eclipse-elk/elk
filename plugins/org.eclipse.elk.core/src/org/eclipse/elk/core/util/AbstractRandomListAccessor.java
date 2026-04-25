@@ -9,9 +9,8 @@
  *******************************************************************************/
 package org.eclipse.elk.core.util;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 /**
  * Base class for classes that want to randomly access a list of elements. Access to non-existent list elements is
@@ -30,7 +29,7 @@ public abstract class AbstractRandomListAccessor<T> {
      * Creates a new instance.
      */
     protected AbstractRandomListAccessor() {
-        list = Lists.newArrayList();
+        list = new ArrayList<>();
     }
     
 

@@ -34,7 +34,6 @@ import org.eclipse.elk.core.util.IElkProgressMonitor;
 import org.eclipse.elk.graph.properties.IProperty;
 import org.eclipse.elk.graph.properties.Property;
 
-import com.google.common.collect.Lists;
 
 
 /**
@@ -704,7 +703,7 @@ public final class LabelDummySwitcher implements ILayoutProcessor<LGraph> {
             } while (source.getType() == NodeType.LONG_EDGE);
             
             // The list is currently not in the order we would expect, so produce a reversed version
-            leftLongEdgeDummies = Lists.reverse(leftLongEdgeDummies);
+            leftLongEdgeDummies = LGraphUtil.reversed(leftLongEdgeDummies);
         }
         
         /**

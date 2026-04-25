@@ -26,8 +26,8 @@ import org.eclipse.elk.core.options.Direction;
 import org.eclipse.elk.core.options.EdgeRouting;
 import org.eclipse.elk.core.options.LabelSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
+import org.eclipse.elk.alg.layered.graph.LGraphUtil;
 
-import com.google.common.collect.Lists;
 
 /**
  * <p>Processor that removes the inserted center label dummies and places the labels on their
@@ -149,7 +149,7 @@ public final class LabelDummyRemover implements ILayoutProcessor<LGraph> {
         // reverse the label order in the final result. Thus, in that case we iterate over the reversed label list
         List<LLabel> effectiveLabels = labels;
         if (layoutDirection == Direction.UP) {
-            effectiveLabels = Lists.reverse(effectiveLabels);
+            effectiveLabels = LGraphUtil.reversed(effectiveLabels);
         }
         
         for (LLabel label : effectiveLabels) {

@@ -10,6 +10,7 @@
 package org.eclipse.elk.alg.layered.intermediate.compaction;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.common.compaction.oned.CGroup;
 import org.eclipse.elk.alg.common.compaction.oned.CNode;
@@ -23,7 +24,6 @@ import org.eclipse.elk.alg.layered.options.Spacings;
 import org.eclipse.elk.core.UnsupportedConfigurationException;
 import org.eclipse.elk.core.options.EdgeRouting;
 
-import com.google.common.collect.Lists;
 
 /**
  * An extended scanline procedure that is able to properly handle different spacing values between nodes and edges.
@@ -65,7 +65,7 @@ public class EdgeAwareScanlineConstraintCalculation extends ScanlineConstraintCa
     // -------------------------------------- SPLINES --------------------------------------
     
     private void calculateForSpline() {
-        final List<Runnable> schedule = Lists.newArrayList();
+        final List<Runnable> schedule = new ArrayList<>();
         
         /* -------------------- Vertical Segments -------------------- */
         // Note that some constraints between subsequent vertical segments of the same spline 
@@ -114,7 +114,7 @@ public class EdgeAwareScanlineConstraintCalculation extends ScanlineConstraintCa
     // -------------------------------------- ORTHOGONAL --------------------------------------
     private void calculateForOrthogonal() {
         
-        final List<Runnable> schedule = Lists.newArrayList();
+        final List<Runnable> schedule = new ArrayList<>();
         
         /* -------------------- Vertical Segments -------------------- */
         compactor.cGraph.cNodes.stream()

@@ -12,7 +12,6 @@ package org.eclipse.elk.alg.layered.graph;
 import org.eclipse.elk.alg.layered.graph.transform.ElkGraphTransformer;
 import org.eclipse.elk.graph.properties.MapPropertyHolder;
 
-import com.google.common.base.Strings;
 
 /**
  * Abstract superclass for the layers, nodes, ports, and edges of a layered graph
@@ -45,7 +44,7 @@ public abstract class LGraphElement extends MapPropertyHolder {
      */
     public String getDesignation() {
         String identifier = ElkGraphTransformer.getOriginIdentifier(this);
-        if (!Strings.isNullOrEmpty(identifier)) {
+        if (!(identifier == null || identifier.isEmpty())) {
             return identifier;
         }
         return null;

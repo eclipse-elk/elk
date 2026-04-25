@@ -9,16 +9,16 @@
  *******************************************************************************/
 package org.eclipse.elk.core.comments;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
 
 import org.eclipse.elk.core.util.Pair;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * Main class of the comment attachment framework. Comment attachment infers the relation between comments and the
@@ -109,9 +109,9 @@ public final class CommentAttacher<C, T> {
     /** The bounds provider to be used. */
     private IBoundsProvider<C, T> boundsProvider = null;
     /** List of filters. */
-    private List<IFilter<C>> filters = Lists.newArrayList();
+    private List<IFilter<C>> filters = new ArrayList<>();
     /** List of matchers. */
-    private List<IMatcher<C, T>> matchers = Lists.newArrayList();
+    private List<IMatcher<C, T>> matchers = new ArrayList<>();
     /** The attachment decider. */
     private IDecider<T> decider = new AggregatedMatchDecider<>();
     
@@ -277,11 +277,11 @@ public final class CommentAttacher<C, T> {
         
         // We keep track of all comment->target pairs we find (we may want to store the data provider that was used
         // to obtain the comment and the attachment target at some point)
-        Collection<Pair<C, T>> explicitAttachments = Lists.newArrayList();
-        Collection<Pair<C, T>> heuristicAttachments = Lists.newArrayList();
+        Collection<Pair<C, T>> explicitAttachments = new ArrayList<>();
+        Collection<Pair<C, T>> heuristicAttachments = new ArrayList<>();
         
         // Iterate over all comments we should iterate over
-        Queue<IDataProvider<C, T>> processingQueue = Lists.newLinkedList();
+        Queue<IDataProvider<C, T>> processingQueue = new LinkedList<>();
         processingQueue.add(dataProvider);
         
         while (!processingQueue.isEmpty()) {
@@ -371,10 +371,10 @@ public final class CommentAttacher<C, T> {
         }
         
         // Collect the matcher results in this map, indexed by attachment target, then indexed by the matcher
-        Map<T, Map<Class<? extends IMatcher<?, T>>, Double>> results = Maps.newHashMap();
+        Map<T, Map<Class<? extends IMatcher<?, T>>, Double>> results = new HashMap<>();
         
         for (T candidate : candidates) {
-            Map<Class<? extends IMatcher<?, T>>, Double> candidateResults = Maps.newHashMap();
+            Map<Class<? extends IMatcher<?, T>>, Double> candidateResults = new HashMap<>();
             results.put(candidate, candidateResults);
             
             // Run the normalized heuristics and collect their results in an array

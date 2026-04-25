@@ -10,6 +10,7 @@
 package org.eclipse.elk.alg.layered.intermediate;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -23,7 +24,6 @@ import org.eclipse.elk.core.math.KVectorChain;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
 
 /**
  * Improves the placement of hypernodes by moving them such that they replace the join
@@ -86,7 +86,7 @@ public final class HypernodesProcessor implements ILayoutProcessor<LGraph> {
     private void moveHypernode(final LGraph layeredGraph, final LNode hypernode,
             final boolean right) {
         // find edges that constitute the first join point of the hyperedge
-        List<LEdge> bendEdges = Lists.newArrayList();
+        List<LEdge> bendEdges = new ArrayList<>();
         double bendx = Integer.MAX_VALUE, diffx = Integer.MAX_VALUE, diffy = Integer.MAX_VALUE;
         if (right) {
             bendx = layeredGraph.getSize().x;

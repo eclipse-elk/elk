@@ -12,8 +12,6 @@ package org.eclipse.elk.core.math;
 import java.util.Iterator;
 import java.util.ListIterator;
 
-import com.google.common.math.DoubleMath;
-
 /**
  * Mathematics utility class for the Eclipse Layout Kernel.
  * 
@@ -25,6 +23,22 @@ public final class ElkMath {
      * Hidden constructor to avoid instantiation.
      */
     private ElkMath() {
+    }
+
+    private static boolean fuzzyEquals(final double a, final double b, final double tolerance) {
+        return Math.abs(a - b) <= tolerance
+                || Double.valueOf(a).equals(Double.valueOf(b));
+    }
+
+    private static int fuzzyCompare(final double a, final double b, final double tolerance) {
+        if (fuzzyEquals(a, b, tolerance)) {
+            return 0;
+        } else if (a < b) {
+            return -1;
+        } else if (a > b) {
+            return 1;
+        }
+        return Boolean.compare(Double.isNaN(a), Double.isNaN(b));
     }
 
     /** table of precomputed factorial values. */
@@ -1012,7 +1026,7 @@ public final class ElkMath {
         double x11 = v1.x, y11 = v1.y;
         
         double d = x11 * y01 - x01 * y11;
-        if (DoubleMath.fuzzyEquals(0, d, DOUBLE_EQ_EPSILON)) {
+        if (fuzzyEquals(0, d, DOUBLE_EQ_EPSILON)) {
             return false;
         }
         double s = (1 / d) * ((x00 - x10) * y01 - (y00 - y10) * x01);
@@ -1022,13 +1036,13 @@ public final class ElkMath {
         // use < instead of <= to not recognize "touching" as intersection
         final boolean intersects =
                 // 0 < s
-                DoubleMath.fuzzyCompare(0, s, DOUBLE_EQ_EPSILON) < 0
+                fuzzyCompare(0, s, DOUBLE_EQ_EPSILON) < 0
                 // s < 1
-                && DoubleMath.fuzzyCompare(s, 1, DOUBLE_EQ_EPSILON) < 0
+                && fuzzyCompare(s, 1, DOUBLE_EQ_EPSILON) < 0
                 // 0 < t
-                && DoubleMath.fuzzyCompare(0, t, DOUBLE_EQ_EPSILON) < 0
+                && fuzzyCompare(0, t, DOUBLE_EQ_EPSILON) < 0
                 // t < 1
-                && DoubleMath.fuzzyCompare(t, 1, DOUBLE_EQ_EPSILON) < 0;
+                && fuzzyCompare(t, 1, DOUBLE_EQ_EPSILON) < 0;
         return intersects;
     }
     
@@ -1254,11 +1268,11 @@ public final class ElkMath {
         double bottomDist = r2.y - (r1.y + r1.height);
         double horzDist = Math.max(leftDist, rightDist);
         double vertDist = Math.max(topDist, bottomDist);
-        if (DoubleMath.fuzzyCompare(horzDist, 0, DOUBLE_EQ_EPSILON) >= 0 
-                ^ DoubleMath.fuzzyCompare(vertDist, 0, DOUBLE_EQ_EPSILON) >= 0) { // case 1
+        if (fuzzyCompare(horzDist, 0, DOUBLE_EQ_EPSILON) >= 0
+                ^ fuzzyCompare(vertDist, 0, DOUBLE_EQ_EPSILON) >= 0) { // case 1
             return Math.max(vertDist, horzDist);
         }
-        if (DoubleMath.fuzzyCompare(horzDist, 0, DOUBLE_EQ_EPSILON) > 0) { // case 2
+        if (fuzzyCompare(horzDist, 0, DOUBLE_EQ_EPSILON) > 0) { // case 2
             return Math.sqrt(vertDist * vertDist + horzDist * horzDist);
         }
         // case 3

@@ -32,7 +32,6 @@ import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 import org.eclipse.elk.graph.properties.Property;
 
-import com.google.common.collect.Lists;
 
 /**
  * Node placement implementation that aligns long edges using linear segments. Inspired by Section 4 of
@@ -62,7 +61,7 @@ public final class LinearSegmentsNodePlacer implements ILayoutPhase<LayeredPhase
      */
     public static class LinearSegment implements Comparable<LinearSegment> {
         /** Nodes of the linear segment. */
-        private List<LNode> nodes = Lists.newArrayList();
+        private List<LNode> nodes = new ArrayList<>();
         /** Identifier value, used as index in the segments array. */
         private int id;
         /** Index in the previous layer. Used for cycle avoidance. */
@@ -215,7 +214,7 @@ public final class LinearSegmentsNodePlacer implements ILayoutPhase<LayeredPhase
      */
     private LinearSegment[] sortLinearSegments(final LGraph layeredGraph, final IElkProgressMonitor monitor) {
         // set the identifier and input / output priority for all nodes
-        List<LinearSegment> segmentList = Lists.newArrayList();
+        List<LinearSegment> segmentList = new ArrayList<>();
         for (Layer layer : layeredGraph) {
             for (LNode node : layer) {
                 node.id = -1;
@@ -251,8 +250,8 @@ public final class LinearSegmentsNodePlacer implements ILayoutPhase<LayeredPhase
         }
 
         // create and initialize segment ordering graph
-        List<List<LinearSegment>> outgoingList = Lists.newArrayListWithCapacity(segmentList.size());
-        List<Integer> incomingCountList = Lists.newArrayListWithCapacity(segmentList.size());
+        List<List<LinearSegment>> outgoingList = new ArrayList<>(segmentList.size());
+        List<Integer> incomingCountList = new ArrayList<>(segmentList.size());
         for (int i = 0; i < segmentList.size(); i++) {
             outgoingList.add(new ArrayList<LinearSegment>());
             incomingCountList.add(0);
@@ -274,7 +273,7 @@ public final class LinearSegmentsNodePlacer implements ILayoutPhase<LayeredPhase
 
         // gather the sources of the segment ordering graph
         int nextRank = 0;
-        List<LinearSegment> noIncoming = Lists.newArrayList();
+        List<LinearSegment> noIncoming = new ArrayList<>();
         for (int i = 0; i < segments.length; i++) {
             if (incomingCount[i] == 0) {
                 noIncoming.add(segments[i]);

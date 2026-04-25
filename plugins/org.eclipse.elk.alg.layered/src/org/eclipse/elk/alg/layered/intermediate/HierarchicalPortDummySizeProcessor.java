@@ -10,6 +10,7 @@
 package org.eclipse.elk.alg.layered.intermediate;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.graph.LNode;
@@ -23,7 +24,6 @@ import org.eclipse.elk.core.options.Alignment;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
 
 /**
  * Sets the width of hierarchical port dummies and sets the layer alignment of North/South port dummies
@@ -55,8 +55,8 @@ public final class HierarchicalPortDummySizeProcessor implements ILayoutProcesso
     public void process(final LGraph layeredGraph, final IElkProgressMonitor monitor) {
         monitor.begin("Hierarchical port dummy size processing", 1);
 
-        List<LNode> northernDummies = Lists.newArrayList();
-        List<LNode> southernDummies = Lists.newArrayList();
+        List<LNode> northernDummies = new ArrayList<>();
+        List<LNode> southernDummies = new ArrayList<>();
         
         // Calculate the width difference (this assumes CENTER node alignment)
         //  The idea behind this is that ports are stacked on top of each other at the center of the 

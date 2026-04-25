@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.eclipse.elk.core.util.adapters;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -35,8 +36,6 @@ import org.eclipse.elk.graph.properties.IProperty;
 import org.eclipse.elk.graph.properties.Property;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
 import org.eclipse.emf.common.util.ECollections;
-
-import com.google.common.collect.Lists;
 
 /**
  * Contains implementations of the {@link GraphAdapters} interfaces for the ElkGraph. To obtain an
@@ -215,7 +214,7 @@ public final class ElkGraphAdapters {
         @Override
         public Iterable<NodeAdapter<?>> getNodes() {
             if (childNodes == null) {
-                childNodes = Lists.newArrayListWithExpectedSize(element.getChildren().size());
+                childNodes = new ArrayList<>(element.getChildren().size());
                 for (ElkNode n : element.getChildren()) {
                     childNodes.add(new ElkNodeAdapter(this, n));
                 }
@@ -264,7 +263,7 @@ public final class ElkGraphAdapters {
         @Override
         public List<LabelAdapter<?>> getLabels() {
             if (labelAdapters == null) {
-                labelAdapters = Lists.newArrayListWithExpectedSize(element.getLabels().size());
+                labelAdapters = new ArrayList<>(element.getLabels().size());
                 for (ElkLabel l : element.getLabels()) {
                     labelAdapters.add(new ElkLabelAdapter(l));
                 }
@@ -275,7 +274,7 @@ public final class ElkGraphAdapters {
         @Override
         public List<PortAdapter<?>> getPorts() {
             if (portAdapters == null) {
-                portAdapters = Lists.newArrayListWithExpectedSize(element.getPorts().size());
+                portAdapters = new ArrayList<>(element.getPorts().size());
                 for (ElkPort p : element.getPorts()) {
                     portAdapters.add(new ElkPortAdapter(p));
                 }
@@ -286,7 +285,7 @@ public final class ElkGraphAdapters {
         @Override
         public Iterable<EdgeAdapter<?>> getIncomingEdges() {
             if (incomingEdgeAdapters == null) {
-                incomingEdgeAdapters = Lists.newArrayList();
+                incomingEdgeAdapters = new ArrayList<>();
                 for (ElkEdge e : ElkGraphUtil.allIncomingEdges(element)) {
                     incomingEdgeAdapters.add(new ElkEdgeAdapter(e));
                 }
@@ -297,7 +296,7 @@ public final class ElkGraphAdapters {
         @Override
         public Iterable<EdgeAdapter<?>> getOutgoingEdges() {
             if (outgoingEdgeAdapters == null) {
-                outgoingEdgeAdapters = Lists.newArrayList();
+                outgoingEdgeAdapters = new ArrayList<>();
                 for (ElkEdge e : ElkGraphUtil.allOutgoingEdges(element)) {
                     outgoingEdgeAdapters.add(new ElkEdgeAdapter(e));
                 }
@@ -384,7 +383,7 @@ public final class ElkGraphAdapters {
 
         public List<LabelAdapter<?>> getLabels() {
             if (labelAdapters == null) {
-                labelAdapters = Lists.newArrayListWithExpectedSize(element.getLabels().size());
+                labelAdapters = new ArrayList<>(element.getLabels().size());
                 for (ElkLabel l : element.getLabels()) {
                     labelAdapters.add(new ElkLabelAdapter(l));
                 }
@@ -394,7 +393,7 @@ public final class ElkGraphAdapters {
 
         public Iterable<EdgeAdapter<?>> getIncomingEdges() {
             if (incomingEdgeAdapters == null) {
-                incomingEdgeAdapters = Lists.newArrayListWithCapacity(element.getIncomingEdges().size());
+                incomingEdgeAdapters = new ArrayList<>(element.getIncomingEdges().size());
                 for (ElkEdge e : element.getIncomingEdges()) {
                     incomingEdgeAdapters.add(new ElkEdgeAdapter(e));
                 }
@@ -404,7 +403,7 @@ public final class ElkGraphAdapters {
 
         public Iterable<EdgeAdapter<?>> getOutgoingEdges() {
             if (outgoingEdgeAdapters == null) {
-                outgoingEdgeAdapters = Lists.newArrayListWithCapacity(element.getOutgoingEdges().size());
+                outgoingEdgeAdapters = new ArrayList<>(element.getOutgoingEdges().size());
                 for (ElkEdge e : element.getOutgoingEdges()) {
                     outgoingEdgeAdapters.add(new ElkEdgeAdapter(e));
                 }
@@ -464,7 +463,7 @@ public final class ElkGraphAdapters {
 
         public Iterable<LabelAdapter<?>> getLabels() {
             if (labelAdapters == null) {
-                labelAdapters = Lists.newArrayListWithExpectedSize(element.getLabels().size());
+                labelAdapters = new ArrayList<>(element.getLabels().size());
                 for (ElkLabel l : element.getLabels()) {
                     labelAdapters.add(new ElkLabelAdapter(l));
                 }

@@ -23,7 +23,6 @@ import org.eclipse.elk.alg.layered.options.LayeredOptions;
 import org.eclipse.elk.core.alg.ILayoutProcessor;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Streams;
 
 /**
  * Reverses edges that connect higher-index to lower-index partitions. If all nodes have a partition set, the result is
@@ -71,7 +70,7 @@ public class PartitionPreprocessor implements ILayoutProcessor<LGraph> {
             .collect(Collectors.toList());
         List<LEdge> edgesToBeReversed = lGraph.getLayerlessNodes().stream()
             .filter(lNode -> lNode.hasProperty(LayeredOptions.PARTITIONING_PARTITION))
-            .flatMap(lNode -> Streams.stream(lNode.getOutgoingEdges()))
+            .flatMap(lNode -> java.util.stream.StreamSupport.stream(lNode.getOutgoingEdges().spliterator(), false))
             .filter(lEdge -> mustBeReversed(lEdge, partitionedNodes))
             .collect(Collectors.toList());
             

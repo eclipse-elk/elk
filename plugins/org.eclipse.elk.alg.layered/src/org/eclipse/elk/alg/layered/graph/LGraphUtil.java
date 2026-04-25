@@ -9,8 +9,18 @@
  *******************************************************************************/
 package org.eclipse.elk.alg.layered.graph;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.eclipse.elk.alg.layered.graph.LNode.NodeType;
 import org.eclipse.elk.alg.layered.options.EdgeConstraint;
@@ -41,6 +51,144 @@ public final class LGraphUtil {
      * Hidden constructor to avoid instantiation.
      */
     private LGraphUtil() { }
+
+    /** Returns a fresh list with the same elements as {@code list} in reverse order. */
+    public static <T> List<T> reversed(final List<? extends T> list) {
+        List<T> copy = new ArrayList<>(list);
+        Collections.reverse(copy);
+        return copy;
+    }
+
+    /** Returns a zero-copy reverse view of {@code list}. Reads are O(1); structural changes
+     *  to the backing list are reflected here. */
+    public static <T> List<T> reversedView(final List<T> list) {
+        Objects.requireNonNull(list);
+        return new AbstractList<T>() {
+            @Override
+            public T get(final int index) {
+                return list.get(list.size() - 1 - index);
+            }
+
+            @Override
+            public int size() {
+                return list.size();
+            }
+        };
+    }
+
+    /** Lazy filtering iterable backed by a predicate (replacement for {@code Iterables.filter}). */
+    public static <T> Iterable<T> filter(final Iterable<T> source, final Predicate<? super T> predicate) {
+        Objects.requireNonNull(source);
+        Objects.requireNonNull(predicate);
+        return () -> new Iterator<T>() {
+            private final Iterator<T> it = source.iterator();
+            private T next;
+            private boolean computed;
+
+            @Override
+            public boolean hasNext() {
+                if (computed) {
+                    return next != null;
+                }
+                computed = true;
+                while (it.hasNext()) {
+                    T candidate = it.next();
+                    if (predicate.test(candidate)) {
+                        next = candidate;
+                        return true;
+                    }
+                }
+                next = null;
+                return false;
+            }
+
+            @Override
+            public T next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                computed = false;
+                T result = next;
+                next = null;
+                return result;
+            }
+        };
+    }
+
+    /** Lazily concatenates the given iterables (replacement for {@code Iterables.concat}). */
+    @SafeVarargs
+    public static <T> Iterable<T> concat(final Iterable<? extends T>... iterables) {
+        Objects.requireNonNull(iterables);
+        return () -> new Iterator<T>() {
+            private int index;
+            private Iterator<? extends T> current = Collections.emptyIterator();
+
+            @Override
+            public boolean hasNext() {
+                while (!current.hasNext()) {
+                    if (index >= iterables.length) {
+                        return false;
+                    }
+                    current = iterables[index++].iterator();
+                }
+                return true;
+            }
+
+            @Override
+            public T next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return current.next();
+            }
+        };
+    }
+
+    /** Lazily concatenates a sequence of iterables. */
+    public static <T> Iterable<T> concat(final Iterable<? extends Iterable<? extends T>> iterables) {
+        Objects.requireNonNull(iterables);
+        return () -> new Iterator<T>() {
+            private final Iterator<? extends Iterable<? extends T>> outer = iterables.iterator();
+            private Iterator<? extends T> current = Collections.emptyIterator();
+
+            @Override
+            public boolean hasNext() {
+                while (!current.hasNext()) {
+                    if (!outer.hasNext()) {
+                        return false;
+                    }
+                    current = outer.next().iterator();
+                }
+                return true;
+            }
+
+            @Override
+            public T next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return current.next();
+            }
+        };
+    }
+
+    /** Counts elements in an iterable (replacement for {@code Iterables.size}). */
+    public static int size(final Iterable<?> iterable) {
+        if (iterable instanceof Collection<?> c) {
+            return c.size();
+        }
+        int count = 0;
+        for (Object ignored : iterable) {
+            count++;
+        }
+        return count;
+    }
+
+    /** Returns a sequential stream over the given iterable. */
+    public static <T> Stream<T> stream(final Iterable<T> iterable) {
+        Objects.requireNonNull(iterable);
+        return StreamSupport.stream(iterable.spliterator(), false);
+    }
     
     /**
      * Create a new array by copying the content of the given node collection.

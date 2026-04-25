@@ -13,8 +13,6 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
 
-import com.google.common.collect.Sets;
-
 /**
  * Definition of port sides on a node. Besides defining the actual available port sides, this enumeration
  * also defines convenience methods as well as constants with all possible port side combinations. The
@@ -44,50 +42,50 @@ public enum PortSide {
     public static final Set<PortSide> SIDES_NONE = Collections.unmodifiableSet(
             EnumSet.noneOf(PortSide.class));
     /** Immutable set containing the given port sides. */
-    public static final Set<PortSide> SIDES_NORTH = Sets.immutableEnumSet(
-            PortSide.NORTH);
+    public static final Set<PortSide> SIDES_NORTH = Collections.unmodifiableSet(EnumSet.of(
+            PortSide.NORTH));
     /** Immutable set containing the given port sides. */
-    public static final Set<PortSide> SIDES_EAST = Sets.immutableEnumSet(
-            PortSide.EAST);
+    public static final Set<PortSide> SIDES_EAST = Collections.unmodifiableSet(EnumSet.of(
+            PortSide.EAST));
     /** Immutable set containing the given port sides. */
-    public static final Set<PortSide> SIDES_SOUTH = Sets.immutableEnumSet(
-            PortSide.SOUTH);
+    public static final Set<PortSide> SIDES_SOUTH = Collections.unmodifiableSet(EnumSet.of(
+            PortSide.SOUTH));
     /** Immutable set containing the given port sides. */
-    public static final Set<PortSide> SIDES_WEST = Sets.immutableEnumSet(
-            PortSide.WEST);
+    public static final Set<PortSide> SIDES_WEST = Collections.unmodifiableSet(EnumSet.of(
+            PortSide.WEST));
     /** Immutable set containing the given port sides. */
-    public static final Set<PortSide> SIDES_NORTH_SOUTH = Sets.immutableEnumSet(
-            PortSide.NORTH, PortSide.SOUTH);
+    public static final Set<PortSide> SIDES_NORTH_SOUTH = Collections.unmodifiableSet(EnumSet.of(
+            PortSide.NORTH, PortSide.SOUTH));
     /** Immutable set containing the given port sides. */
-    public static final Set<PortSide> SIDES_EAST_WEST = Sets.immutableEnumSet(
-            PortSide.EAST, PortSide.WEST);
+    public static final Set<PortSide> SIDES_EAST_WEST = Collections.unmodifiableSet(EnumSet.of(
+            PortSide.EAST, PortSide.WEST));
     /** Immutable set containing the given port sides. */
-    public static final Set<PortSide> SIDES_NORTH_WEST = Sets.immutableEnumSet(
-            PortSide.NORTH, PortSide.WEST);
+    public static final Set<PortSide> SIDES_NORTH_WEST = Collections.unmodifiableSet(EnumSet.of(
+            PortSide.NORTH, PortSide.WEST));
     /** Immutable set containing the given port sides. */
-    public static final Set<PortSide> SIDES_NORTH_EAST = Sets.immutableEnumSet(
-            PortSide.NORTH, PortSide.EAST);
+    public static final Set<PortSide> SIDES_NORTH_EAST = Collections.unmodifiableSet(EnumSet.of(
+            PortSide.NORTH, PortSide.EAST));
     /** Immutable set containing the given port sides. */
-    public static final Set<PortSide> SIDES_SOUTH_WEST = Sets.immutableEnumSet(
-            PortSide.SOUTH, PortSide.WEST);
+    public static final Set<PortSide> SIDES_SOUTH_WEST = Collections.unmodifiableSet(EnumSet.of(
+            PortSide.SOUTH, PortSide.WEST));
     /** Immutable set containing the given port sides. */
-    public static final Set<PortSide> SIDES_EAST_SOUTH = Sets.immutableEnumSet(
-            PortSide.EAST, PortSide.SOUTH);
+    public static final Set<PortSide> SIDES_EAST_SOUTH = Collections.unmodifiableSet(EnumSet.of(
+            PortSide.EAST, PortSide.SOUTH));
     /** Immutable set containing the given port sides. */
-    public static final Set<PortSide> SIDES_NORTH_EAST_WEST = Sets.immutableEnumSet(
-            PortSide.NORTH, PortSide.EAST, PortSide.WEST);
+    public static final Set<PortSide> SIDES_NORTH_EAST_WEST = Collections.unmodifiableSet(EnumSet.of(
+            PortSide.NORTH, PortSide.EAST, PortSide.WEST));
     /** Immutable set containing the given port sides. */
-    public static final Set<PortSide> SIDES_EAST_SOUTH_WEST = Sets.immutableEnumSet(
-            PortSide.EAST, PortSide.SOUTH, PortSide.WEST);
+    public static final Set<PortSide> SIDES_EAST_SOUTH_WEST = Collections.unmodifiableSet(EnumSet.of(
+            PortSide.EAST, PortSide.SOUTH, PortSide.WEST));
     /** Immutable set containing the given port sides. */
-    public static final Set<PortSide> SIDES_NORTH_SOUTH_WEST = Sets.immutableEnumSet(
-            PortSide.NORTH, PortSide.SOUTH, PortSide.WEST);
+    public static final Set<PortSide> SIDES_NORTH_SOUTH_WEST = Collections.unmodifiableSet(EnumSet.of(
+            PortSide.NORTH, PortSide.SOUTH, PortSide.WEST));
     /** Immutable set containing the given port sides. */
-    public static final Set<PortSide> SIDES_NORTH_EAST_SOUTH = Sets.immutableEnumSet(
-            PortSide.NORTH, PortSide.EAST, PortSide.SOUTH);
+    public static final Set<PortSide> SIDES_NORTH_EAST_SOUTH = Collections.unmodifiableSet(EnumSet.of(
+            PortSide.NORTH, PortSide.EAST, PortSide.SOUTH));
     /** Immutable set containing the given port sides. */
-    public static final Set<PortSide> SIDES_NORTH_EAST_SOUTH_WEST = Sets.immutableEnumSet(
-            PortSide.NORTH, PortSide.EAST, PortSide.SOUTH, PortSide.WEST);
+    public static final Set<PortSide> SIDES_NORTH_EAST_SOUTH_WEST = Collections.unmodifiableSet(EnumSet.of(
+            PortSide.NORTH, PortSide.EAST, PortSide.SOUTH, PortSide.WEST));
     
     
     //////////////////////////////////////////////////////////////////////////////////////////////

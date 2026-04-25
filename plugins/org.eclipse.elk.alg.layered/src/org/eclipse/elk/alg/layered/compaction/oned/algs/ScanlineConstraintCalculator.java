@@ -18,10 +18,9 @@ import org.eclipse.elk.alg.layered.compaction.oned.OneDimensionalCompactor;
 import org.eclipse.elk.alg.layered.compaction.recthull.Scanline;
 import org.eclipse.elk.alg.layered.compaction.recthull.Scanline.EventHandler;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.ArrayList;
 
 /**
  * Scanline-procedure to calculate the constraint graph in O(nlogn) time, n being the number of
@@ -66,9 +65,9 @@ public class ScanlineConstraintCalculator implements IConstraintCalculationAlgor
         blowUpHitboxes(filterFun, spacingFun);
         
         // add all nodes twice (once for the lower, once for the upper border)
-        List<Timestamp> points = Lists.newArrayList();
+        List<Timestamp> points = new ArrayList<>();
         for (CNode n : compactor.cGraph.cNodes) {
-            if (filterFun.apply(n)) {
+            if (filterFun.test(n)) {
                 points.add(new Timestamp(n, true));
                 points.add(new Timestamp(n, false));
             }
@@ -89,7 +88,7 @@ public class ScanlineConstraintCalculator implements IConstraintCalculationAlgor
 
         for (CNode n : compactor.cGraph.cNodes) {
         
-            if (!filter.apply(n)) {
+            if (!filter.test(n)) {
                 continue;
             }
             
@@ -112,7 +111,7 @@ public class ScanlineConstraintCalculator implements IConstraintCalculationAlgor
             final Function<CNode, Double> spacingFun) {
         for (CNode n : compactor.cGraph.cNodes) {
             
-            if (!filter.apply(n)) {
+            if (!filter.test(n)) {
                 continue;
             }
             
@@ -193,7 +192,7 @@ public class ScanlineConstraintCalculator implements IConstraintCalculationAlgor
          * Note: the methods to query for neighbor elements (e.g., {@link TreeSet#lower(Object)})
          * are not constant time.
          */
-        private TreeSet<CNode> intervals = Sets.newTreeSet((c1, c2) -> Double.compare(
+        private TreeSet<CNode> intervals = new TreeSet<>((c1, c2) -> Double.compare(
                 c1.hitbox.x + (c1.hitbox.width / 2), c2.hitbox.x + (c2.hitbox.width / 2)));
         /** Candidate array with possible constraints. */
         private CNode[] cand;

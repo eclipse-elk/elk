@@ -12,7 +12,9 @@ package org.eclipse.elk.core.data;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,10 +29,6 @@ import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.core.util.IndividualSpacings;
 import org.eclipse.elk.core.util.Pair;
 import org.eclipse.elk.graph.util.ElkReflect;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 /**
  * Singleton class for access to the ELK layout meta data. This class is used globally to retrieve meta data for
@@ -139,44 +137,44 @@ public final class LayoutMetaDataService {
                 (al) -> ((ArrayList) al).clone());
         ElkReflect.register(LinkedList.class, 
                 () -> new LinkedList(),
-                (ll) -> Lists.newLinkedList((LinkedList) ll));
+                (ll) -> new LinkedList((LinkedList) ll));
         ElkReflect.register(HashSet.class, 
                 () -> new HashSet(),
-                (hs) -> Sets.newHashSet((HashSet) hs));
+                (hs) -> new HashSet((HashSet) hs));
         ElkReflect.register(LinkedHashSet.class, 
                 () -> new LinkedHashSet(),
-                (hs) -> Sets.newLinkedHashSet((HashSet) hs));
+                (hs) -> new LinkedHashSet((HashSet) hs));
         ElkReflect.register(TreeSet.class, 
                 () -> new TreeSet(),
-                (ts) -> Sets.newTreeSet((TreeSet) ts));
+                (ts) -> new TreeSet((TreeSet) ts));
     }
 
     /**
      * Mapping of layout provider identifiers to their data instances.
      */
-    private final Map<String, LayoutAlgorithmData> layoutAlgorithmMap = Maps.newLinkedHashMap();
+    private final Map<String, LayoutAlgorithmData> layoutAlgorithmMap = new LinkedHashMap<>();
     /**
      * Mapping of layout option identifiers to their data instances.
      */
-    private final Map<String, LayoutOptionData> layoutOptionMap = Maps.newLinkedHashMap();
+    private final Map<String, LayoutOptionData> layoutOptionMap = new LinkedHashMap<>();
     /**
      * Mapping of legacy layout option identifiers to their data instances. Note that the actual layout option data
      * contain the new identifiers.
      */
-    private final Map<String, LayoutOptionData> legacyLayoutOptionMap = Maps.newLinkedHashMap();
+    private final Map<String, LayoutOptionData> legacyLayoutOptionMap = new LinkedHashMap<>();
     /**
      * Mapping of layout category identifiers to their data instances.
      */
-    private final Map<String, LayoutCategoryData> layoutCategoryMap = Maps.newLinkedHashMap();
+    private final Map<String, LayoutCategoryData> layoutCategoryMap = new LinkedHashMap<>();
     /**
      * Additional map of layout algorithm suffixes to data instances.
      */
-    private final Map<String, LayoutAlgorithmData> algorithmSuffixMap = Maps.newHashMap();
+    private final Map<String, LayoutAlgorithmData> algorithmSuffixMap = new HashMap<>();
     /**
      * Additional map of layout option suffixes to data instances. For layout options this include the layout option's
      * group.
      */
-    private final Map<String, LayoutOptionData> optionSuffixMap = Maps.newHashMap();
+    private final Map<String, LayoutOptionData> optionSuffixMap = new HashMap<>();
 
     /**
      * Registers the data provided by the given meta data providers with the meta data service.

@@ -28,6 +28,7 @@ import static org.eclipse.elk.core.options.PortSide.SIDES_WEST;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
@@ -35,7 +36,6 @@ import org.eclipse.elk.core.math.ElkMath;
 import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.options.EdgeRouting;
 
-import com.google.common.collect.Lists;
 
 /**
  * A graph placer that tries to place the components of a graph with taking connections to external
@@ -57,7 +57,7 @@ class ComponentGroupGraphPlacer extends AbstractGraphPlacer {
     /**
      * List of component groups holding the different components.
      */
-    protected final List<ComponentGroup> componentGroups = Lists.newArrayList();
+    protected final List<ComponentGroup> componentGroups = new ArrayList<>();
     
     
     ///////////////////////////////////////////////////////////////////////////////
