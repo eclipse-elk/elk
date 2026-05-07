@@ -52,21 +52,31 @@ public final class LGraphUtil {
      */
     private LGraphUtil() { }
 
-    /** Returns a fresh list with the same elements as {@code list} in reverse order. */
-    public static <T> List<T> reversed(final List<? extends T> list) {
-        List<T> copy = new ArrayList<>(list);
-        Collections.reverse(copy);
-        return copy;
-    }
-
-    /** Returns a zero-copy reverse view of {@code list}. Reads are O(1); structural changes
-     *  to the backing list are reflected here. */
-    public static <T> List<T> reversedView(final List<T> list) {
+    /**
+     * Returns a live, mutable reverse view of {@code list}. Reads are O(1) and modifications
+     * (set, add, remove) propagate to the backing list. Replacement for Guava's {@code Lists.reverse}.
+     */
+    public static <T> List<T> reversed(final List<T> list) {
         Objects.requireNonNull(list);
         return new AbstractList<T>() {
             @Override
             public T get(final int index) {
-                return list.get(list.size() - 1 - index);
+                return list.get(reverseIndex(index, list.size()));
+            }
+
+            @Override
+            public T set(final int index, final T element) {
+                return list.set(reverseIndex(index, list.size()), element);
+            }
+
+            @Override
+            public void add(final int index, final T element) {
+                list.add(reverseInsertIndex(index, list.size()), element);
+            }
+
+            @Override
+            public T remove(final int index) {
+                return list.remove(reverseIndex(index, list.size()));
             }
 
             @Override
@@ -74,6 +84,28 @@ public final class LGraphUtil {
                 return list.size();
             }
         };
+    }
+
+    private static int reverseIndex(final int index, final int size) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        return size - 1 - index;
+    }
+
+    private static int reverseInsertIndex(final int index, final int size) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        return size - index;
+    }
+
+    /**
+     * @deprecated use {@link #reversed(List)} which is also a live view.
+     */
+    @Deprecated
+    public static <T> List<T> reversedView(final List<T> list) {
+        return reversed(list);
     }
 
     /** Lazy filtering iterable backed by a predicate (replacement for {@code Iterables.filter}). */
