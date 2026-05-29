@@ -17,10 +17,8 @@
     <relativePath>../../build/pom.xml</relativePath>
   </parent>
 
-  <groupId>org.eclipse.elk</groupId>
   <artifactId>org.eclipse.elk.alg.topdownpacking</artifactId>
   <name>ELK Topdown Packing Algorithm</name>
-  <version>0.10.0-SNAPSHOT</version>
   <description>Algorithm that packs nodes into a grid. Used for topdown layout.</description>
   <packaging>eclipse-plugin</packaging>
 

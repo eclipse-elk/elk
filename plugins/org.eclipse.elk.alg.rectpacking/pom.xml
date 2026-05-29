@@ -17,10 +17,8 @@
     <relativePath>../../build/pom.xml</relativePath>
   </parent>
 
-  <groupId>org.eclipse.elk</groupId>
   <artifactId>org.eclipse.elk.alg.rectpacking</artifactId>
   <name>ELK Rectangle Packing Algorithm</name>
-  <version>0.10.0-SNAPSHOT</version>
   <description>Algorithm that views nodes as rectanlges and packs them.</description>
   <packaging>eclipse-plugin</packaging>
 

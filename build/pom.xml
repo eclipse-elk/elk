@@ -22,6 +22,9 @@
   <!-- Define a few properties used throughout all build profiles. -->
   <properties>
     <targetJdk>17</targetJdk>
+    <maven.compiler.release>${targetJdk}</maven.compiler.release>
+    <maven.compiler.source>${targetJdk}</maven.compiler.source>
+    <maven.compiler.target>${targetJdk}</maven.compiler.target>
     <tycho-version>4.0.12</tycho-version>
     <xtext-version>2.36.0</xtext-version>
     <elk-version>${project.version}</elk-version>
@@ -34,7 +37,6 @@
          due to xtend's template symbols («) when running maven on windows. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
-    <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
   </properties>
 
 
@@ -62,7 +64,6 @@
       <id>elk-meta</id>
 
       <modules>
-        <module>org.eclipse.elk.targetplatform</module>
         <module>../plugins/org.eclipse.elk.graph</module>
         <module>../plugins/org.eclipse.elk.core.meta</module>
       </modules>
@@ -298,6 +299,9 @@
               <version>${elk-version}</version>
             </artifact>
           </target>
+          <target>
+            <file>${maven.multiModuleProjectDirectory}/org.eclipse.elk.targetplatform/org.eclipse.elk.targetplatform.target</file>
+          </target>
           <environments>
             <environment>
               <os>win32</os>
@@ -350,15 +354,6 @@
         <version>${tycho-version}</version>
         <configuration>
           <enableAssertions>true</enableAssertions>
-          <!-- There seems to be an issue with executing several tests in parallel in that
-               it can happen that failed tests are eventually reported as having succeeded.
-               A resolution is to set forkCount=1 and reuseForks=false
-               See, e.g. the following stackoverflow post:
-               https://stackoverflow.com/questions/3365628/junit-tests-pass-in-eclipse-but-fail-in-maven-surefire -->
-          <!-- parallel>classes</parallel -->
-          <!-- threadCount>4</threadCount -->
-          <reuseForks>false</reuseForks>
-          <forkCount>1</forkCount>
           <excludes>
             <exclude>**/TestUtil.java</exclude>
           </excludes>
@@ -419,6 +414,7 @@
           <version>${xtext-version}</version>
           <configuration>
             <outputDirectory>${basedir}/xtend-gen</outputDirectory>
+            <javaSourceVersion>${maven.compiler.release}</javaSourceVersion>
           </configuration>
           <executions>
             <execution>
@@ -590,8 +586,8 @@
   <!-- The license ELK is available as. -->
   <licenses>
     <license>
-      <name>Eclipse Public License - v 2.0</name>
-      <url>http://www.eclipse.org/legal/epl-v20.html</url>
+      <name>EPL-2.0</name>
+      <url>https://www.eclipse.org/legal/epl-2.0</url>
     </license>
   </licenses>
 

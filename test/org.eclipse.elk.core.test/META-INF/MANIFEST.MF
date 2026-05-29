@@ -11,3 +11,4 @@ Require-Bundle: com.google.guava,
  org.eclipse.elk.graph,
  org.eclipse.elk.alg.test
 Bundle-Vendor: Eclipse Modeling Project
+Automatic-Module-Name: org.eclipse.elk.core.test

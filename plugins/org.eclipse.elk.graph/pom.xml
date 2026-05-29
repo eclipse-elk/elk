@@ -17,6 +17,11 @@
     <relativePath>../../build/pom.xml</relativePath>
   </parent>
 
+  <artifactId>org.eclipse.elk.graph</artifactId>
+  <name>ELK Graph Model</name>
+  <description>The ELK Graph is the central data structure of the Eclipse Layout Kernel.</description>
+  <packaging>eclipse-plugin</packaging>
+
   <dependencies>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -34,11 +39,4 @@
       <version>2.12.0</version>
     </dependency>
   </dependencies>
-
-  <groupId>org.eclipse.elk</groupId>
-  <artifactId>org.eclipse.elk.graph</artifactId>
-  <name>ELK Graph Model</name>
-  <version>0.10.0-SNAPSHOT</version>
-  <description>The ELK Graph is the central data structure of the Eclipse Layout Kernel.</description>
-  <packaging>eclipse-plugin</packaging>
 </project>
