@@ -491,6 +491,11 @@ public final class InternalProperties {
      * The weight of a node as used by the MedianHeuristic class.
      */
     public static final IProperty<Double> WEIGHT = new Property<>("medianHeuristic.weight");
+
+    /**
+     * 
+     */
+    public static final IProperty<Boolean> WAS_FLEXIBLE = new Property<>("networksimplex.wasFexlible");;
     
     /**
      * Hidden default constructor.

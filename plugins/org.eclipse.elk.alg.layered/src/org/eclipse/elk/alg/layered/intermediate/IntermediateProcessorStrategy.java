@@ -126,6 +126,7 @@ public enum IntermediateProcessorStrategy implements ILayoutProcessorFactory<LGr
     HIERARCHICAL_PORT_DUMMY_SIZE_PROCESSOR,
 
     // Before Phase 5
+    NODE_PLACEMENT_REPEATER,
 
     /** Calculate the size of layers and the graph's height and offset. */
     LAYER_SIZE_AND_GRAPH_HEIGHT_CALCULATOR,
@@ -294,6 +295,9 @@ public enum IntermediateProcessorStrategy implements ILayoutProcessorFactory<LGr
 
         case LONG_EDGE_SPLITTER:
             return new LongEdgeSplitter();
+            
+        case NODE_PLACEMENT_REPEATER:
+            return new NodePlacementRepeater();
             
         case NODE_PROMOTION:
             return new NodePromotion();

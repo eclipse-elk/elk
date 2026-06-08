@@ -322,9 +322,8 @@ final class GraphConfigurator {
         default: // OFF
         }
         
-        if (lgraph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY) != OrderingStrategy.NONE) {
-            configuration
-                .addBefore(LayeredPhases.P3_NODE_ORDERING, IntermediateProcessorStrategy.SORT_BY_INPUT_ORDER_OF_MODEL);
+        if (lgraph.hasProperty(LayeredOptions.NODE_PLACEMENT_NETWORK_SIMPLEX_NODE_FLEXIBILITY) || lgraph.hasProperty(LayeredOptions.NODE_PLACEMENT_NETWORK_SIMPLEX_NODE_FLEXIBILITY_DEFAULT)) {
+            configuration.addAfter(LayeredPhases.P4_NODE_PLACEMENT, IntermediateProcessorStrategy.NODE_PLACEMENT_REPEATER);
         }
         
         return configuration;
