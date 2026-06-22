@@ -506,35 +506,59 @@ public class LayerSweepCrossingMinimizer
             return;
         }
 
+        // The end layer may also hold dummies for ports of other sides: dummies for NORTH/SOUTH
+        // ports carry no layer constraint, so the layerer may place them in the first or last
+        // layer as well (#1192). Write back only the dummies that belong to ports on the side
+        // facing the end of the sweep, in their layer order.
+        PortSide sweepEndSide = onRightMostLayer ? PortSide.EAST : PortSide.WEST;
+        Deque<LPort> dummyOrigins = new ArrayDeque<>();
+        for (; j >= 0 && j < lastLayer.length; j += next(onRightMostLayer)) {
+            LNode node = lastLayer[j];
+            if (isExternalPortDummy(node) && originPort(node).getSide() == sweepEndSide) {
+                dummyOrigins.add(originPort(node));
+            }
+        }
+
+        // Permute exactly the ports whose dummies were found in the end layer; every other port
+        // keeps its position. This keeps the port list duplicate-free even if some side port's
+        // dummy ended up in another layer.
+        Set<LPort> originSet = Sets.newHashSet(dummyOrigins);
         List<LPort> ports = parent.getPorts();
         for (int i = 0; i < ports.size(); i++) {
             LPort port = ports.get(i);
-            if (isOnEndOfSweepSide(port, onRightMostLayer) && isHierarchical(port)) {
-                // Only on external port dummy node has a port as its origin.
-                ports.set(i, originPort(lastLayer[j]));
-                j += next(onRightMostLayer);
+            if (isOnEndOfSweepSide(port, onRightMostLayer) && isHierarchical(port)
+                    && originSet.contains(port)) {
+                // Only an external port dummy node has a port as its origin.
+                ports.set(i, dummyOrigins.poll());
             }
         }
     }
 
     private LNode[] sortPortDummiesByPortPositions(final LNode parentNode,
             final LNode[] layerCloseToNodeEdge, final PortSide side) {
-        Iterable<LPort> ports = CrossMinUtil.inNorthSouthEastWestOrder(parentNode, side);
-
-        LNode[] sortedDummies = new LNode[layerCloseToNodeEdge.length];
-
-        int i = 0;
-        for (LPort port : ports) {
+        // The boundary layer is not guaranteed to consist only of dummies for hierarchical ports
+        // on the sweep-facing side: dummies for NORTH/SOUTH ports carry no layer constraint and
+        // the layerer may place them in the first or last layer as well (#1192). Sort only the
+        // dummies that belong to ports on the given side; leave all other nodes of the layer in
+        // their current relative order.
+        Set<LNode> layerNodes = Sets.newHashSet(layerCloseToNodeEdge);
+        Deque<LNode> sortedSideDummies = new ArrayDeque<>();
+        for (LPort port : CrossMinUtil.inNorthSouthEastWestOrder(parentNode, side)) {
             if (isHierarchical(port)) {
-                sortedDummies[i++] = dummyNodeFor(port);
+                LNode dummy = dummyNodeFor(port);
+                if (dummy != null && layerNodes.contains(dummy)) {
+                    sortedSideDummies.add(dummy);
+                }
             }
         }
 
-        if (i < layerCloseToNodeEdge.length) {
-            throw new IllegalStateException("Expected " + layerCloseToNodeEdge.length
-                    + " hierarchical ports, but found only " + i + ".");
+        Set<LNode> sideDummies = Sets.newHashSet(sortedSideDummies);
+        LNode[] result = new LNode[layerCloseToNodeEdge.length];
+        for (int i = 0; i < layerCloseToNodeEdge.length; i++) {
+            LNode node = layerCloseToNodeEdge[i];
+            result[i] = sideDummies.contains(node) ? sortedSideDummies.poll() : node;
         }
-        return sortedDummies;
+        return result;
     }
 
     private void saveAllNodeOrdersOfChangedGraphs() {
