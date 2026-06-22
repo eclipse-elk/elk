@@ -12,6 +12,8 @@ package org.eclipse.elk.alg.layered.intermediate.greedyswitch;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LNode;
@@ -19,8 +21,6 @@ import org.eclipse.elk.alg.layered.graph.LPort;
 import org.eclipse.elk.alg.layered.p3order.counting.CrossMinUtil;
 import org.eclipse.elk.core.options.PortSide;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * Calculates the number of crossings for edges incident to two nodes. In the case where there is
@@ -48,9 +48,9 @@ public final class BetweenLayerEdgeTwoNodeCrossingsCounter {
      *            Index of free layer.
      */
     public BetweenLayerEdgeTwoNodeCrossingsCounter(final LNode[][] currentNodeOrder, final int freeLayerIndex) {
-        portPositions = Maps.newHashMap();
-        easternAdjacencies = Maps.newHashMap();
-        westernAdjacencies = Maps.newHashMap();
+        portPositions = new HashMap<>();
+        easternAdjacencies = new HashMap<>();
+        westernAdjacencies = new HashMap<>();
         this.currentNodeOrder = currentNodeOrder;
         this.freeLayerIndex = freeLayerIndex;
         setPortPositionsForNeighbouringLayers();
@@ -241,7 +241,7 @@ public final class BetweenLayerEdgeTwoNodeCrossingsCounter {
         AdjacencyList(final LNode node, final PortSide side) {
             this.node = node;
             this.side = side;
-            adjacencyList = Lists.newArrayList();
+            adjacencyList = new ArrayList<>();
             getAdjacenciesSortedByPosition();
         }
 

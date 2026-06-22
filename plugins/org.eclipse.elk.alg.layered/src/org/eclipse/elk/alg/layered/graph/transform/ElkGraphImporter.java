@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.eclipse.elk.alg.common.nodespacing.NodeLabelAndSizeCalculator;
 import org.eclipse.elk.alg.layered.components.ComponentOrderingStrategy;
@@ -65,9 +67,6 @@ import org.eclipse.elk.graph.ElkPort;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * Implements the graph import aspect of {@link ElkGraphTransformer}.
@@ -75,7 +74,7 @@ import com.google.common.collect.Maps;
 class ElkGraphImporter {
     
     /** map between ElkGraph nodes / ports and the LGraph nodes / ports created for them. */
-    private final Map<ElkGraphElement, LGraphElement> nodeAndPortMap = Maps.newHashMap();
+    private final Map<ElkGraphElement, LGraphElement> nodeAndPortMap = new HashMap<>();
     
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -302,7 +301,7 @@ class ElkGraphImporter {
      *            graph to add the direct children of the current hierarchy level to.
      */
     private void importHierarchicalGraph(final ElkNode elkgraph, final LGraph lgraph) {
-        final Queue<ElkNode> elkGraphQueue = Lists.newLinkedList();
+        final Queue<ElkNode> elkGraphQueue = new LinkedList<>();
         
         Direction parentGraphDirection = lgraph.getProperty(LayeredOptions.DIRECTION);
 
@@ -760,7 +759,7 @@ class ElkGraphImporter {
 
         // Transform all of the port's labels
         for (ElkLabel elklabel : elkport.getLabels()) {
-            if (!elklabel.getProperty(LayeredOptions.NO_LAYOUT) && !Strings.isNullOrEmpty(elklabel.getText())) {
+            if (!elklabel.getProperty(LayeredOptions.NO_LAYOUT) && !(elklabel.getText() == null || elklabel.getText().isEmpty())) {
                 LLabel llabel = transformLabel(elklabel);
                 dummyPort.getLabels().add(llabel);
                 
@@ -941,7 +940,7 @@ class ElkGraphImporter {
 
         // add the node's labels
         for (ElkLabel elklabel : elknode.getLabels()) {
-            if (!elklabel.getProperty(LayeredOptions.NO_LAYOUT) && !Strings.isNullOrEmpty(elklabel.getText())) {
+            if (!elklabel.getProperty(LayeredOptions.NO_LAYOUT) && !(elklabel.getText() == null || elklabel.getText().isEmpty())) {
                 lnode.getLabels().add(transformLabel(elklabel));
             }
         }
@@ -1040,7 +1039,7 @@ class ElkGraphImporter {
 
         // create the port's labels
         for (ElkLabel elklabel : elkport.getLabels()) {
-            if (!elklabel.getProperty(LayeredOptions.NO_LAYOUT) && !Strings.isNullOrEmpty(elklabel.getText())) {
+            if (!elklabel.getProperty(LayeredOptions.NO_LAYOUT) && !(elklabel.getText() == null || elklabel.getText().isEmpty())) {
                 lport.getLabels().add(transformLabel(elklabel));
             }
         }
@@ -1195,7 +1194,7 @@ class ElkGraphImporter {
 
         // Transform the edge's labels
         for (ElkLabel elklabel : elkedge.getLabels()) {
-            if (!elklabel.getProperty(LayeredOptions.NO_LAYOUT) && !Strings.isNullOrEmpty(elklabel.getText())) {
+            if (!elklabel.getProperty(LayeredOptions.NO_LAYOUT) && !(elklabel.getText() == null || elklabel.getText().isEmpty())) {
                 LLabel llabel = transformLabel(elklabel);
                 ledge.getLabels().add(llabel);
                 

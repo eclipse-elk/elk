@@ -10,9 +10,8 @@
 package org.eclipse.elk.graph.util;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Map;
-
-import com.google.common.collect.Maps;
 
 /**
  * Provides the means to register a new instance function and a clone function with class types. The functionality to
@@ -35,8 +34,8 @@ import com.google.common.collect.Maps;
  */
 public final class ElkReflect {
 
-    private static final Map<Class<?>, NewInstanceFunction> REGISTRY_NEW = Maps.newHashMap();
-    private static final Map<Class<?>, CloneFunction> REGISTRY_CLONE = Maps.newHashMap();
+    private static final Map<Class<?>, NewInstanceFunction> REGISTRY_NEW = new HashMap<>();
+    private static final Map<Class<?>, CloneFunction> REGISTRY_CLONE = new HashMap<>();
     
     static {
         // special treatment and no new instance function required for EnumSets, register clone here

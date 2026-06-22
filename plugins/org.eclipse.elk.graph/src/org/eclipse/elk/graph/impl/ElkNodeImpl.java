@@ -30,8 +30,6 @@ import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import com.google.common.base.Strings;
-
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Elk Node</b></em>'.
@@ -360,11 +358,11 @@ public class ElkNodeImpl extends ElkConnectableShapeImpl implements ElkNode {
         StringBuilder builder = new StringBuilder("ElkNode");
         // Use identifier or labels
         String id = getIdentifier();
-        if (!Strings.isNullOrEmpty(id)) {
+        if (id != null && !id.isEmpty()) {
             builder.append(" \"").append(id).append("\"");
         } else if (getLabels().size() > 0) {
             String text = getLabels().get(0).getText();
-            if (!Strings.isNullOrEmpty(text)) {
+            if (text != null && !text.isEmpty()) {
                 builder.append(" \"").append(text).append("\"");
             }
         }

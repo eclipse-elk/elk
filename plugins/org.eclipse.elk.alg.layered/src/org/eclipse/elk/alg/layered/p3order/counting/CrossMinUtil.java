@@ -14,8 +14,8 @@ import java.util.Collections;
 import org.eclipse.elk.alg.layered.graph.LNode;
 import org.eclipse.elk.alg.layered.graph.LPort;
 import org.eclipse.elk.core.options.PortSide;
+import org.eclipse.elk.alg.layered.graph.LGraphUtil;
 
-import com.google.common.collect.Lists;
 
 /**
  * Utility class for iterating over ports in any direction.
@@ -43,7 +43,7 @@ public final class CrossMinUtil {
             return node.getPortSideView(side);
         case SOUTH:
         case WEST:
-            return Lists.reverse(node.getPortSideView(side));
+            return LGraphUtil.reversed(node.getPortSideView(side));
         }
         return Collections.emptyList();
     }

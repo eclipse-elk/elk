@@ -28,10 +28,10 @@ import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 import org.eclipse.elk.core.util.Pair;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Range;
-import com.google.common.collect.Sets;
+import java.util.function.Predicate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 /**
  * Implementation of the heuristic MinWidth for solving the NP-hard minimum-width layering problem
@@ -99,8 +99,10 @@ public final class MinWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph
      * http://dx.doi.org/10.1007/978-3-540-24838-5_42.</li>
      * </ul>
      */
-    private static final Range<Integer> UPPERBOUND_ON_WIDTH_RANGE = Range.closed(1, 4);
-    private static final Range<Integer> COMPENSATOR_RANGE = Range.closed(1, 2);
+    private static final int UPPERBOUND_ON_WIDTH_LOWER = 1;
+    private static final int UPPERBOUND_ON_WIDTH_UPPER = 4;
+    private static final int COMPENSATOR_LOWER = 1;
+    private static final int COMPENSATOR_UPPER = 2;
 
     // Some variables used for considering real node sizes, see below.
     private double dummySize;
@@ -214,12 +216,12 @@ public final class MinWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph
         // ... then check, whether any special values (i.e. negative values, which aren't valid) have
         // been used for the properties. In that case use the recommended ranges described above …
         if (upperBoundOnWidth < 0) {
-            ubwStart = UPPERBOUND_ON_WIDTH_RANGE.lowerEndpoint();
-            ubwEnd = UPPERBOUND_ON_WIDTH_RANGE.upperEndpoint();
+            ubwStart = UPPERBOUND_ON_WIDTH_LOWER;
+            ubwEnd = UPPERBOUND_ON_WIDTH_UPPER;
         }
         if (compensator < 0) {
-            cStart = COMPENSATOR_RANGE.lowerEndpoint();
-            cEnd = COMPENSATOR_RANGE.upperEndpoint();
+            cStart = COMPENSATOR_LOWER;
+            cEnd = COMPENSATOR_UPPER;
         }
 
         // … Depending on the start- and end-values, this nested for-loop will last for up to 8
@@ -272,15 +274,15 @@ public final class MinWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph
      * @return List of Set of successor {@link LNode}s in order of the given nodes
      */
     private List<Set<LNode>> precalcSuccessors(final Collection<LNode> nodes) {
-        List<Set<LNode>> successors = Lists.newArrayListWithCapacity(nodes.size());
+        List<Set<LNode>> successors = new ArrayList<>(nodes.size());
 
         for (LNode node : nodes) {
 
-            Set<LNode> outNodes = Sets.newHashSet();
+            Set<LNode> outNodes = new HashSet<>();
             Iterable<LEdge> outEdges = node.getOutgoingEdges();
 
             for (LEdge edge : outEdges) {
-                if (!isSelfLoopTest.apply(edge)) {
+                if (!isSelfLoopTest.test(edge)) {
                     outNodes.add(edge.getTarget().getNode());
                 }
             }
@@ -321,8 +323,9 @@ public final class MinWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph
             final int compensator, final Iterable<LNode> nodes,
             final List<Set<LNode>> nodeSuccessors) {
 
-        List<List<LNode>> layers = Lists.newArrayList();
-        Set<LNode> unplacedNodes = Sets.newLinkedHashSet(nodes);
+        List<List<LNode>> layers = new ArrayList<>();
+        Set<LNode> unplacedNodes = new LinkedHashSet<>();
+        nodes.forEach(unplacedNodes::add);
 
         // One of the deviations from the paper is, that our upper bound is taking node sizes into
         // account:
@@ -337,12 +340,12 @@ public final class MinWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph
         // version we consider only the nodes already placed in the current layer), and the
         // second contains all nodes already placed in layers which have been determined before the
         // currentLayer.
-        Set<LNode> alreadyPlacedInCurrentLayer = Sets.newHashSet();
-        Set<LNode> alreadyPlacedInOtherLayers = Sets.newHashSet();
+        Set<LNode> alreadyPlacedInCurrentLayer = new HashSet<>();
+        Set<LNode> alreadyPlacedInOtherLayers = new HashSet<>();
 
         // Set up the first layer (algorithm is bottom up, so the List layer is going to be reversed
         // at the end.
-        List<LNode> currentLayer = Lists.newArrayList();
+        List<LNode> currentLayer = new ArrayList<>();
 
         // Initial values for the width of the current layer and the estimated width of the coming
         // layers
@@ -400,7 +403,7 @@ public final class MinWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph
                     || (widthCurrent >= ubwConsiderSize && normSize[currentNode.id] > outDeg * dummySize)
                     || widthUp >= compensator * ubwConsiderSize) {
                 layers.add(currentLayer);
-                currentLayer = Lists.newArrayList();
+                currentLayer = new ArrayList<>();
                 alreadyPlacedInOtherLayers.addAll(alreadyPlacedInCurrentLayer);
                 alreadyPlacedInCurrentLayer.clear();
 
@@ -458,7 +461,7 @@ public final class MinWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph
     private int countEdgesExceptSelfLoops(final Iterable<LEdge> edges) {
         int i = 0;
         for (LEdge edge : edges) {
-            if (!isSelfLoopTest.apply(edge)) {
+            if (!isSelfLoopTest.test(edge)) {
                 i++;
             }
         }
@@ -471,7 +474,7 @@ public final class MinWidthLayerer implements ILayoutPhase<LayeredPhases, LGraph
     private class SelfLoopPredicate implements Predicate<LEdge> {
 
         @Override
-        public boolean apply(final LEdge input) {
+        public boolean test(final LEdge input) {
             return input.getSource().getNode().equals(input.getTarget().getNode());
         }
 

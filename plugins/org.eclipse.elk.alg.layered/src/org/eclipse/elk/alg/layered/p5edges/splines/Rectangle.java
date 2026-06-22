@@ -19,7 +19,6 @@ import org.eclipse.elk.core.math.ElkMargin;
 import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.options.PortSide;
 
-import com.google.common.collect.Iterables;
 
 /**
  * This class is representing a rectangle and provides some comfort methods to work with the
@@ -105,7 +104,7 @@ public final class Rectangle {
      * @param vectors The coordinates to span the rectangle around.
      */
     public Rectangle(final Iterable<KVector> vectors) {
-        if (Iterables.isEmpty(vectors)) {
+        if (!vectors.iterator().hasNext()) {
             throw new IllegalArgumentException("The list of vectors may not be empty.");
         }
             

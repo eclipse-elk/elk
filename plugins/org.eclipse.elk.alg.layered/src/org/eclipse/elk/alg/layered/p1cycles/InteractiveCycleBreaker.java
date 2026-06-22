@@ -10,6 +10,7 @@
 package org.eclipse.elk.alg.layered.p1cycles;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.LayeredPhases;
 import org.eclipse.elk.alg.layered.graph.LEdge;
@@ -22,7 +23,6 @@ import org.eclipse.elk.core.alg.ILayoutPhase;
 import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
 
 /**
  * A cycle breaker that responds to user interaction by respecting the direction of
@@ -54,7 +54,7 @@ public final class InteractiveCycleBreaker implements ILayoutPhase<LayeredPhases
         monitor.begin("Interactive cycle breaking", 1);
         
         // gather edges that point to the wrong direction
-        List<LEdge> revEdges = Lists.newArrayList();
+        List<LEdge> revEdges = new ArrayList<>();
         for (LNode source : layeredGraph.getLayerlessNodes()) {
             source.id = 1;
             double sourcex = source.getInteractiveReferencePoint().x;

@@ -23,7 +23,6 @@ import org.eclipse.elk.core.alg.ILayoutPhase;
 import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Iterables;
 
 /**
  * Cycle breaker implementation that uses a depth-first traversal of the graph. Described in
@@ -89,7 +88,7 @@ public class DepthFirstCycleBreaker implements ILayoutPhase<LayeredPhases, LGrap
         for (LNode node : nodes) {
             // The node id is used as index into our arrays
             node.id = index;
-            if (Iterables.isEmpty(node.getIncomingEdges())) {
+            if (!node.getIncomingEdges().iterator().hasNext()) {
                 sources.add(node);
             }
             index++;

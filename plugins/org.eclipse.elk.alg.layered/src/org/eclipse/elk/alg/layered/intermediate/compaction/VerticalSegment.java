@@ -10,9 +10,9 @@
 package org.eclipse.elk.alg.layered.intermediate.compaction;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.common.compaction.oned.CNode;
-import org.eclipse.elk.alg.common.compaction.oned.CompareFuzzy;
 import org.eclipse.elk.alg.common.compaction.oned.Quadruplet;
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LPort;
@@ -20,10 +20,8 @@ import org.eclipse.elk.alg.layered.options.LayeredOptions;
 import org.eclipse.elk.core.math.ElkRectangle;
 import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.math.KVectorChain;
+import org.eclipse.elk.alg.layered.compaction.oned.CompareFuzzy;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-import com.google.common.math.DoubleMath;
 
 /**
  * Represents a vertical segment on a single {@link LEdge} that is merged with intersecting
@@ -40,15 +38,15 @@ public final class VerticalSegment implements Comparable<VerticalSegment> {
     // SUPPRESS CHECKSTYLE NEXT 34 VisibilityModifier
     
     /** Nodes that may become the parent of the {@link CNode} that will represent this segment. */
-    public List<CNode> potentialGroupParents = Lists.newArrayList();
+    public List<CNode> potentialGroupParents = new ArrayList<>();
     
     /** The edges that contribute at least partly to this vertical segment. */
-    public List<LEdge> representedLEdges = Lists.newArrayList();
+    public List<LEdge> representedLEdges = new ArrayList<>();
     /** The bendpoints that are located within the hitbox of this vertical segment.
      *  After compaction they should be adjusted. */
-    public List<KVector> affectedBends = Lists.newArrayList();
+    public List<KVector> affectedBends = new ArrayList<>();
     /** Bounding boxes, e.g. of splines, that are to be adjusted after compaction. */
-    public List<ElkRectangle> affectedBoundingBoxes = Lists.newArrayList();
+    public List<ElkRectangle> affectedBoundingBoxes = new ArrayList<>();
 
     /** The area occupied by this vertical segment. */
     public ElkRectangle hitbox = new ElkRectangle();
@@ -60,13 +58,13 @@ public final class VerticalSegment implements Comparable<VerticalSegment> {
     public Quadruplet ignoreSpacing = new Quadruplet();
     
     /** Pre-computed constraints that are to be added to the {@link CNode} which represents this segment. */
-    public List<VerticalSegment> constraints = Lists.newArrayList();
+    public List<VerticalSegment> constraints = new ArrayList<>();
 
     /** Orthogonal edges may have vertical segments that leave/enter a north/south port. Such a port is stored here. */
     public LPort aPort;
     
     /** Segments that have been joined with this one. */
-    public List<VerticalSegment> joined = Lists.newArrayList();
+    public List<VerticalSegment> joined = new ArrayList<>();
     
     /**
      * Creates a new instance setting all fields.
@@ -162,7 +160,7 @@ public final class VerticalSegment implements Comparable<VerticalSegment> {
 
     @Override
     public int compareTo(final VerticalSegment o) {
-        int d = DoubleMath.fuzzyCompare(hitbox.x, o.hitbox.x, CompareFuzzy.TOLERANCE);
+        int d = CompareFuzzy.fuzzyCompare(hitbox.x, o.hitbox.x, CompareFuzzy.TOLERANCE);
         if (d == 0) {
             return Double.compare(this.hitbox.y, o.hitbox.y);
         }
@@ -175,7 +173,7 @@ public final class VerticalSegment implements Comparable<VerticalSegment> {
         sb.append("VerticalSegment ");
         sb.append(hitbox);
         sb.append(" ");
-        sb.append(Joiner.on(", ").join(representedLEdges));
+        sb.append(representedLEdges.stream().map(String::valueOf).collect(java.util.stream.Collectors.joining(String.valueOf(", "))));
         return sb.toString();
     }
 }

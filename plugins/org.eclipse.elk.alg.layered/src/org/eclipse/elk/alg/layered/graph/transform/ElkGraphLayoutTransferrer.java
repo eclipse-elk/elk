@@ -12,6 +12,7 @@ package org.eclipse.elk.alg.layered.graph.transform;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -43,7 +44,6 @@ import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.ElkPort;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
 
-import com.google.common.collect.Lists;
 
 /**
  * Implements the graph layout application aspect of {@link ElkGraphTransformer}.
@@ -90,7 +90,7 @@ public class ElkGraphLayoutTransferrer {
         }
 
         // Along the way, we collect the list of edges to be processed later
-        List<LEdge> edgeList = Lists.newArrayList();
+        List<LEdge> edgeList = new ArrayList<>();
 
         // Process the nodes
         for (LNode lnode : lgraph.getLayerlessNodes()) {
@@ -461,7 +461,7 @@ public class ElkGraphLayoutTransferrer {
         }
 
         // Along the way, we collect the list of edges to be processed later
-        List<LEdge> edgeList = Lists.newArrayList();
+        List<LEdge> edgeList = new ArrayList<>();
 
         // Process the nodes
         for (LNode lnode : collectNodes(lgraph)) {
@@ -529,7 +529,7 @@ public class ElkGraphLayoutTransferrer {
      * @return A list of all nodes that represent a node in the original ELK graph.
      */
     private static List<LNode> collectNodes(LGraph lgraph) {
-        List<LNode> nodes = Lists.newArrayList();
+        List<LNode> nodes = new ArrayList<>();
         for (Layer layer : lgraph.getLayers()) {
             for (LNode lNode : layer.getNodes()) {
                 if (representsNode(lNode)) {

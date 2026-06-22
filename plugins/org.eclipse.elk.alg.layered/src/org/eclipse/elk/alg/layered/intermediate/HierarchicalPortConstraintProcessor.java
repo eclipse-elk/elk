@@ -31,8 +31,6 @@ import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * Processes constraints imposed on hierarchical node dummies.
@@ -207,8 +205,8 @@ public final class HierarchicalPortConstraintProcessor implements ILayoutProcess
         // again.
         // We keep enough space to hold layerCount + 2 instances of each data structure because we
         // might have to add a new first and last layer, even though that shouldn't normally happen
-        List<Map<Object, LNode>> extPortToDummyNodeMap = Lists.newArrayListWithExpectedSize(layerCount + 2);
-        List<List<LNode>> newDummyNodes = Lists.newArrayListWithExpectedSize(layerCount + 2);
+        List<Map<Object, LNode>> extPortToDummyNodeMap = new ArrayList<>(layerCount + 2);
+        List<List<LNode>> newDummyNodes = new ArrayList<>(layerCount + 2);
         
         // Add maps and lists for a new first layer that might have to be created as well as for the
         // current first layer. A map for the next layer is added on each iteration of the for loop
@@ -218,7 +216,7 @@ public final class HierarchicalPortConstraintProcessor implements ILayoutProcess
         newDummyNodes.add(new ArrayList<LNode>());
         
         // We remember each original external port dummy we encounter (they must be removed from the layers later)
-        List<LNode> originalExternalPortDummies = Lists.newArrayList();
+        List<LNode> originalExternalPortDummies = new ArrayList<>();
         
         // Iterate through each layer
         for (int currLayerIdx = 0; currLayerIdx < layerCount; currLayerIdx++) {
@@ -226,11 +224,11 @@ public final class HierarchicalPortConstraintProcessor implements ILayoutProcess
             
             // Dummy node maps and lists for the next and previous layer
             Map<Object, LNode> prevExtPortToDummyNodesMap = extPortToDummyNodeMap.get(currLayerIdx);
-            Map<Object, LNode> nextExtPortToDummyNodesMap = Maps.newHashMap();
+            Map<Object, LNode> nextExtPortToDummyNodesMap = new HashMap<>();
             extPortToDummyNodeMap.add(nextExtPortToDummyNodesMap);
             
             List<LNode> prevNewDummyNodes = newDummyNodes.get(currLayerIdx);
-            List<LNode> nextNewDummyNodes = Lists.newArrayList();
+            List<LNode> nextNewDummyNodes = new ArrayList<>();
             newDummyNodes.add(nextNewDummyNodes);
             
             // Iterate through the layer's nodes, looking for normal nodes connected to

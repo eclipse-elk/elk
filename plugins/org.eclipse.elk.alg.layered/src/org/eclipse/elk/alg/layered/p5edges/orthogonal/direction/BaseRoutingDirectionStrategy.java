@@ -10,6 +10,7 @@
 package org.eclipse.elk.alg.layered.p5edges.orthogonal.direction;
 
 import java.util.Set;
+import java.util.HashSet;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LPort;
@@ -20,7 +21,6 @@ import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.math.KVectorChain;
 import org.eclipse.elk.core.options.PortSide;
 
-import com.google.common.collect.Sets;
 
 /**
  * A routing direction strategy adapts the {@link OrthogonalRoutingGenerator} to different routing directions. Commonly,
@@ -36,7 +36,7 @@ public abstract class BaseRoutingDirectionStrategy {
     // Properties
 
     /** set of already created junction points, to avoid multiple points at the same position. */
-    private final Set<KVector> createdJunctionPoints = Sets.newHashSet();
+    private final Set<KVector> createdJunctionPoints = new HashSet<>();
     
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////

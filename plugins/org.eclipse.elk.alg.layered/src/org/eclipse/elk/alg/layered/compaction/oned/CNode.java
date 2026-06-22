@@ -10,12 +10,12 @@
 package org.eclipse.elk.alg.layered.compaction.oned;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LGraphElement;
 import org.eclipse.elk.core.math.ElkRectangle;
 import org.eclipse.elk.core.math.KVector;
 
-import com.google.common.collect.Lists;
 
 
 /**
@@ -36,7 +36,7 @@ public abstract class CNode {
     /** refers to the parent node of a north/south segment. */
     public CNode parentNode = null;
     /** representation of constraints. */
-    public List<CNode> constraints = Lists.newArrayList();
+    public List<CNode> constraints = new ArrayList<>();
     /** the area occupied by this element including margins for ports and labels. */
     public ElkRectangle hitbox;
     /** offset to the root position of the containing {@link CGroup} . */

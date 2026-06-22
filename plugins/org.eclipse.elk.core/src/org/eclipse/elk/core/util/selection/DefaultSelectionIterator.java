@@ -9,16 +9,16 @@
  *******************************************************************************/
 package org.eclipse.elk.core.util.selection;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.elk.graph.ElkConnectableShape;
 import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkGraphElement;
 import org.eclipse.elk.graph.ElkPort;
-
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Sets;
 
 /**
  * The default {@link SelectionIterator} for usage in
@@ -59,7 +59,7 @@ public class DefaultSelectionIterator extends SelectionIterator {
     protected Iterator<? extends ElkGraphElement> getChildren(final Object object) {
         // Ensure that the visited set is properly initialized
         if (visited == null) {
-            visited = Sets.newHashSet();
+            visited = new HashSet<>();
         }
         
         if (object instanceof ElkEdge) {
@@ -86,9 +86,10 @@ public class DefaultSelectionIterator extends SelectionIterator {
 
             // If the port should be added to the selection, add it to the result set
             if (addPorts) {
-                Iterator<ElkGraphElement> portIterator =
-                        Iterators.singletonIterator((ElkGraphElement) port);
-                return Iterators.concat(portIterator, resultEdges);
+                List<ElkGraphElement> combined = new ArrayList<>();
+                combined.add(port);
+                resultEdges.forEachRemaining(combined::add);
+                return combined.iterator();
             } else {
                 return resultEdges;
             }

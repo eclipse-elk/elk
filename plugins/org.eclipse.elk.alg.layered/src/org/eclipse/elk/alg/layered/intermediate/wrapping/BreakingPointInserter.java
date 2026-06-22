@@ -14,6 +14,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -29,8 +32,6 @@ import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * Calculates cut points and inserts breaking points into the calculated layering. 
@@ -126,10 +127,10 @@ public class BreakingPointInserter implements ILayoutProcessor<LGraph> {
         int cut = cutIt.next();
         int noSplitEdges = 0;
         
-        Set<LEdge> alreadySplit = Sets.newHashSet();
+        Set<LEdge> alreadySplit = new HashSet<>();
         
         // keep track of edges that have to be split upon cut insertion
-        Set<LEdge> openEdges = Sets.newLinkedHashSet();
+        Set<LEdge> openEdges = new LinkedHashSet<>();
         // run
         while (layerIt.hasNext()) {
             
@@ -242,10 +243,10 @@ public class BreakingPointInserter implements ILayoutProcessor<LGraph> {
     @SuppressWarnings("unused")
     private List<Integer> improveCuts(final LGraph graph, final List<Integer> cuts) {
         
-        List<Integer> improvedCuts = Lists.newArrayList();
+        List<Integer> improvedCuts = new ArrayList<>();
        
         // convert to cut object
-        List<Cut> ccuts = Lists.newArrayList();
+        List<Cut> ccuts = new ArrayList<>();
         Cut lastCut = null;
         for (Integer cutIdx : cuts) {
             Cut cut = new Cut(cutIdx);
@@ -333,7 +334,7 @@ public class BreakingPointInserter implements ILayoutProcessor<LGraph> {
     private int[] computeEdgeSpans(final LGraph graph) {
         int[] spans = new int[graph.getLayers().size() + 1];
         
-        Set<LEdge> open = Sets.newHashSet();
+        Set<LEdge> open = new HashSet<>();
         int i = 0;
         for (Layer l : graph.getLayers()) {
             

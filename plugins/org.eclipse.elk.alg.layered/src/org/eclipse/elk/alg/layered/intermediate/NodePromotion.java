@@ -29,9 +29,8 @@ import org.eclipse.elk.core.alg.ILayoutProcessor;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 import org.eclipse.elk.core.util.Pair;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import java.util.function.Function;
+import java.util.ArrayList;
 
 /**
  * An approach that is implementing the node promotion heuristic of Nikola S. Nikolov and Alexandre
@@ -276,8 +275,8 @@ public class NodePromotion implements ILayoutProcessor<LGraph> {
         int nodeID = 0;
         maxWidth = 0;
         maxWidthPixel = 0.0;
-        currentWidth = Lists.newArrayList(new Integer[maxHeight]);
-        currentWidthPixel = Lists.newArrayList(new Double[maxHeight]);
+        currentWidth = new ArrayList<>(java.util.Arrays.asList(new Integer[maxHeight]));
+        currentWidthPixel = new ArrayList<>(java.util.Arrays.asList(new Double[maxHeight]));
 
         // Set IDs for all layers and nodes.
         // Layer IDs are reversed for easier handling in the heuristic.
@@ -295,8 +294,8 @@ public class NodePromotion implements ILayoutProcessor<LGraph> {
 
         layers = new int[nodeID];
         degreeDiff = new int[nodeID][3]; // SUPPRESS CHECKSTYLE MagicNumber
-        nodes = Lists.newArrayList();
-        nodesWithIncomingEdges = Lists.newArrayList();
+        nodes = new ArrayList<>();
+        nodesWithIncomingEdges = new ArrayList<>();
         int dummyBaggage = 0; // Will contain number of dummy nodes between the layers.
         dummyNodeCount = 0;
 
@@ -313,8 +312,8 @@ public class NodePromotion implements ILayoutProcessor<LGraph> {
                 layers[nodeID] = node.getLayer().id;
                 layerSizePixel += node.getSize().y + nodeSizeAffix; // Accumulate width of every
                                                                     // node.
-                int inDegree = Iterables.size(node.getIncomingEdges());
-                int outDegree = Iterables.size(node.getOutgoingEdges());
+                int inDegree = ((int) java.util.stream.StreamSupport.stream(node.getIncomingEdges().spliterator(), false).count());
+                int outDegree = ((int) java.util.stream.StreamSupport.stream(node.getOutgoingEdges().spliterator(), false).count());
                 degreeDiff[nodeID][0] = outDegree - inDegree;
                 degreeDiff[nodeID][1] = inDegree;
                 degreeDiff[nodeID][2] = outDegree;
@@ -584,13 +583,13 @@ public class NodePromotion implements ILayoutProcessor<LGraph> {
                     reducedDummies += dummyBackup - dummyNodeCount;
                     dummyBackup = dummyNodeCount + promotionPair.getFirst();
                     heightBackup = maxHeight;
-                    currentWidthBackup = Lists.newArrayList(currentWidth);
-                    currentWidthPixelBackup = Lists.newArrayList(currentWidthPixel);
+                    currentWidthBackup = new ArrayList<>(currentWidth);
+                    currentWidthPixelBackup = new ArrayList<>(currentWidthPixel);
                 } else { // Promotion is invalid and the last valid state will be restored.
                     layers = Arrays.copyOf(layeringBackup, layeringBackup.length);
                     dummyNodeCount = dummyBackup;
-                    currentWidth = Lists.newArrayList(currentWidthBackup);
-                    currentWidthPixel = Lists.newArrayList(currentWidthPixelBackup);
+                    currentWidth = new ArrayList<>(currentWidthBackup);
+                    currentWidthPixel = new ArrayList<>(currentWidthPixelBackup);
                     maxHeight = heightBackup;
                 }
             }
@@ -693,7 +692,7 @@ public class NodePromotion implements ILayoutProcessor<LGraph> {
         // our layering. It is added to the layeredGraph with reversed IDs so they fit to the IDs
         // stored in the nodes but can also be properly assigned compliant with the layering used in
         // ELK Layered.
-        List<Layer> layList = Lists.newArrayList();
+        List<Layer> layList = new ArrayList<>();
         for (int i = 0; i <= maxHeight; i++) {
             Layer laLaLayer = new Layer(layeredGraph);
             laLaLayer.id = maxHeight - i;
@@ -724,7 +723,7 @@ public class NodePromotion implements ILayoutProcessor<LGraph> {
      * @param layeredGraph The graph to which the calculated new layering is applied.
      */
     private void setNewLayeringModelOrder(final LGraph layeredGraph) {
-        List<Layer> layerList = Lists.newArrayList();
+        List<Layer> layerList = new ArrayList<>();
         layeredGraph.getLayers().clear();
         // Get the layer indices.
         List<Integer> keySet = biLayerMap.keySet().stream().sorted().collect(Collectors.toList());

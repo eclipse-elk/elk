@@ -26,8 +26,6 @@ import org.eclipse.elk.core.options.BoxLayouterOptions;
 import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.graph.ElkNode;
 
-import com.google.common.collect.Lists;
-
 /**
  * A layout algorithm that does not take edges into account, but treats all nodes as isolated boxes.
  * This is useful for parts of a diagram that consist of objects without connections, such as
@@ -311,7 +309,7 @@ public class BoxLayoutProvider extends AbstractLayoutProvider {
         }
 
         // wrap boxes in groups
-        List<Group> groups = Lists.newArrayList();
+        List<Group> groups = new ArrayList<>();
         for (ElkNode node : parentNode.getChildren()) {
             Group g = new Group(node);
             groups.add(g);
@@ -392,7 +390,7 @@ public class BoxLayoutProvider extends AbstractLayoutProvider {
         LinkedList<Double> rowHeights = new LinkedList<>();
         ListIterator<Group> boxIter = group.groups.listIterator();
         Group last = null;
-        List<Group> bottoms = Lists.newArrayList();
+        List<Group> bottoms = new ArrayList<>();
         while (boxIter.hasNext()) {
             Group box = boxIter.next();
             double width = box.getWidth();
@@ -483,9 +481,9 @@ public class BoxLayoutProvider extends AbstractLayoutProvider {
         // the code below makes relies on this
         Collections.sort(groups, (g1, g2) -> -Double.compare(g1.area(), g2.area()));
         
-        Queue<Group> boxQueue = Lists.newLinkedList(groups);
-        List<Group> toBePlaced = Lists.newArrayList();
-        List<Group> maybeGroup = Lists.newArrayList();
+        Queue<Group> boxQueue = new LinkedList<>(groups);
+        List<Group> toBePlaced = new ArrayList<>();
+        List<Group> maybeGroup = new ArrayList<>();
         
         // current 'large' node and the combined area of 'smaller' nodes
         Group boxToBeat = null;         
@@ -547,7 +545,7 @@ public class BoxLayoutProvider extends AbstractLayoutProvider {
         pq.addAll(groups);
         
         int index = 0;
-        List<Group> toBePlaced = Lists.newArrayList();
+        List<Group> toBePlaced = new ArrayList<>();
         
         while (!pq.isEmpty()) {
             // only take a look, we might not want to remove it
@@ -613,7 +611,7 @@ public class BoxLayoutProvider extends AbstractLayoutProvider {
         Collections.sort(groups, (g1, g2) -> Double.compare(g1.area(), g2.area()));
         
         ListIterator<Group> groupIterator = groups.listIterator();
-        List<Group> toBePlaced = Lists.newArrayList();
+        List<Group> toBePlaced = new ArrayList<>();
         double commonArea = 0;
 
         while (groupIterator.hasNext()) {
@@ -699,9 +697,10 @@ public class BoxLayoutProvider extends AbstractLayoutProvider {
         }
         
         Group(final Iterable<Group> groups) {
-            this.groups = Lists.newArrayList(groups);
-            this.bottom = Lists.newArrayList();
-            this.right = Lists.newArrayList();
+            this.groups = new ArrayList<>();
+            groups.forEach(this.groups::add);
+            this.bottom = new ArrayList<>();
+            this.right = new ArrayList<>();
             this.size = new KVector();
         }
 

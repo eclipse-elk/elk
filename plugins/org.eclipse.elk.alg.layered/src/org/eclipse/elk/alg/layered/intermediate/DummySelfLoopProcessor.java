@@ -10,6 +10,7 @@
 package org.eclipse.elk.alg.layered.intermediate;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -25,7 +26,6 @@ import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
 
 /**
  * This processor does some work to ensure that other phases and processors can handle
@@ -66,7 +66,7 @@ public final class DummySelfLoopProcessor implements ILayoutProcessor<LGraph> {
         monitor.begin("Self-loop processing", 1);
         
         // Iterate through all nodes
-        List<LNode> createdDummies = Lists.newArrayList();
+        List<LNode> createdDummies = new ArrayList<>();
         
         for (Layer layer : layeredGraph) {
             createdDummies.clear();

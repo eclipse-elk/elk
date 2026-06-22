@@ -20,8 +20,6 @@ import org.eclipse.elk.graph.properties.IProperty;
 import org.eclipse.elk.graph.properties.IPropertyHolder;
 import org.eclipse.elk.graph.properties.MapPropertyHolder;
 
-import com.google.common.base.Strings;
-
 /**
  * A property holder which can be used to define individual spacing overrides. The overrides are applied to the
  * element this object is set on, which is done through the {@link CoreOptions#SPACING_INDIVIDUAL} property.
@@ -125,7 +123,7 @@ public class IndividualSpacings extends MapPropertyHolder implements IDataObject
      */
     @Override
     public void parse(final String string) {
-        if (Strings.isNullOrEmpty(string)) {
+        if (string == null || string.isEmpty()) {
             // Nothing to do.
             return;
         }

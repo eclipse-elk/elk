@@ -15,8 +15,8 @@ import org.eclipse.elk.alg.layered.graph.LPort;
 import org.eclipse.elk.alg.layered.intermediate.loops.SelfLoopEdge;
 import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.math.KVectorChain;
+import org.eclipse.elk.alg.layered.compaction.oned.CompareFuzzy;
 
-import com.google.common.math.DoubleMath;
 
 /**
  * Routes self loops with polylines. This is basically the same routing as computed by the
@@ -105,10 +105,10 @@ public class PolylineSelfLoopRouter extends OrthogonalSelfLoopRouter {
      * Determines whether the three vectors constitute an orthogonal routing, minus double tolerances.
      */
     private boolean areOrthogonallyRouted(final KVector previous, final KVector corner, final KVector next) {
-        boolean verticalHorizontal = DoubleMath.fuzzyEquals(previous.x, corner.x, TOLERANCE)
-                && DoubleMath.fuzzyEquals(corner.y, next.y, TOLERANCE);
-        boolean horizontalVertical = DoubleMath.fuzzyEquals(previous.y, corner.y, TOLERANCE)
-                && DoubleMath.fuzzyEquals(corner.x, next.x, TOLERANCE);
+        boolean verticalHorizontal = CompareFuzzy.fuzzyEquals(previous.x, corner.x, TOLERANCE)
+                && CompareFuzzy.fuzzyEquals(corner.y, next.y, TOLERANCE);
+        boolean horizontalVertical = CompareFuzzy.fuzzyEquals(previous.y, corner.y, TOLERANCE)
+                && CompareFuzzy.fuzzyEquals(corner.x, next.x, TOLERANCE);
         
         return verticalHorizontal || horizontalVertical;
     }

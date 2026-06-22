@@ -28,8 +28,7 @@ import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
+import java.util.stream.Collectors;
 
 /**
  * <!-- begin-user-doc -->
@@ -462,11 +461,11 @@ public class ElkEdgeImpl extends ElkGraphElementImpl implements ElkEdge {
         StringBuilder builder = new StringBuilder("ElkEdge");
         // Use identifier or labels
         String id = getIdentifier();
-        if (!Strings.isNullOrEmpty(id)) {
+        if (id != null && !id.isEmpty()) {
             builder.append(" \"").append(id).append("\"");
         } else if (getLabels().size() > 0) {
             String text = getLabels().get(0).getText();
-            if (!Strings.isNullOrEmpty(text)) {
+            if (text != null && !text.isEmpty()) {
                 builder.append(" \"").append(text).append("\"");
             }
         }
@@ -477,7 +476,7 @@ public class ElkEdgeImpl extends ElkGraphElementImpl implements ElkEdge {
         } else {
             builder.append(" ");
         }
-        builder.append(Joiner.on(", ").join(sources));
+        builder.append(sources.stream().map(Object::toString).collect(Collectors.joining(", ")));
         if (hyperedge) {
             builder.append("]");
         }
@@ -485,7 +484,7 @@ public class ElkEdgeImpl extends ElkGraphElementImpl implements ElkEdge {
         if (hyperedge) {
             builder.append("[");
         }
-        builder.append(Joiner.on(", ").join(targets));
+        builder.append(targets.stream().map(Object::toString).collect(Collectors.joining(", ")));
         if (hyperedge) {
             builder.append("]");
         }

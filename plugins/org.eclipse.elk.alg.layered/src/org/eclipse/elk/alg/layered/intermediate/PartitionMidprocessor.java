@@ -24,8 +24,12 @@ import org.eclipse.elk.core.alg.ILayoutProcessor;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Add constraint edges between partitions that force layering algorithms to adhere to the partitions.
@@ -58,12 +62,14 @@ public class PartitionMidprocessor implements ILayoutProcessor<LGraph> {
         monitor.begin("Partition midprocessing", 1);
         
         // Collect nodes which have a partition set
-        Multimap<Integer, LNode> partitionToNodesMap = HashMultimap.create();
+        Map<Integer, Set<LNode>> partitionToNodesMap = new HashMap<>();
         
         // Go through all layerless nodes and collect all partition IDs in use
         lGraph.getLayerlessNodes().stream()
             .filter(node -> node.hasProperty(LayeredOptions.PARTITIONING_PARTITION))
-            .forEach(node -> partitionToNodesMap.put(node.getProperty(LayeredOptions.PARTITIONING_PARTITION), node));
+            .forEach(node -> partitionToNodesMap
+                    .computeIfAbsent(node.getProperty(LayeredOptions.PARTITIONING_PARTITION), k -> new HashSet<>())
+                    .add(node));
         
         if (partitionToNodesMap.isEmpty()) {
             // This shouldn't happen, but if it does, there's nothing to do
@@ -82,7 +88,8 @@ public class PartitionMidprocessor implements ILayoutProcessor<LGraph> {
         Integer firstId = idIterator.next();
         while (idIterator.hasNext()) {
             Integer secondId = idIterator.next();
-            connectNodes(partitionToNodesMap.get(firstId), partitionToNodesMap.get(secondId));
+            connectNodes(partitionToNodesMap.getOrDefault(firstId, Collections.emptySet()),
+                    partitionToNodesMap.getOrDefault(secondId, Collections.emptySet()));
             firstId = secondId;
         }
         

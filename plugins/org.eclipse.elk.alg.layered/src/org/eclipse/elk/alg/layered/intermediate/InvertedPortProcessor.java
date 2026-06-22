@@ -11,6 +11,7 @@ package org.eclipse.elk.alg.layered.intermediate;
 
 import java.util.List;
 import java.util.ListIterator;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -29,7 +30,6 @@ import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
 
 /**
  * Inserts dummy nodes to cope with inverted ports.
@@ -87,7 +87,7 @@ public final class InvertedPortProcessor implements ILayoutProcessor<LGraph> {
         // modification exceptions)
         ListIterator<Layer> layerIterator = layers.listIterator();
         Layer currentLayer = null;
-        List<LNode> unassignedNodes = Lists.newArrayList();
+        List<LNode> unassignedNodes = new ArrayList<>();
         
         while (layerIterator.hasNext()) {
             // Update previous and current layers

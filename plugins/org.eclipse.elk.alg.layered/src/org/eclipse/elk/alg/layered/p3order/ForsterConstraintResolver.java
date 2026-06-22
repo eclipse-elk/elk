@@ -12,6 +12,7 @@ package org.eclipse.elk.alg.layered.p3order;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.LinkedList;
 
 import org.eclipse.elk.alg.layered.graph.LNode;
 import org.eclipse.elk.alg.layered.graph.LNode.NodeType;
@@ -20,9 +21,11 @@ import org.eclipse.elk.alg.layered.p3order.BarycenterHeuristic.BarycenterState;
 import org.eclipse.elk.alg.layered.p3order.counting.IInitializable;
 import org.eclipse.elk.core.util.Pair;
 
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Detects and resolves violated constraints. Inspired by
@@ -42,7 +45,7 @@ public class ForsterConstraintResolver implements IInitializable {
     /** Whether there are successor constraints between non-dummies. */
     private boolean constraintsBetweenNonDummies = false;
     /** the layout units for handling dummy nodes for north / south ports. */
-    private Multimap<LNode, LNode> layoutUnits;
+    private Map<LNode, Set<LNode>> layoutUnits;
     /** the barycenter values of every node in the graph, indexed by layer.id and node.id. */
     private BarycenterState[][] barycenterStates;
     /** the constraint groups, indexed by layer.id and node.id. */
@@ -64,7 +67,7 @@ public class ForsterConstraintResolver implements IInitializable {
         }
         barycenterStates = new BarycenterState[currentNodeOrder.length][];
         constraintGroups = new ConstraintGroup[currentNodeOrder.length][];
-        layoutUnits = LinkedHashMultimap.create();
+        layoutUnits = new LinkedHashMap<>();
     }
 
     @Override
@@ -99,7 +102,7 @@ public class ForsterConstraintResolver implements IInitializable {
             
             LNode layoutUnit = node.getProperty(InternalProperties.IN_LAYER_LAYOUT_UNIT);
             if (layoutUnit != null) {
-                layoutUnits.put(layoutUnit, node);
+                layoutUnits.computeIfAbsent(layoutUnit, k -> new LinkedHashSet<>()).add(node);
             }
         }
     }
@@ -202,8 +205,8 @@ public class ForsterConstraintResolver implements IInitializable {
                 // constraints from all of that other node's layout unit's vertices to this
                 // node's layout unit's vertices
                 if (lastNonDummyNode != null) {
-                    for (LNode lastUnitNode : layoutUnits.get(lastNonDummyNode)) {
-                        for (LNode currentUnitNode : layoutUnits.get(node)) {
+                    for (LNode lastUnitNode : layoutUnits.getOrDefault(lastNonDummyNode, Collections.emptySet())) {
+                        for (LNode currentUnitNode : layoutUnits.getOrDefault(node, Collections.emptySet())) {
                             groupOf(lastUnitNode).getOutgoingConstraints().add(groupOf(currentUnitNode));
                             groupOf(currentUnitNode).incomingConstraintsCount++;
                         }
@@ -238,7 +241,7 @@ public class ForsterConstraintResolver implements IInitializable {
             // Find sources of the constraint graph to start the constraints check
             if (group.hasOutgoingConstraints() && group.incomingConstraintsCount == 0) {
                 if (activeGroups == null) {
-                    activeGroups = Lists.newArrayList();
+                    activeGroups = new ArrayList<>();
                 }
                 activeGroups.add(group);
             }
@@ -415,7 +418,7 @@ public class ForsterConstraintResolver implements IInitializable {
             // Add constraints, taking care not to add any constraints to vertex1 or vertex2
             // and to decrement the incoming constraints count of those that are successors to both
             if (nodeGroup1.outgoingConstraints != null) {
-                this.outgoingConstraints = Lists.newLinkedList(nodeGroup1.outgoingConstraints);
+                this.outgoingConstraints = new LinkedList<>(nodeGroup1.outgoingConstraints);
                 this.outgoingConstraints.remove(nodeGroup2);
                 if (nodeGroup2.outgoingConstraints != null) {
                     for (ConstraintGroup candidate : nodeGroup2.outgoingConstraints) {
@@ -430,7 +433,7 @@ public class ForsterConstraintResolver implements IInitializable {
                     }
                 }
             } else if (nodeGroup2.outgoingConstraints != null) {
-                this.outgoingConstraints = Lists.newLinkedList(nodeGroup2.outgoingConstraints);
+                this.outgoingConstraints = new LinkedList<>(nodeGroup2.outgoingConstraints);
                 this.outgoingConstraints.remove(nodeGroup1);
             }
 
@@ -475,7 +478,7 @@ public class ForsterConstraintResolver implements IInitializable {
          */
         public List<ConstraintGroup> getOutgoingConstraints() {
             if (outgoingConstraints == null) {
-                outgoingConstraints = Lists.newArrayList();
+                outgoingConstraints = new ArrayList<>();
             }
             return outgoingConstraints;
         }
@@ -503,7 +506,7 @@ public class ForsterConstraintResolver implements IInitializable {
          */
         public List<ConstraintGroup> getIncomingConstraints() {
             if (incomingConstraints == null) {
-                incomingConstraints = Lists.newArrayList();
+                incomingConstraints = new ArrayList<>();
             }
             return incomingConstraints;
         }

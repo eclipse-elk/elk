@@ -26,8 +26,7 @@ import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.Pair;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import org.eclipse.elk.alg.layered.graph.LGraphUtil;
 
 /**
  * In ELK Layered we distinguish three types of edge crossings that can occur:
@@ -342,7 +341,7 @@ public final class CrossingsCounter {
                 }
             }
         }
-        return Lists.newArrayList(ports);
+        return new ArrayList<>(ports);
     }
 
     private List<LPort> connectedPortsSortedByPosition(final LPort upperPort, final LPort lowerPort) {
@@ -355,7 +354,7 @@ public final class CrossingsCounter {
                 }
             }
         }
-        return Lists.newArrayList(ports);
+        return new ArrayList<>(ports);
     }
 
     private int countCrossingsOnPorts(final Iterable<LPort> ports) {
@@ -407,7 +406,7 @@ public final class CrossingsCounter {
    
     private int countNorthSouthCrossingsOnPorts(final Iterable<LPort> ports) {
         int crossings = 0;
-        final List<Pair<LPort, Integer>> targetsAndDegrees = Lists.newArrayList();
+        final List<Pair<LPort, Integer>> targetsAndDegrees = new ArrayList<>();
         
         for (LPort port : ports) {
             indexTree.removeAll(positionOf(port));
@@ -483,7 +482,7 @@ public final class CrossingsCounter {
     private static final PortSide STACK_SIDE = PortSide.EAST;
     
     private List<LPort> initPositionsForNorthSouthCounting(final LNode[] nodes) {
-        final List<LPort> ports = Lists.newArrayList();
+        final List<LPort> ports = new ArrayList<>();
         final Deque<LNode> stack = new ArrayDeque<>();
         
         LNode lastLayoutUnit = null;
@@ -574,17 +573,17 @@ public final class CrossingsCounter {
             if (topDown) {
                 return node.getPortSideView(side);
             } else {
-                return Lists.reverse(node.getPortSideView(side));
+                return LGraphUtil.reversed(node.getPortSideView(side));
             }
         } else if (topDown) {
-            return Lists.reverse(node.getPortSideView(side));
+            return LGraphUtil.reversed(node.getPortSideView(side));
         } else {
             return node.getPortSideView(side);
         }
     }
 
     private Iterable<LPort> getNorthSouthPortsWithIncidentEdges(final LNode node, final PortSide side) {
-        return Iterables.filter(node.getPortSideView(side), p -> p.hasProperty(InternalProperties.PORT_DUMMY));
+        return LGraphUtil.filter(node.getPortSideView(side), p -> p.hasProperty(InternalProperties.PORT_DUMMY));
     }
     
     private int start(final LNode[] nodes, final boolean topDown) {

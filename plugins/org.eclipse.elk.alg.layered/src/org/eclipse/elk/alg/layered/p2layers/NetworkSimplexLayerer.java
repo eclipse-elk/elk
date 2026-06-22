@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.eclipse.elk.alg.common.networksimplex.NEdge;
 import org.eclipse.elk.alg.common.networksimplex.NGraph;
@@ -30,8 +32,6 @@ import org.eclipse.elk.core.alg.ILayoutPhase;
 import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * The main class of the network simplex layerer component. It offers an algorithm to determine an
@@ -107,7 +107,7 @@ public final class NetworkSimplexLayerer implements ILayoutPhase<LayeredPhases, 
         } else {
             Arrays.fill(nodeVisited, false);
         }
-        componentNodes = Lists.newArrayList();
+        componentNodes = new ArrayList<>();
 
         // re-index nodes
         int counter = 0;
@@ -115,7 +115,7 @@ public final class NetworkSimplexLayerer implements ILayoutPhase<LayeredPhases, 
             node.id = counter++;
         }
         // determine connected components
-        LinkedList<List<LNode>> components = Lists.newLinkedList();
+        LinkedList<List<LNode>> components = new LinkedList<>();
         for (LNode node : theNodes) {
             if (!nodeVisited[node.id]) {
                 connectedComponentsDFS(node);
@@ -126,7 +126,7 @@ public final class NetworkSimplexLayerer implements ILayoutPhase<LayeredPhases, 
                 } else {
                     components.addLast(componentNodes);
                 }
-                componentNodes = Lists.newArrayList();
+                componentNodes = new ArrayList<>();
             }
         }
         return components;
@@ -176,7 +176,7 @@ public final class NetworkSimplexLayerer implements ILayoutPhase<LayeredPhases, 
      */
     private NGraph initialize(final List<LNode> theNodes) {
 
-        final Map<LNode, NNode> nodeMap = Maps.newHashMap();
+        final Map<LNode, NNode> nodeMap = new HashMap<>();
         
         // transform nodes
         NGraph graph = new NGraph();

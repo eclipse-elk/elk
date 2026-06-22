@@ -16,7 +16,6 @@ import org.eclipse.elk.alg.layered.graph.LPort;
 import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.options.PortSide;
 
-import com.google.common.collect.Iterables;
 
 /**
  * Mathematics utility class used in the splines routing.
@@ -167,7 +166,7 @@ public final class SplinesMath {
      * @return The readable string.
      */
     public static String convertKVectorToString(final Iterable<KVector> list) {
-        if (list == null || Iterables.size(list) == 0) {
+        if (list == null || !list.iterator().hasNext()) {
             return NULL_STRING;
         }
         final StringBuilder retVal = new StringBuilder();

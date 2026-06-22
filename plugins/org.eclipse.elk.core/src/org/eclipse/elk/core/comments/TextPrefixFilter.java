@@ -9,12 +9,10 @@
  *******************************************************************************/
 package org.eclipse.elk.core.comments;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 /**
  * Determines if a comment is eligible for attachment based on its size. Use the methods named
@@ -28,7 +26,7 @@ public class TextPrefixFilter<C> implements IFilter<C> {
     /** Function that provides the text for comments. */
     private Function<C, String> commentTextProvider = null;
     /** List of prefixes. */
-    private List<String> prefixes = Lists.newArrayList();
+    private List<String> prefixes = new ArrayList<>();
     /**
      * If {@code true}, a comment that starts with one of the prefixes is not eligible for attachment. If {@code false},
      * a comment must start with one of the prefixes to be eligible.
@@ -100,7 +98,7 @@ public class TextPrefixFilter<C> implements IFilter<C> {
      *             if the prefix is {@code null} or the empty string.
      */
     public TextPrefixFilter<C> addPrefix(final String prefix) {
-        if (Strings.isNullOrEmpty(prefix)) {
+        if (prefix == null || prefix.isEmpty()) {
             throw new IllegalArgumentException("Prefix cannot be null or empty. Wouldn't make sense.");
         }
         
@@ -138,7 +136,7 @@ public class TextPrefixFilter<C> implements IFilter<C> {
     public boolean eligibleForAttachment(final C comment) {
         String commentText = commentTextProvider.apply(comment);
 
-        if (!Strings.isNullOrEmpty(commentText)) {
+        if (commentText != null && !commentText.isEmpty()) {
             for (String prefix : prefixes) {
                 // We can only have a match if the comment is as least as long as the prefix
                 if (commentText.length() >= prefix.length()) {
