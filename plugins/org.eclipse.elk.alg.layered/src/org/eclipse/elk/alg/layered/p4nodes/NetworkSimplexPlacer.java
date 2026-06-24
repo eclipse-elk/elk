@@ -216,12 +216,6 @@ public class NetworkSimplexPlacer implements ILayoutPhase<LayeredPhases, LGraph>
     @Override
     public void process(final LGraph layeredGraph, final IElkProgressMonitor progressMonitor) {
         progressMonitor.begin("Network simplex node placement", 1);
-
-        // elkjs-exclude-start
-        if (progressMonitor.isLoggingEnabled()) {
-            DebugUtil.logDebugGraph(progressMonitor, layeredGraph, 0, "before ag");
-        }
-        // elkjs-exclude-end
         
         this.lGraph = layeredGraph;
         this.spacings = layeredGraph.getProperty(InternalProperties.SPACINGS);
@@ -299,9 +293,6 @@ public class NetworkSimplexPlacer implements ILayoutPhase<LayeredPhases, LGraph>
         applyPositions();
         
         cleanup();
-        if (progressMonitor.isLoggingEnabled()) {
-            DebugUtil.logDebugGraph(progressMonitor, layeredGraph, 0, "after alg");
-        }
         
         progressMonitor.done();
     }
