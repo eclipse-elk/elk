@@ -321,8 +321,14 @@ final class GraphConfigurator {
             break;
         default: // OFF
         }
-        
-        if (lgraph.hasProperty(LayeredOptions.NODE_PLACEMENT_NETWORK_SIMPLEX_NODE_FLEXIBILITY) || lgraph.hasProperty(LayeredOptions.NODE_PLACEMENT_NETWORK_SIMPLEX_NODE_FLEXIBILITY_DEFAULT)) {
+
+        if (lgraph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY) != OrderingStrategy.NONE) {
+            configuration
+                .addBefore(LayeredPhases.P3_NODE_ORDERING, IntermediateProcessorStrategy.SORT_BY_INPUT_ORDER_OF_MODEL);
+        }
+
+        if (lgraph.hasProperty(LayeredOptions.NODE_PLACEMENT_NETWORK_SIMPLEX_NODE_FLEXIBILITY)
+                && lgraph.hasProperty(LayeredOptions.NODE_PLACEMENT_NETWORK_SIMPLEX_NODE_FLEXIBILITY_RECOMPUTE_NODE_PLACEMENT)) {
             configuration.addAfter(LayeredPhases.P4_NODE_PLACEMENT, IntermediateProcessorStrategy.NODE_PLACEMENT_REPEATER);
         }
         
