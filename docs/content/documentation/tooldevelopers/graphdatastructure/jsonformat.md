@@ -177,7 +177,7 @@ an edge's representation might look like the following after layout.
 ```json
 {
   id: "root",
-  properties: { "elk.direction": "RIGHT" },
+  layoutOptions: { "elk.direction": "RIGHT" },
   children: [
     { id: "n1", width: 10, height: 10 },
     { id: "n2", width: 10, height: 10 }
