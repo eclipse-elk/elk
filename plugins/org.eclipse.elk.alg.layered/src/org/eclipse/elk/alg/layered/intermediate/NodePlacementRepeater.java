@@ -43,6 +43,8 @@ public class NodePlacementRepeater implements ILayoutProcessor<LGraph> {
         graph.setProperty(LayeredOptions.NODE_PLACEMENT_NETWORK_SIMPLEX_NODE_FLEXIBILITY_DEFAULT, null);
         for (Layer layer : graph) {
             for (LNode node : layer.getNodes()) {
+                // make sure node-level flexibility settings don't affect the second run
+                node.setProperty(LayeredOptions.NODE_PLACEMENT_NETWORK_SIMPLEX_NODE_FLEXIBILITY, null);
                 // default node size constraints == fixed size
                 node.setProperty(LayeredOptions.NODE_SIZE_CONSTRAINTS, null);
                 // reset node positions
