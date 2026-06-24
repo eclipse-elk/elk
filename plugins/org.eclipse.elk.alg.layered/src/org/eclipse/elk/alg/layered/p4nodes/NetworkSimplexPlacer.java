@@ -27,7 +27,6 @@ import org.eclipse.elk.alg.common.networksimplex.NEdge;
 import org.eclipse.elk.alg.common.networksimplex.NGraph;
 import org.eclipse.elk.alg.common.networksimplex.NNode;
 import org.eclipse.elk.alg.common.networksimplex.NetworkSimplex;
-import org.eclipse.elk.alg.layered.DebugUtil;
 import org.eclipse.elk.alg.layered.LayeredPhases;
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
