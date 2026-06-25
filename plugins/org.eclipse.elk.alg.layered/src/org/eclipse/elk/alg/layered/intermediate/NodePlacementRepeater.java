@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.eclipse.elk.alg.layered.intermediate;
 
+import org.eclipse.elk.alg.common.nodespacing.NodeDimensionCalculation;
 import org.eclipse.elk.alg.common.nodespacing.NodeLabelAndSizeCalculator;
 import org.eclipse.elk.alg.layered.LayeredPhases;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -55,8 +56,10 @@ public class NodePlacementRepeater implements ILayoutProcessor<LGraph> {
                 true,
                 true,
                 node -> node.getType() == NodeType.NORMAL);
-        // recompute port positions based on now fixed node sizes
+        // recompute port and label positions based on now fixed node sizes
         NodeLabelAndSizeCalculator.process(adapterGraph);
+        // recalculate node margins
+        NodeDimensionCalculation.calculateNodeMargins(adapterGraph);
         // second node placement run
         nodePlacer.process(graph, progressMonitor);
 
