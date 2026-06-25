@@ -34,12 +34,11 @@ public class NodePlacementRepeater implements ILayoutProcessor<LGraph> {
      */
     @Override
     public void process(LGraph graph, IElkProgressMonitor progressMonitor) {
-        if (!graph.hasProperty(LayeredOptions.NODE_PLACEMENT_NETWORK_SIMPLEX_NODE_FLEXIBILITY_RECOMPUTE_NODE_PLACEMENT)) {
-            return;
-        }
+
+        progressMonitor.begin("Node placement repeater", 1);
+
         ILayoutPhase<LayeredPhases, LGraph> nodePlacer = graph.getProperty(LayeredOptions.NODE_PLACEMENT_NETWORK_SIMPLEX_NODE_FLEXIBILITY_RECOMPUTE_NODE_PLACEMENT).create();
         // disable node flexibility for second node placement run
-        graph.setProperty(LayeredOptions.NODE_PLACEMENT_NETWORK_SIMPLEX_NODE_FLEXIBILITY, null);
         graph.setProperty(LayeredOptions.NODE_PLACEMENT_NETWORK_SIMPLEX_NODE_FLEXIBILITY_DEFAULT, null);
         for (Layer layer : graph) {
             for (LNode node : layer.getNodes()) {
@@ -60,5 +59,7 @@ public class NodePlacementRepeater implements ILayoutProcessor<LGraph> {
         NodeLabelAndSizeCalculator.process(adapterGraph);
         // second node placement run
         nodePlacer.process(graph, progressMonitor);
+
+        progressMonitor.done();
     }
 }
