@@ -22,6 +22,7 @@ import org.eclipse.elk.alg.layered.options.GraphProperties;
 import org.eclipse.elk.alg.layered.options.GreedySwitchType;
 import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
+import org.eclipse.elk.alg.layered.options.NodeFlexibility;
 import org.eclipse.elk.alg.layered.options.NodePromotionStrategy;
 import org.eclipse.elk.alg.layered.options.OrderingStrategy;
 import org.eclipse.elk.alg.layered.options.Spacings;
@@ -325,6 +326,11 @@ final class GraphConfigurator {
         if (lgraph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY) != OrderingStrategy.NONE) {
             configuration
                 .addBefore(LayeredPhases.P3_NODE_ORDERING, IntermediateProcessorStrategy.SORT_BY_INPUT_ORDER_OF_MODEL);
+        }
+        
+        if (lgraph.getLayerlessNodes().stream().anyMatch(n -> NodeFlexibility.getNodeFlexibility(n) != null)
+                && lgraph.hasProperty(LayeredOptions.NODE_PLACEMENT_NETWORK_SIMPLEX_NODE_FLEXIBILITY_RECOMPUTE_NODE_PLACEMENT)) {
+            configuration.addAfter(LayeredPhases.P4_NODE_PLACEMENT, IntermediateProcessorStrategy.NODE_PLACEMENT_REPEATER);
         }
         
         return configuration;

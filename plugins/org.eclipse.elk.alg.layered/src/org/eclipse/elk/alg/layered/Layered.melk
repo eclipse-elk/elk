@@ -99,6 +99,7 @@ algorithm layered(LayeredLayoutProvider) {
     // flexible nodes during node placement
     supports nodePlacement.networkSimplex.nodeFlexibility
     supports nodePlacement.networkSimplex.nodeFlexibility.^default
+    supports nodePlacement.networkSimplex.nodeFlexibility.recomputeNodePlacement
     
     // splines
     supports edgeRouting.splines.mode
@@ -578,6 +579,18 @@ group nodePlacement {
                     "Default value of the 'nodeFlexibility' option for the children of a hierarchical node."
                 default = NodeFlexibility.NONE
                 targets parents   
+                requires nodePlacement.strategy == NodePlacementStrategy.NETWORK_SIMPLEX
+            }
+            
+            advanced option recomputeNodePlacement: NodePlacementStrategy {
+                label "Node Flexibility Recompute Node Placement"
+                description
+                    "Run a second node placement algorithm after the initial network simplex with node flexibility.
+                     In the second run, node flexibility is disabled and a different node placer can be used.
+                     The node sizes determined by the node flexibility option are used as fixed node sizes in the second
+                     run. If set to null (default) no second run is performed."
+                default = null
+                targets parents
                 requires nodePlacement.strategy == NodePlacementStrategy.NETWORK_SIMPLEX
             }
 
