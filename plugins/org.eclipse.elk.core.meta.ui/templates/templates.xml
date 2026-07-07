@@ -4,7 +4,7 @@
   terms of the Eclipse Public License 2.0 which is available at
   http://www.eclipse.org/legal/epl-2.0.
   
-  SPDX-License-Identifier: EPL-2.0
+  SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
 -->
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><templates><template autoinsert="true" context="org.eclipse.elk.core.meta.MetaData.MdBundleMember" deleted="false" description="Create a layout algorithm" enabled="true" name="algorithm" id="algorithm">algorithm ${name}(${type:CrossReference(JvmParameterizedTypeReference.type)}) {
 	label "${label}"
