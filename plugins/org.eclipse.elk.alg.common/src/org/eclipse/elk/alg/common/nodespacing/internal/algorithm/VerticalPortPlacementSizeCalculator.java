@@ -37,7 +37,7 @@ public final class VerticalPortPlacementSizeCalculator {
     
     
     /**
-     * Calculates the space required for horizontal port placements. If the port placement is not fixed, this will
+     * Calculates the space required for vertical port placements. If the port placement is not fixed, this will
      * also setup the top and bottom padding of the inside port label placement cells to reflect the amount of space
      * to be left around the port placement.
      */
