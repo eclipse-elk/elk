@@ -6,16 +6,17 @@ maven/mavencentral/biz.aQute.bnd/biz.aQute.resolve/7.0.0, Apache-2.0, approved, 
 maven/mavencentral/ch.qos.reload4j/reload4j/1.2.25, Apache-2.0, approved, #17936
 maven/mavencentral/com.google.code.findbugs/jsr305/3.0.2, Apache-2.0 and CC-BY-2.5, approved, #15220
 maven/mavencentral/com.google.code.gson/gson/2.11.0, Apache-2.0, approved, #14820
-maven/mavencentral/com.google.code.gson/gson/2.13.1, Apache-2.0, approved, #20656
+maven/mavencentral/com.google.code.gson/gson/2.14.0, Apache-2.0, approved, #27541
 maven/mavencentral/com.google.errorprone/error_prone_annotations/2.27.0, Apache-2.0, approved, #14584
 maven/mavencentral/com.google.errorprone/error_prone_annotations/2.28.0, Apache-2.0, approved, #15107
-maven/mavencentral/com.google.errorprone/error_prone_annotations/2.36.0, Apache-2.0, approved, #18702
+maven/mavencentral/com.google.errorprone/error_prone_annotations/2.47.0, Apache-2.0, approved, #25985
 maven/mavencentral/com.google.guava/failureaccess/1.0.2, Apache-2.0, approved, CQ22654
 maven/mavencentral/com.google.guava/guava/33.3.0-jre, Apache-2.0 AND CC0-1.0 AND (Apache-2.0 AND CC-PDDC) AND (Apache-2.0 AND CC0-1.0), approved, #15952
-maven/mavencentral/com.google.guava/guava/33.4.8-jre, Apache-2.0 AND CC0-1.0 AND CC-PDDC, approved, #17939
+maven/mavencentral/com.google.guava/guava/33.6.0-jre, Apache-2.0 AND CC-PDDC, approved, #27169
 maven/mavencentral/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava, Apache-2.0, approved, CQ22657
 maven/mavencentral/com.google.inject/guice/7.0.0, Apache-2.0, approved, #9095
 maven/mavencentral/com.google.j2objc/j2objc-annotations/3.0.0, Apache-2.0, approved, #13676
+maven/mavencentral/com.google.j2objc/j2objc-annotations/3.1, Apache-2.0, approved, #23379
 maven/mavencentral/com.ibm.icu/icu4j/75.1, Unicode-TOU AND ICU AND BSD-3-Clause AND NAIST-2003 AND BSD-2-Clause AND LicenseRef-Public-domain AND GPL-2.0-or-later WITH Autoconf-exception-2.0 AND GPL-3.0-or-later WITH Autoconf-exception-3.0 AND NTP, approved, #14415
 maven/mavencentral/commons-beanutils/commons-beanutils/1.9.4, Apache-2.0, approved, CQ12654
 maven/mavencentral/commons-cli/commons-cli/1.9.0, Apache-2.0, approved, #15950
@@ -55,60 +56,60 @@ maven/mavencentral/org.bndtools/org.bndtools.versioncontrol.ignores.plugin.git/7
 maven/mavencentral/org.bouncycastle/bcpg-jdk18on/1.78.1, Apache-2.0, approved, #14432
 maven/mavencentral/org.bouncycastle/bcprov-jdk18on/1.78.1, MIT AND CC0-1.0, approved, #14433
 maven/mavencentral/org.bouncycastle/bcutil-jdk18on/1.78.1, MIT, approved, #14435
-maven/mavencentral/org.checkerframework/checker-qual/3.43.0, MIT, approved, clearlydefined
+maven/mavencentral/org.checkerframework/checker-qual/3.43.0, MIT, approved, #23161
 maven/mavencentral/org.codehaus.mojo/animal-sniffer-annotations/1.9, MIT, approved, #17663
 maven/mavencentral/org.eclipse.birt.runtime/org.w3c.css.sac/1.3.1.v200903091627, EPL-2.0, approved, technology.birt
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.common/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.disco.debug/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.disco/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.force/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.graphviz.dot/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.graphviz.layouter/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.layered/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.libavoid/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.mrtree/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.radial/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.rectpacking/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.spore/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.test/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.topdownpacking/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.vertiflex/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.algorithms.feature/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.conn.gmf/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core.debug.grandom.ide/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core.debug.grandom.ui/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core.debug.grandom/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core.debug/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core.meta.ui/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core.meta/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core.service/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core.ui/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.feature/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.gmf.feature/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph.json.feature/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph.json.text.ide/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph.json.text.ui/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph.json.text/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph.json/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph.text.ide/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph.text.ui/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph.text/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graphviz.feature/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.libavoid.feature/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.sdk.feature/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.elk/org.eclipse.elk.ui.feature/0.11.0-SNAPSHOT, EPL-2.0, approved, modeling.elk
-maven/mavencentral/org.eclipse.emf/org.eclipse.emf.common/2.12.0, EPL-2.0, approved, modeling.emf.emf
-maven/mavencentral/org.eclipse.emf/org.eclipse.emf.common/2.24.0, EPL-2.0, approved, modeling.emf.emf
-maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore.change/2.14.0, EPL-2.0, approved, modeling.emf.emf
-maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore.change/2.17.0, EPL-2.0, approved, modeling.emf.emf
-maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore.xmi/2.12.0, EPL-2.0, approved, modeling.emf.emf
-maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore.xmi/2.16.0, EPL-2.0, approved, modeling.emf.emf
-maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore/2.12.0, EPL-2.0, approved, modeling.emf.emf
-maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore/2.26.0, EPL-2.0, approved, modeling.emf.emf
-maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore/2.39.0, EPL-2.0, approved, modeling.emf.emf
-maven/mavencentral/org.eclipse.emf/org.eclipse.emf.edit/2.12.0, EPL-2.0, approved, modeling.emf.emf
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.common/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.disco.debug/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.disco/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.force/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.graphviz.dot/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.graphviz.layouter/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.layered/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.libavoid/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.mrtree/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.radial/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.rectpacking/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.spore/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.test/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.topdownpacking/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.alg.vertiflex/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.algorithms.feature/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.conn.gmf/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core.debug.grandom.ide/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core.debug.grandom.ui/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core.debug.grandom/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core.debug/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core.meta.ui/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core.meta/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core.service/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core.ui/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.core/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.feature/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.gmf.feature/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph.json.feature/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph.json.text.ide/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph.json.text.ui/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph.json.text/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph.json/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph.text.ide/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph.text.ui/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph.text/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graph/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.graphviz.feature/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.libavoid.feature/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.sdk.feature/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.elk/org.eclipse.elk.ui.feature/0.12.0-SNAPSHOT, EPL-2.0 OR GPL-3.0-only, approved, modeling.elk
+maven/mavencentral/org.eclipse.emf/org.eclipse.emf.common/2.12.0, EPL-2.0, approved, modeling.emf
+maven/mavencentral/org.eclipse.emf/org.eclipse.emf.common/2.24.0, EPL-2.0, approved, modeling.emf
+maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore.change/2.14.0, EPL-2.0, approved, modeling.emf
+maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore.change/2.17.0, EPL-2.0, approved, modeling.emf
+maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore.xmi/2.12.0, EPL-2.0, approved, modeling.emf
+maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore.xmi/2.16.0, EPL-2.0, approved, modeling.emf
+maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore/2.12.0, EPL-2.0, approved, modeling.emf
+maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore/2.26.0, EPL-2.0, approved, modeling.emf
+maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore/2.42.0, EPL-2.0, approved, modeling.emf
+maven/mavencentral/org.eclipse.emf/org.eclipse.emf.edit/2.12.0, EPL-2.0, approved, modeling.emf
 maven/mavencentral/org.eclipse.jdt/ecj/3.33.0, EPL-2.0, approved, eclipse.jdt
 maven/mavencentral/org.eclipse.jetty.toolchain/jetty-schemas/5.2, EPL-2.0 OR Apache-2.0, approved, rt.jetty
 maven/mavencentral/org.eclipse.jetty.toolchain/jetty-servlet-api/4.0.6, EPL-2.0 OR Apache-2.0, approved, rt.jetty
@@ -156,15 +157,15 @@ maven/mavencentral/org.eclipse.platform/org.eclipse.osgi/3.18.300, EPL-2.0, appr
 maven/mavencentral/org.eclipse.platform/org.eclipse.osgi/3.19.0, EPL-2.0, approved, eclipse.platform
 maven/mavencentral/org.eclipse.platform/org.eclipse.ui.workbench/3.130.0, EPL-2.0, approved, eclipse.platform
 maven/mavencentral/org.eclipse.platform/org.eclipse.urischeme/1.3.100, EPL-2.0, approved, eclipse.platform
-maven/mavencentral/org.eclipse.xtend/org.eclipse.xtend.lib.macro/2.36.0, EPL-2.0, approved, modeling.tmf.xtext
-maven/mavencentral/org.eclipse.xtend/org.eclipse.xtend.lib/2.36.0, EPL-2.0, approved, modeling.tmf.xtext
-maven/mavencentral/org.eclipse.xtext/org.eclipse.xtext.common.types/2.36.0, EPL-2.0, approved, modeling.tmf.xtext
-maven/mavencentral/org.eclipse.xtext/org.eclipse.xtext.ide/2.36.0, EPL-2.0, approved, modeling.tmf.xtext
-maven/mavencentral/org.eclipse.xtext/org.eclipse.xtext.util/2.36.0, EPL-2.0, approved, modeling.tmf.xtext
-maven/mavencentral/org.eclipse.xtext/org.eclipse.xtext.xbase.lib/2.36.0, EPL-2.0, approved, modeling.tmf.xtext
-maven/mavencentral/org.eclipse.xtext/org.eclipse.xtext.xbase/2.36.0, EPL-2.0, approved, modeling.tmf.xtext
-maven/mavencentral/org.eclipse.xtext/org.eclipse.xtext/2.36.0, EPL-2.0, approved, modeling.tmf.xtext
-maven/mavencentral/org.hamcrest/hamcrest-core/2.2, BSD-3-Clause, approved, clearlydefined
+maven/mavencentral/org.eclipse.xtend/org.eclipse.xtend.lib.macro/2.36.0, EPL-2.0, approved, modeling.xtext
+maven/mavencentral/org.eclipse.xtend/org.eclipse.xtend.lib/2.36.0, EPL-2.0, approved, modeling.xtext
+maven/mavencentral/org.eclipse.xtext/org.eclipse.xtext.common.types/2.36.0, EPL-2.0, approved, modeling.xtext
+maven/mavencentral/org.eclipse.xtext/org.eclipse.xtext.ide/2.36.0, EPL-2.0, approved, modeling.xtext
+maven/mavencentral/org.eclipse.xtext/org.eclipse.xtext.util/2.36.0, EPL-2.0, approved, modeling.xtext
+maven/mavencentral/org.eclipse.xtext/org.eclipse.xtext.xbase.lib/2.36.0, EPL-2.0, approved, modeling.xtext
+maven/mavencentral/org.eclipse.xtext/org.eclipse.xtext.xbase/2.36.0, EPL-2.0, approved, modeling.xtext
+maven/mavencentral/org.eclipse.xtext/org.eclipse.xtext/2.36.0, EPL-2.0, approved, modeling.xtext
+maven/mavencentral/org.hamcrest/hamcrest-core/2.2, BSD-3-Clause, approved, #23163
 maven/mavencentral/org.hamcrest/hamcrest-library/2.2, BSD-3-Clause, approved, CQ22925
 maven/mavencentral/org.hamcrest/hamcrest/3.0, BSD-3-Clause, approved, #17661
 maven/mavencentral/org.jdom/jdom/1.1.3, Apache-1.1, approved, #18555
@@ -200,7 +201,7 @@ maven/mavencentral/org.osgi/org.osgi.util.function/1.2.0, Apache-2.0, approved, 
 maven/mavencentral/org.osgi/org.osgi.util.promise/1.3.0, Apache-2.0, approved, technology.osgi-technology
 maven/mavencentral/org.osgi/org.osgi.util.tracker/1.5.4, Apache-2.0, approved, technology.osgi-technology
 maven/mavencentral/org.osgi/osgi.annotation/8.0.1, Apache-2.0, approved, #6909
-maven/mavencentral/org.osgi/osgi.annotation/8.1.0, Apache-2.0, approved, #15270
+maven/mavencentral/org.osgi/osgi.annotation/8.1.0, Apache-2.0, approved, #29271
 maven/mavencentral/org.ow2.asm/asm-analysis/9.7, BSD-3-Clause, approved, #16463
 maven/mavencentral/org.ow2.asm/asm-commons/9.7, BSD-3-Clause, approved, #16465
 maven/mavencentral/org.ow2.asm/asm-tree/9.7, BSD-3-Clause, approved, #16466
@@ -330,40 +331,40 @@ p2/orbit/p2.eclipse.plugin/org.eclipse.e4.ui.workbench.swt/0.17.500.v20240807-09
 p2/orbit/p2.eclipse.plugin/org.eclipse.e4.ui.workbench/1.15.500.v20240730-1919, EPL-2.0, approved, eclipse.platform
 p2/orbit/p2.eclipse.plugin/org.eclipse.e4.ui.workbench3.source/0.17.400.v20240321-1245, EPL-2.0, approved, eclipse.platform
 p2/orbit/p2.eclipse.plugin/org.eclipse.e4.ui.workbench3/0.17.400.v20240321-1245, EPL-2.0, approved, eclipse.platform
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.codegen.ecore.source/2.39.0.v20240721-0802, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.codegen.ecore/2.39.0.v20240721-0802, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.codegen.source/2.24.0.v20240721-0802, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.codegen/2.24.0.v20240721-0802, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.common.source/2.31.0.v20240731-0952, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.common.ui.source/2.23.0.v20240604-0832, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.common.ui/2.23.0.v20240604-0832, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.common/2.31.0.v20240731-0952, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.change.source/2.17.0.v20240604-0832, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.change/2.17.0.v20240604-0832, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.edit.source/2.15.0.v20240604-0832, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.edit/2.15.0.v20240604-0832, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.editor.source/2.19.0.v20240604-0832, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.editor/2.19.0.v20240604-0832, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.source/2.37.0.v20240721-0802, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.xmi.source/2.38.0.v20240721-0634, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.xmi/2.38.0.v20240721-0634, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore/2.37.0.v20240721-0802, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.edit.source/2.22.0.v20240604-0832, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.edit.ui.source/2.24.0.v20240604-0832, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.edit.ui/2.24.0.v20240604-0832, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.edit/2.22.0.v20240604-0832, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.mwe.core/1.13.0.v20240823-1107, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.mwe.utils/1.13.0.v20240823-1107, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.mwe2.language/2.19.0.v20240823-1107, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.mwe2.launch/2.19.0.v20240823-1107, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.mwe2.lib/2.19.0.v20240823-1107, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.mwe2.runtime/2.19.0.v20240823-1107, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.transaction.source/1.10.0.202408231629, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.transaction/1.10.0.202408231629, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.validation.source/1.9.0.202408231629, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.validation/1.9.0.202408231629, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.workspace.source/1.6.0.202408231629, EPL-2.0, approved, modeling.emf.emf
-p2/orbit/p2.eclipse.plugin/org.eclipse.emf.workspace/1.6.0.202408231629, EPL-2.0, approved, modeling.emf.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.codegen.ecore.source/2.39.0.v20240721-0802, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.codegen.ecore/2.39.0.v20240721-0802, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.codegen.source/2.24.0.v20240721-0802, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.codegen/2.24.0.v20240721-0802, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.common.source/2.31.0.v20240731-0952, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.common.ui.source/2.23.0.v20240604-0832, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.common.ui/2.23.0.v20240604-0832, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.common/2.31.0.v20240731-0952, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.change.source/2.17.0.v20240604-0832, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.change/2.17.0.v20240604-0832, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.edit.source/2.15.0.v20240604-0832, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.edit/2.15.0.v20240604-0832, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.editor.source/2.19.0.v20240604-0832, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.editor/2.19.0.v20240604-0832, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.source/2.37.0.v20240721-0802, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.xmi.source/2.38.0.v20240721-0634, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore.xmi/2.38.0.v20240721-0634, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.ecore/2.37.0.v20240721-0802, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.edit.source/2.22.0.v20240604-0832, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.edit.ui.source/2.24.0.v20240604-0832, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.edit.ui/2.24.0.v20240604-0832, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.edit/2.22.0.v20240604-0832, EPL-2.0, approved, modeling.emf
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.mwe.core/1.13.0.v20240823-1107, EPL-2.0, approved, modeling.mwe
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.mwe.utils/1.13.0.v20240823-1107, EPL-2.0, approved, modeling.mwe
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.mwe2.language/2.19.0.v20240823-1107, EPL-2.0, approved, modeling.mwe
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.mwe2.launch/2.19.0.v20240823-1107, EPL-2.0, approved, modeling.mwe
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.mwe2.lib/2.19.0.v20240823-1107, EPL-2.0, approved, modeling.mwe
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.mwe2.runtime/2.19.0.v20240823-1107, EPL-2.0, approved, modeling.mwe
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.transaction.source/1.10.0.202408231629, EPL-2.0, approved, modeling.emfservices
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.transaction/1.10.0.202408231629, EPL-2.0, approved, modeling.emfservices
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.validation.source/1.9.0.202408231629, EPL-2.0, approved, modeling.emfservices
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.validation/1.9.0.202408231629, EPL-2.0, approved, modeling.emfservices
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.workspace.source/1.6.0.202408231629, EPL-2.0, approved, modeling.emfservices
+p2/orbit/p2.eclipse.plugin/org.eclipse.emf.workspace/1.6.0.202408231629, EPL-2.0, approved, modeling.emfservices
 p2/orbit/p2.eclipse.plugin/org.eclipse.equinox.app.source/1.7.200.v20240722-2103, EPL-2.0, approved, eclipse.equinox
 p2/orbit/p2.eclipse.plugin/org.eclipse.equinox.app/1.7.200.v20240722-2103, EPL-2.0, approved, eclipse.equinox
 p2/orbit/p2.eclipse.plugin/org.eclipse.equinox.bidi.source/1.5.100.v20240321-1445, EPL-2.0, approved, eclipse.equinox
@@ -585,50 +586,50 @@ p2/orbit/p2.eclipse.plugin/org.eclipse.ui.workbench/3.133.0.v20240818-1923, EPL-
 p2/orbit/p2.eclipse.plugin/org.eclipse.ui/3.206.100.v20240720-1232, EPL-2.0, approved, eclipse.platform
 p2/orbit/p2.eclipse.plugin/org.eclipse.urischeme.source/1.3.400.v20240606-1412, EPL-2.0, approved, eclipse.platform
 p2/orbit/p2.eclipse.plugin/org.eclipse.urischeme/1.3.400.v20240606-1412, EPL-2.0, approved, eclipse.platform
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtend.lib.macro.source/2.36.0.v20240825-0714, EPL-1.0, approved, modeling.m2t.xpand
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtend.lib.macro/2.36.0.v20240825-0714, EPL-1.0, approved, modeling.m2t.xpand
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtend.lib.source/2.36.0.v20240825-0714, EPL-1.0, approved, modeling.m2t.xpand
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtend.lib/2.36.0.v20240825-0714, EPL-1.0, approved, modeling.m2t.xpand
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.builder.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.builder/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.common.types.edit.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.common.types.edit/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.common.types.shared.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.common.types.shared/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.common.types.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.common.types.ui.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.common.types.ui/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.common.types/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ecore.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ecore/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ide.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ide/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.smap.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.smap/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.codetemplates.ide.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.codetemplates.ide/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.codetemplates.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.codetemplates.ui.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.codetemplates.ui/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.codetemplates/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.shared.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.shared/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.util.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.util/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xbase.ide.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xbase.ide/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xbase.lib.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xbase.lib/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xbase.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xbase.ui.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xbase.ui/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xbase/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xtext.generator.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xtext.generator/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
-p2/orbit/p2.eclipse.plugin/org.eclipse.xtext/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.tmf.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtend.lib.macro.source/2.36.0.v20240825-0714, , approved, modeling.m2t.xpand
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtend.lib.macro/2.36.0.v20240825-0714, , approved, modeling.m2t.xpand
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtend.lib.source/2.36.0.v20240825-0714, , approved, modeling.m2t.xpand
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtend.lib/2.36.0.v20240825-0714, , approved, modeling.m2t.xpand
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.builder.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.builder/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.common.types.edit.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.common.types.edit/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.common.types.shared.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.common.types.shared/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.common.types.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.common.types.ui.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.common.types.ui/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.common.types/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ecore.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ecore/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ide.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ide/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.smap.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.smap/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.codetemplates.ide.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.codetemplates.ide/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.codetemplates.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.codetemplates.ui.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.codetemplates.ui/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.codetemplates/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.shared.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.shared/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.ui/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.util.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.util/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xbase.ide.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xbase.ide/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xbase.lib.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xbase.lib/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xbase.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xbase.ui.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xbase.ui/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xbase/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xtext.generator.source/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext.xtext.generator/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
+p2/orbit/p2.eclipse.plugin/org.eclipse.xtext/2.36.0.v20240825-0714, EPL-2.0, approved, modeling.xtext
 p2/orbit/p2.eclipse.plugin/org.hamcrest.core/2.2.0.v20230809-1000, BSD-3-Clause, approved, #9982
 p2/orbit/p2.eclipse.plugin/org.hamcrest.library/2.2.0.v20230809-1000, BSD-3-Clause, approved, #9983
 p2/orbit/p2.eclipse.plugin/org.jdom/1.1.3.v20230812-1600, Apache-1.1, approved, #18555
