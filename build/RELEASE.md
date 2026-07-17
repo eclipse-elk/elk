@@ -57,11 +57,11 @@ The Eclipse release process is described in more detail in the [Eclipse Project 
 
 This is a summary of the information on [this page](https://central.sonatype.org/pages/releasing-the-deployment.html).
 
-1. Login to [OSSRH](https://oss.sonatype.org/).
-1. In _Staging Repositories_, look for the drop that contains the new ELK bundles.
+1. Login to [Sonatype](https://central.sonatype.com/).
+1. Sonatype will already check the bundle to test if everything is in order.
+1. In _Publish_, look for the drop that contains the new ELK bundles.
 1. Examine their content.
-1. Once satisfied, _Close_ the bundle. This will cause Nexus to examine the bundle and check whether everything is in order. If it isn't, _Drop_ the bundle, fix any problems and build a new release.
-1. If closing the bundle was successful, _Release_ the bundle and be done with it.
+1. _Release_ the bundle and be done with it.
 
 
 ## Releasing to Update Site
