@@ -16,9 +16,8 @@ package org.eclipse.elk.core.comments;
 
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Double;
+import java.util.HashMap;
 import java.util.Map;
-
-import com.google.common.collect.Maps;
 
 /**
  * Knows how to retrieve the position and size of comments and attachment targets.
@@ -95,9 +94,9 @@ public interface IBoundsProvider<C, T> {
         return new IBoundsProvider<C, T>() {
 
             /** Cache for comment bounds. */
-            private final Map<C, Rectangle2D.Double> commentBoundsCache = Maps.newHashMap();
+            private final Map<C, Rectangle2D.Double> commentBoundsCache = new HashMap<>();
             /** Cache for target bounds. */
-            private final Map<T, Rectangle2D.Double> targetBoundsCache = Maps.newHashMap();
+            private final Map<T, Rectangle2D.Double> targetBoundsCache = new HashMap<>();
             
             @Override
             public Double boundsForComment(final C comment) {

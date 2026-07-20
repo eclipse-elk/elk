@@ -33,7 +33,6 @@ import org.eclipse.elk.core.alg.ILayoutPhase;
 import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Iterables;
 
 /**
  * Edge routing implementation that creates orthogonal bend points. Inspired by
@@ -257,10 +256,8 @@ public final class OrthogonalEdgeRouter implements ILayoutPhase<LayeredPhases, L
             slotsCount = routingGenerator.routeEdges(monitor, layeredGraph, leftLayerNodes, leftLayerIndex,
                     rightLayerNodes, startPos);
             
-            boolean isLeftLayerExternal = leftLayer == null || Iterables.all(leftLayerNodes,
-                    PolylineEdgeRouter.PRED_EXTERNAL_WEST_OR_EAST_PORT);
-            boolean isRightLayerExternal = rightLayer == null || Iterables.all(rightLayerNodes,
-                    PolylineEdgeRouter.PRED_EXTERNAL_WEST_OR_EAST_PORT);
+            boolean isLeftLayerExternal = leftLayer == null || java.util.stream.StreamSupport.stream(leftLayerNodes.spliterator(), false).allMatch(PolylineEdgeRouter.PRED_EXTERNAL_WEST_OR_EAST_PORT);
+            boolean isRightLayerExternal = rightLayer == null || java.util.stream.StreamSupport.stream(rightLayerNodes.spliterator(), false).allMatch(PolylineEdgeRouter.PRED_EXTERNAL_WEST_OR_EAST_PORT);
             
             if (slotsCount > 0) {
                 // Compute routing area's width

@@ -34,8 +34,6 @@ import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 /**
  * Inserts dummy nodes to cope with northern and southern ports.
@@ -152,8 +150,8 @@ public final class NorthSouthPortPreprocessor implements ILayoutProcessor<LGraph
         monitor.begin("Odd port side processing", 1);
 
         int pointer;
-        List<LNode> northDummyNodes = Lists.newArrayList();
-        List<LNode> southDummyNodes = Lists.newArrayList();
+        List<LNode> northDummyNodes = new ArrayList<>();
+        List<LNode> southDummyNodes = new ArrayList<>();
 
         // Iterate through the layers
         for (Layer layer : layeredGraph) {
@@ -188,12 +186,12 @@ public final class NorthSouthPortPreprocessor implements ILayoutProcessor<LGraph
                 southDummyNodes.clear();
 
                 // Create a list of barycenter associates for the node
-                List<LNode> barycenterAssociates = Lists.newArrayList();
+                List<LNode> barycenterAssociates = new ArrayList<>();
 
                 // Prepare a list of ports on the northern side, sorted from left to right (when viewed
                 // in the diagram); create the appropriate dummy nodes and assign them to the layer
-                LinkedList<LPort> portList = Lists.newLinkedList();
-                Iterables.addAll(portList, node.getPorts(PortSide.NORTH));
+                LinkedList<LPort> portList = new LinkedList<>();
+                node.getPorts(PortSide.NORTH).forEach(portList::add);
 
                 if (node.getGraph().getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY) != OrderingStrategy.NONE) {                    
                     portList = modelOrderNorthSouthInputReversing(portList, node);
@@ -386,7 +384,7 @@ public final class NorthSouthPortPreprocessor implements ILayoutProcessor<LGraph
                 outgoing.add(port);
             }
         }
-        Lists.reverse(incoming).addAll(outgoing);
+        LGraphUtil.reversed(incoming).addAll(outgoing);
         return incoming;
     }
 

@@ -16,6 +16,7 @@ package org.eclipse.elk.alg.layered.intermediate;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -29,7 +30,6 @@ import org.eclipse.elk.core.alg.ILayoutProcessor;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
 
 /**
  * A pre-processor for comment boxes. Looks for comments that have exactly one connection
@@ -85,7 +85,7 @@ public final class CommentPreprocessor implements ILayoutProcessor<LGraph> {
                     nodeIter.remove();
                 } else {
                     // reverse edges that are oddly connected
-                    List<LEdge> revEdges = Lists.newArrayList();
+                    List<LEdge> revEdges = new ArrayList<>();
                     for (LPort port : node.getPorts()) {
                         for (LEdge outedge : port.getOutgoingEdges()) {
                             if (!outedge.getTarget().getOutgoingEdges().isEmpty()) {
@@ -160,14 +160,14 @@ public final class CommentPreprocessor implements ILayoutProcessor<LGraph> {
             // determine the position to use, favoring the top position
             List<LNode> topBoxes = realNode.getProperty(InternalProperties.TOP_COMMENTS);
             if (topBoxes == null) {
-                boxList = Lists.newArrayList();
+                boxList = new ArrayList<>();
                 realNode.setProperty(InternalProperties.TOP_COMMENTS, boxList);
             } else if (onlyTop) {
                 boxList = topBoxes;
             } else {
                 List<LNode> bottomBoxes = realNode.getProperty(InternalProperties.BOTTOM_COMMENTS);
                 if (bottomBoxes == null) {
-                    boxList = Lists.newArrayList();
+                    boxList = new ArrayList<>();
                     realNode.setProperty(InternalProperties.BOTTOM_COMMENTS, boxList);
                 } else {
                     if (topBoxes.size() <= bottomBoxes.size()) {
@@ -181,14 +181,14 @@ public final class CommentPreprocessor implements ILayoutProcessor<LGraph> {
             // determine the position to use, favoring the bottom position
             List<LNode> bottomBoxes = realNode.getProperty(InternalProperties.BOTTOM_COMMENTS);
             if (bottomBoxes == null) {
-                boxList = Lists.newArrayList();
+                boxList = new ArrayList<>();
                 realNode.setProperty(InternalProperties.BOTTOM_COMMENTS, boxList);
             } else if (onlyBottom) {
                 boxList = bottomBoxes;
             } else {
                 List<LNode> topBoxes = realNode.getProperty(InternalProperties.TOP_COMMENTS);
                 if (topBoxes == null) {
-                    boxList = Lists.newArrayList();
+                    boxList = new ArrayList<>();
                     realNode.setProperty(InternalProperties.TOP_COMMENTS, boxList);
                 } else {
                     if (bottomBoxes.size() <= topBoxes.size()) {

@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
 import java.util.Queue;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -35,7 +36,6 @@ import org.eclipse.elk.core.options.LabelSide;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
 
 /**
  * <p>Decides for each edge label whether to place it above or below its respective edge. How the decision is made
@@ -244,7 +244,7 @@ public final class LabelSideSelector implements ILayoutProcessor<LGraph> {
             final LabelSide defaultSide) {
         
         // We keep track of runs of consecutive label dummy nodes that connect the same two nodes
-        List<LNode> labelDummyRun = Lists.newArrayListWithCapacity(dummyNodes.size());
+        List<LNode> labelDummyRun = new ArrayList<>(dummyNodes.size());
         LNode prevLongEdgeSource = null;
         LNode prevLongEdgeTarget = null;
         

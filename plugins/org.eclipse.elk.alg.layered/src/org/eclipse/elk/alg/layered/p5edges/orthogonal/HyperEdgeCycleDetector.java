@@ -19,11 +19,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.eclipse.elk.alg.layered.p5edges.orthogonal.HyperEdgeSegmentDependency.DependencyType;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * Finds a set of dependencies to remove or reverse to break cycles in the conflict graph of {@link HyperEdgeSegment}s
@@ -64,8 +63,8 @@ public final class HyperEdgeCycleDetector {
         
         List<HyperEdgeSegmentDependency> result = new ArrayList<>();
         
-        LinkedList<HyperEdgeSegment> sources = Lists.newLinkedList();
-        LinkedList<HyperEdgeSegment> sinks = Lists.newLinkedList();
+        LinkedList<HyperEdgeSegment> sources = new LinkedList<>();
+        LinkedList<HyperEdgeSegment> sinks = new LinkedList<>();
 
         // initialize values for the algorithm
         initialize(segments, sources, sinks, criticalOnly);
@@ -149,7 +148,7 @@ public final class HyperEdgeCycleDetector {
             final LinkedList<HyperEdgeSegment> sources, final LinkedList<HyperEdgeSegment> sinks,
             final boolean criticalOnly, final Random random) {
         
-        Set<HyperEdgeSegment> unprocessed = Sets.newTreeSet(segments);
+        Set<HyperEdgeSegment> unprocessed = new TreeSet<>(segments);
         List<HyperEdgeSegment> maxSegments = new ArrayList<HyperEdgeSegment>();
         
         // We'll mark sinks with marks < markBase and sources with marks > markBase. Sink marks will later be offset to

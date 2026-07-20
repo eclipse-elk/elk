@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LNode;
 import org.eclipse.elk.alg.layered.graph.LNode.NodeType;
@@ -27,7 +28,6 @@ import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 import org.eclipse.elk.alg.layered.options.PortType;
 
-import com.google.common.collect.Lists;
 
 /**
  * Determines the node order of a given free layer. Uses heuristic methods to find an ordering that
@@ -343,7 +343,7 @@ public class BarycenterHeuristic implements ICrossingMinimizationHeuristic {
         LNode firstNodeInLayer = order[freeLayerIndex][0];
         boolean preOrdered = !isFirstSweep || isExternalPortDummy(firstNodeInLayer);
 
-        List<LNode> nodes = Lists.newArrayList(order[freeLayerIndex]);
+        List<LNode> nodes = new ArrayList<>(java.util.Arrays.asList(order[freeLayerIndex]));
         minimizeCrossings(nodes, preOrdered, false, forwardSweep);
         // apply the new ordering
         int index = 0;
@@ -359,8 +359,8 @@ public class BarycenterHeuristic implements ICrossingMinimizationHeuristic {
         // if sweeping forward, startIndex = 0, else the last existing element of order
         int startIndex = startIndex(isForwardSweep, order.length);
         // extract first layer into List<LNode>
-        List<LNode> nodes = Lists.newArrayList(
-                order[startIndex]);
+        List<LNode> nodes = new ArrayList<>(
+                java.util.Arrays.asList(order[startIndex]));
         // randomize nodes' barycenters
         minimizeCrossings(nodes, false, true, isForwardSweep);
         // fill first layer with nodes

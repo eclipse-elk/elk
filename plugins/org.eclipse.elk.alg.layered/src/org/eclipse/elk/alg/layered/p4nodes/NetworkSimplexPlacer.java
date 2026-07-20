@@ -27,6 +27,9 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 
 import org.eclipse.elk.alg.common.networksimplex.NEdge;
 import org.eclipse.elk.alg.common.networksimplex.NGraph;
@@ -56,12 +59,9 @@ import org.eclipse.elk.core.options.NodeLabelPlacement;
 import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
+import org.eclipse.elk.alg.layered.graph.LGraphUtil;
+import org.eclipse.elk.alg.layered.compaction.oned.CompareFuzzy;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.google.common.math.DoubleMath;
 /**
  * Implements the node placement strategy as described by Gansner et al. in the following paper. It
  * is based on the idea to convert the problem into an auxiliary graph which is layered using the
@@ -172,7 +172,7 @@ public class NetworkSimplexPlacer implements ILayoutPhase<LayeredPhases, LGraph>
     /** Mapping of the internal representations of edges, indexed by {@link LEdge#id}. */
     private EdgeRep[] edgeReps;
     /** Mapping of network simplex nodes to the graph elements they represent. */
-    private Map<LGraphElement, NNode> portMap = Maps.newHashMap();
+    private Map<LGraphElement, NNode> portMap = new HashMap<>();
     
     /** Node count of {@link #lGraph}. The field is uninitialized until {@link #buildInitialAuxiliaryGraph()} 
      *  has been executed. */
@@ -187,7 +187,7 @@ public class NetworkSimplexPlacer implements ILayoutPhase<LayeredPhases, LGraph>
     private boolean[] crossing;
 
     // used for a special version of node flexibility
-    private Set<NEdge> flexibleWhereSpacePermitsEdges = Sets.newHashSet();
+    private Set<NEdge> flexibleWhereSpacePermitsEdges = new HashSet<>();
     
     // - - - - - - edge weights used in the auxiliary network simplex graph - - - - - -  
     /** Basis for the weight of edges. */
@@ -493,7 +493,7 @@ public class NetworkSimplexPlacer implements ILayoutPhase<LayeredPhases, LGraph>
         // -----------------------------------
         // convert the ports to NNodes, note that the list of westward ports 
         // must be reversed since their original order is from bottom to top
-        transformPorts(Lists.reverse(lNode.getPortSideView(PortSide.WEST)), corners);
+        transformPorts(LGraphUtil.reversed(lNode.getPortSideView(PortSide.WEST)), corners);
         transformPorts(lNode.getPortSideView(PortSide.EAST), corners);
 
         // return the corners for further processing
@@ -502,7 +502,7 @@ public class NetworkSimplexPlacer implements ILayoutPhase<LayeredPhases, LGraph>
     
     private void transformPorts(final Iterable<LPort> ports, final NodeRep corners) {
         
-        if (Iterables.isEmpty(ports)) {
+        if (!ports.iterator().hasNext()) {
             // nothing to do ...
             // the top and bottom border of the node are already safely spaced apart
             return;
@@ -589,7 +589,7 @@ public class NetworkSimplexPlacer implements ILayoutPhase<LayeredPhases, LGraph>
         if (!tgtRep.isFlexible) {
             tgtOffset += tgtPort.getPosition().y;
         } 
-        assert DoubleMath.fuzzyEquals(srcOffset - tgtOffset, Math.round(srcOffset - tgtOffset),
+        assert CompareFuzzy.fuzzyEquals(srcOffset - tgtOffset, Math.round(srcOffset - tgtOffset),
                 EPSILON) : "Port positions must be integral";
         
         int tgtDelta = (int) Math.max(0, srcOffset - tgtOffset);
@@ -1018,7 +1018,7 @@ public class NetworkSimplexPlacer implements ILayoutPhase<LayeredPhases, LGraph>
 
         // the nodes were counted and indexed during #prepare
         nodeState = new int[nodeCount];
-        twoPaths = Lists.newArrayList();
+        twoPaths = new ArrayList<>();
         
         // record node states
         lGraph.getLayers().stream()
@@ -1082,7 +1082,7 @@ public class NetworkSimplexPlacer implements ILayoutPhase<LayeredPhases, LGraph>
      * Iteratively post processes 'two paths' until no further bends can be removed. 
      */
     private void postProcessTwoPaths() {
-        Queue<Path> q = Lists.newLinkedList();
+        Queue<Path> q = new LinkedList<>();
         q.addAll(twoPaths);
         
         Stack<Path> s = new Stack<>();
@@ -1155,7 +1155,7 @@ public class NetworkSimplexPlacer implements ILayoutPhase<LayeredPhases, LGraph>
         }
         
         // same space on both sides, check again later 
-        if (probe && DoubleMath.fuzzyEquals(aboveDist, belowDist, EPSILON)) {
+        if (probe && CompareFuzzy.fuzzyEquals(aboveDist, belowDist, EPSILON)) {
             return true; 
         }
         
@@ -1227,7 +1227,7 @@ public class NetworkSimplexPlacer implements ILayoutPhase<LayeredPhases, LGraph>
     // ------------------------------------------------------------------------------------------------
     
     private List<Path> identifyPaths() {
-        final List<Path> paths = Lists.newArrayList();
+        final List<Path> paths = new ArrayList<>();
         lGraph.getLayers().stream()
             .flatMap(l -> l.getNodes().stream()) 
             .filter(n -> nodeState[n.id] == JUNCTION)
@@ -1312,7 +1312,7 @@ public class NetworkSimplexPlacer implements ILayoutPhase<LayeredPhases, LGraph>
      */
     private void markCrossingEdges(final Layer left, final Layer right) {
         
-        final List<LEdge> openEdges = Lists.newArrayList();
+        final List<LEdge> openEdges = new ArrayList<>();
 
         // add all edges in the order they occur in the left layer
         for (LNode node : left) {
@@ -1328,7 +1328,7 @@ public class NetworkSimplexPlacer implements ILayoutPhase<LayeredPhases, LGraph>
         }
         
         // close the edges one after another, recording edge crossings
-        for (LNode node : Lists.reverse(right.getNodes())) {
+        for (LNode node : LGraphUtil.reversed(right.getNodes())) {
             for (LPort port : node.getPortSideView(PortSide.WEST)) { // don't reverse, bottom up is correct
                 for (LEdge edge : port.getIncomingEdges()) {
                     if (edge.isInLayerEdge() || edge.isSelfLoop() 

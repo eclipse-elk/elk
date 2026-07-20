@@ -14,8 +14,10 @@
  *******************************************************************************/
 package org.eclipse.elk.core.data;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -31,12 +33,6 @@ import org.eclipse.elk.graph.ElkLabel;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.ElkPort;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
-
-import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * Utility class providing basic mechanisms for layout option content assist.
@@ -87,8 +83,8 @@ public final class LayoutDataContentAssist {
 
         LayoutAlgorithmData responsibleAlgorithm = getAlgorithm(element);
         if (element instanceof ElkNode) {
-            Set<Target> targets = ((ElkNode) element).getChildren().isEmpty() ? ImmutableSet.of(Target.NODES)
-                    : ImmutableSet.of(Target.NODES, Target.PARENTS);
+            Set<Target> targets = ((ElkNode) element).getChildren().isEmpty() ? Set.of(Target.NODES)
+                    : Set.of(Target.NODES, Target.PARENTS);
             return getLayoutOptionProposals(element, responsibleAlgorithm, targets, prefix);
         } else if (element instanceof ElkEdge) {
             return getLayoutOptionProposals(element, responsibleAlgorithm, Target.EDGES, prefix);
@@ -117,7 +113,7 @@ public final class LayoutDataContentAssist {
      */
     public static List<Proposal<Object>> getLayoutOptionValueProposal(final LayoutOptionData option,
             final String prefix) {
-        List<Proposal<Object>> proposals = Lists.newArrayList();
+        List<Proposal<Object>> proposals = new ArrayList<>();
 
         switch (option.getType()) {
         case BOOLEAN:
@@ -161,7 +157,7 @@ public final class LayoutDataContentAssist {
     private static List<Proposal<LayoutOptionData>> getLayoutOptionProposals(final ElkGraphElement element,
             final LayoutAlgorithmData algorithmData, final LayoutOptionData.Target targetType, final String prefix) {
         return getLayoutOptionProposals(element, algorithmData,
-                targetType != null ? Sets.newHashSet(targetType) : Collections.emptySet(), prefix);
+                targetType != null ? new HashSet<>(Arrays.asList(targetType)) : Collections.emptySet(), prefix);
     }
 
     private static List<Proposal<LayoutOptionData>> getLayoutOptionProposals(final ElkGraphElement element,
@@ -198,7 +194,7 @@ public final class LayoutDataContentAssist {
 
         // Case 3)
         final boolean matchesName =
-                !Strings.isNullOrEmpty(prefix) && data.getName().toLowerCase().contains(prefix.toLowerCase());
+                !(prefix == null || prefix.isEmpty()) && data.getName().toLowerCase().contains(prefix.toLowerCase());
 
         List<String> idSplit = Arrays.asList(data.getId().split("\\."));
         List<String> prefixSplit = matchesName ? null : Arrays.asList(prefix.split("\\."));
@@ -207,16 +203,17 @@ public final class LayoutDataContentAssist {
         int start = idSplit.size() - 1;
         if (data instanceof LayoutOptionData) {
             LayoutOptionData layoutOption = (LayoutOptionData) data;
-            if (!Strings.isNullOrEmpty(layoutOption.getGroup())) {
+            String group = layoutOption.getGroup();
+            if (group != null && !group.isEmpty()) {
                 --start;
             }
-            long numberOfGroups = layoutOption.getGroup().chars().filter(c -> c == '.').count();
+            long numberOfGroups = group.chars().filter(c -> c == '.').count();
             start -= numberOfGroups;
         }
 
         for (int i = start; i >= 0; i--) {
             List<String> suffixElements = idSplit.subList(i, idSplit.size());
-            String suffix = Joiner.on('.').join(suffixElements);
+            String suffix = String.join(".", suffixElements);
             // Case 2) (note that Case 1 is included here)
             if (checker.apply(suffix) != null && (matchesName || startsWith(suffixElements, prefixSplit))) {
                 return Optional.of(Proposal.of(suffix, data));
@@ -257,7 +254,7 @@ public final class LayoutDataContentAssist {
         ElkNode relevantNode = getRelevantNode(element);
         if (relevantNode != null) {
             String algorithmId = relevantNode.getProperty(CoreOptions.ALGORITHM);
-            if (!Strings.isNullOrEmpty(algorithmId)) {
+            if (algorithmId != null && !algorithmId.isEmpty()) {
                 return LayoutMetaDataService.getInstance().getAlgorithmDataBySuffix(algorithmId);
             }
         }

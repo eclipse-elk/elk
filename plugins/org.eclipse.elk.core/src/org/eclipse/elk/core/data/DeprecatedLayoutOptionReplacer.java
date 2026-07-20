@@ -24,8 +24,6 @@ import org.eclipse.elk.core.util.IGraphElementVisitor;
 import org.eclipse.elk.graph.ElkGraphElement;
 import org.eclipse.elk.graph.properties.IProperty;
 
-import com.google.common.collect.ImmutableMap;
-
 /**
  * Replaces (and removes) any deprecated layout options from {@link CoreOptions} with a corresponding new layout option
  * (or whatever is required to reconstruct the old behavior).
@@ -58,7 +56,7 @@ public class DeprecatedLayoutOptionReplacer implements IGraphElementVisitor {
      */
     @SuppressWarnings("deprecation")
     public static final Map<IProperty<?>, Consumer<ElkGraphElement>> RULES =
-            ImmutableMap.of(
+            Map.of(
                 CoreOptions.PORT_LABELS_NEXT_TO_PORT_IF_POSSIBLE, NEXT_TO_PORT_IF_POSSIBLE,
                 CoreOptions.NODE_SIZE_OPTIONS, SPACE_EFFICIENT
             );

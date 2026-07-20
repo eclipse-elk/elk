@@ -17,6 +17,7 @@ package org.eclipse.elk.alg.layered.intermediate.wrapping;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.function.Predicate;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -30,8 +31,8 @@ import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 import org.eclipse.elk.core.alg.ILayoutProcessor;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
+import org.eclipse.elk.alg.layered.graph.LGraphUtil;
 
-import com.google.common.collect.Lists;
 
 /**
  * The second of the triumvirate of breaking point processors. While the other two
@@ -113,7 +114,7 @@ public class BreakingPointProcessor implements ILayoutProcessor<LGraph> {
             
             Layer layer = layerIt.next();
             Layer newLayer = layers.get(idx);
-            List<LNode> nodesToMove = Lists.newArrayList(layer.getNodes());
+            List<LNode> nodesToMove = new ArrayList<>(layer.getNodes());
            
             // remember an offset used for adding in-layer dummies later
             int offset = nodesToMove.size();
@@ -125,9 +126,11 @@ public class BreakingPointProcessor implements ILayoutProcessor<LGraph> {
             
             if (reverse) {
                 // important to introduce the chains of long edge dummies in reversed order
-                for (LNode n : Lists.reverse(nodesToMove)) {
+                for (LNode n : LGraphUtil.reversed(nodesToMove)) {
                     
-                    for (LEdge e : Lists.newArrayList(n.getIncomingEdges())) {
+                    List<LEdge> incEdges = new ArrayList<>();
+                    n.getIncomingEdges().forEach(incEdges::add);
+                    for (LEdge e : incEdges) {
                         
                         // reverse the edge
                         e.reverse(graph, true);
@@ -179,7 +182,7 @@ public class BreakingPointProcessor implements ILayoutProcessor<LGraph> {
     private void improveMultiCutIndexEdges(final LGraph graph) {
 
         for (Layer l : graph.getLayers()) {
-            for (LNode n : Lists.newArrayList(l.getNodes())) {
+            for (LNode n : new ArrayList<>(l.getNodes())) {
                 if (BPInfo.isStart(n)) {
                     BPInfo info = n.getProperty(InternalProperties.BREAKING_POINT_INFO);
 
@@ -244,12 +247,12 @@ public class BreakingPointProcessor implements ILayoutProcessor<LGraph> {
         do {
             didsome = false;
 
-            List<Layer> layers = forwards ? Lists.reverse(graph.getLayers()) : graph.getLayers();
+            List<Layer> layers = forwards ? LGraphUtil.reversed(graph.getLayers()) : graph.getLayers();
             for (Layer layer : layers) {
 
-                List<LNode> nodes = Lists.newArrayList(layer.getNodes());
+                List<LNode> nodes = new ArrayList<>(layer.getNodes());
                 if (!forwards) {
-                    Lists.reverse(nodes);
+                    LGraphUtil.reversed(nodes);
                 }
 
                 for (LNode n : nodes) {

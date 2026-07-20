@@ -28,9 +28,9 @@ import org.eclipse.elk.core.util.IElkProgressMonitor;
 import org.eclipse.elk.core.util.Pair;
 import org.eclipse.elk.core.util.LoggedGraph.Type;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import java.util.function.Function;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Implements the compaction of a {@link CGraph}. This includes the creation of a constraint graph
@@ -513,9 +513,9 @@ public final class OneDimensionalCompactor {
     private void reverseConstraints() {
 
         // maps CNodes to temporary lists of incoming constraints
-        Map<CNode, List<CNode>> incMap = Maps.newHashMap();
+        Map<CNode, List<CNode>> incMap = new HashMap<>();
         for (CNode cNode : cGraph.cNodes) {
-            incMap.put(cNode, Lists.newArrayList());
+            incMap.put(cNode, new ArrayList<>());
         }
         
         // resetting fields of CNodes and reversing constraints

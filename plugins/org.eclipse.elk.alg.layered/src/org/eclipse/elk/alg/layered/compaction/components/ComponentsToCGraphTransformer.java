@@ -29,7 +29,10 @@ import static org.eclipse.elk.core.options.PortSide.SIDES_SOUTH;
 import static org.eclipse.elk.core.options.PortSide.SIDES_SOUTH_WEST;
 import static org.eclipse.elk.core.options.PortSide.SIDES_WEST;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,9 +47,7 @@ import org.eclipse.elk.core.options.Direction;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.Pair;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
+import java.util.EnumMap;
 
 /**
  * Transforms {@link IConnectedComponents} into a representing {@link CGraph} which can be passed to
@@ -67,16 +68,16 @@ public class ComponentsToCGraphTransformer<N, E> implements
     private double spacing;
 
     // internal mappings 
-    private Map<IComponent<N, E>, KVector> oldPosition = Maps.newHashMap();
-    private Map<IComponent<N, E>, CRectNode> offsets = Maps.newHashMap();
+    private Map<IComponent<N, E>, KVector> oldPosition = new HashMap<>();
+    private Map<IComponent<N, E>, CRectNode> offsets = new HashMap<>();
     
     // a global offset and the new graph size after layout
     private KVector globalOffset;
     private KVector graphSize;
 
     // maps the external extension to the CNodes by which they are represented
-    private Map<IExternalExtension<E>, Pair<CGroup, CNode>> externalExtensions = Maps.newHashMap();
-    private Multimap<Direction, Pair<CGroup, CNode>> externalPlaceholder = HashMultimap.create();
+    private Map<IExternalExtension<E>, Pair<CGroup, CNode>> externalExtensions = new HashMap<>();
+    private Map<Direction, List<Pair<CGroup, CNode>>> externalPlaceholder = new EnumMap<>(Direction.class);
     
     /**
      * @param spacing required spacing between connected IComponents.
@@ -119,7 +120,7 @@ public class ComponentsToCGraphTransformer<N, E> implements
     /**
      * @return the externalPlaceholder
      */
-    public Multimap<Direction, Pair<CGroup, CNode>> getExternalPlaceholder() {
+    public Map<Direction, List<Pair<CGroup, CNode>>> getExternalPlaceholder() {
         return externalPlaceholder;
     }
     
@@ -165,7 +166,8 @@ public class ComponentsToCGraphTransformer<N, E> implements
                     setLock(rectPlaceholder, comp.getExternalExtensionSides());
                     CGroup dummyGroup = new CGroup();
                     dummyGroup.addCNode(rectPlaceholder);
-                    externalPlaceholder.put(ee.getDirection(), Pair.of(group, rectPlaceholder));
+                    externalPlaceholder.computeIfAbsent(ee.getDirection(), k -> new ArrayList<>())
+                            .add(Pair.of(group, rectPlaceholder));
                 }
             }
         }
@@ -263,12 +265,14 @@ public class ComponentsToCGraphTransformer<N, E> implements
         
         // note that placeholdes "can move" during compaction and are _not_ fixed to the boundary
         // which allows to use them to determine the maximum position
-        for (Pair<CGroup, CNode> placeholder : externalPlaceholder.values()) {
-            CNode cNode = placeholder.getSecond();
-            topLeft.x = Math.min(topLeft.x, cNode.hitbox.x);
-            topLeft.y = Math.min(topLeft.y, cNode.hitbox.y);
-            bottomRight.x = Math.max(bottomRight.x, cNode.hitbox.x + cNode.hitbox.width);
-            bottomRight.y = Math.max(bottomRight.y, cNode.hitbox.y + cNode.hitbox.height);
+        for (List<Pair<CGroup, CNode>> placeholders : externalPlaceholder.values()) {
+            for (Pair<CGroup, CNode> placeholder : placeholders) {
+                CNode cNode = placeholder.getSecond();
+                topLeft.x = Math.min(topLeft.x, cNode.hitbox.x);
+                topLeft.y = Math.min(topLeft.y, cNode.hitbox.y);
+                bottomRight.x = Math.max(bottomRight.x, cNode.hitbox.x + cNode.hitbox.width);
+                bottomRight.y = Math.max(bottomRight.y, cNode.hitbox.y + cNode.hitbox.height);
+            }
         }
         
         globalOffset = topLeft.clone().negate();

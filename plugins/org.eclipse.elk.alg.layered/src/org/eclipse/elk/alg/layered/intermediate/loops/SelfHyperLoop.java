@@ -28,9 +28,9 @@ import org.eclipse.elk.alg.layered.intermediate.loops.ordering.PortRestorer;
 import org.eclipse.elk.alg.layered.intermediate.loops.routing.RoutingDirector;
 import org.eclipse.elk.core.options.PortSide;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Multimap;
+import java.util.EnumMap;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * A self loop hyperedge consisting of at least one self loop edge.
@@ -63,7 +63,7 @@ public class SelfHyperLoop {
     /** This self loop's loop type. Determined once port sides have been assigned. */
     private SelfLoopType selfLoopType;
     /** List of ports per port side. */
-    private ListMultimap<PortSide, SelfLoopPort> slPortsBySide;
+    private Map<PortSide, List<SelfLoopPort>> slPortsBySide;
     /** The hyper loop trunk's leftmost port. Computed after initialization. */
     private SelfLoopPort leftmostPort = null;
     /** The hyper loop trunk's rightmost port. Computed after initialization. */
@@ -91,12 +91,12 @@ public class SelfHyperLoop {
         assert slPortsBySide == null;
         
         // Remember ports for each side
-        slPortsBySide = ArrayListMultimap.create(PortSide.values().length, slPorts.size());
+        slPortsBySide = new EnumMap<>(PortSide.class);
         for (SelfLoopPort slPort : slPorts) {
             PortSide portSide = slPort.getLPort().getSide();
             assert portSide != PortSide.UNDEFINED;
             
-            slPortsBySide.put(portSide, slPort);
+            slPortsBySide.computeIfAbsent(portSide, k -> new ArrayList<>()).add(slPort);
         }
         
         // Determine this self loop's loop type
@@ -175,7 +175,7 @@ public class SelfHyperLoop {
     /**
      * Returns a map of port sides mapped to ports on that side.
      */
-    public Multimap<PortSide, SelfLoopPort> getSLPortsBySide() {
+    public Map<PortSide, List<SelfLoopPort>> getSLPortsBySide() {
         return slPortsBySide;
     }
     
@@ -183,7 +183,7 @@ public class SelfHyperLoop {
      * Returns the loop's ports on the given side.
      */
     public Collection<SelfLoopPort> getSLPortsBySide(final PortSide portSide) {
-        return slPortsBySide.get(portSide);
+        return slPortsBySide.getOrDefault(portSide, Collections.emptyList());
     }
     
     /**

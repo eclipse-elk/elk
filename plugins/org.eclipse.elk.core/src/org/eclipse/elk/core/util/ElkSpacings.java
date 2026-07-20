@@ -14,6 +14,10 @@
  ********************************************************************************/
 package org.eclipse.elk.core.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -24,11 +28,6 @@ import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.graph.ElkGraphElement;
 import org.eclipse.elk.graph.properties.IProperty;
 import org.eclipse.elk.graph.properties.IPropertyHolder;
-
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.math.DoubleMath;
 
 /**
  * Utility class to conveniently configure core spacing values ({@link CoreOptions#SPACING_*}) for a graph element or a
@@ -59,7 +58,7 @@ public final class ElkSpacings {
         public static final IProperty<Double> BASE_SPACING_OPTION = CoreOptions.SPACING_NODE_NODE;
         
         // @formatter:off
-        private static final List<IProperty<Double>> DEPENDENT_SPACING_OPTIONS = Lists.newArrayList(
+        private static final List<IProperty<Double>> DEPENDENT_SPACING_OPTIONS = Arrays.asList(
             // Sorted alphabetically
             CoreOptions.SPACING_COMPONENT_COMPONENT,
             CoreOptions.SPACING_EDGE_EDGE,
@@ -77,7 +76,7 @@ public final class ElkSpacings {
         static {
             assert BASE_SPACING_OPTION.getDefault() != null : "Base spacing default value must be non-null.";
             // Avoid division by zero.
-            assert !DoubleMath.fuzzyEquals(0.0d, BASE_SPACING_OPTION.getDefault(),
+            assert !(Math.abs(0.0d - BASE_SPACING_OPTION.getDefault()) <=
                     DOUBLE_EQ_EPSILON) : "Base spacing default value must be different from 0.0d.";
         }
         
@@ -139,13 +138,13 @@ public final class ElkSpacings {
         /** Whether the resulting configurator shall overwrite existing spacing option values. */
         private boolean overwrite = false;
         /** Filters to be applied by the resulting configurator. Elements specified directly here are always applied. */
-        private List<IPropertyHolderOptionFilter> filters = Lists.newArrayList(ELK_OPTION_TARGET_FILTER);
+        private List<IPropertyHolderOptionFilter> filters = new ArrayList<>(Arrays.asList(ELK_OPTION_TARGET_FILTER));
         
         /**
          * Internal mapping of dependent layout options to factors that must be applied to those option's default 
          * values when setting the spacing value for a concrete node.
          */
-        private Map<IProperty<Double>, Double> factorMap = Maps.newHashMap();
+        private Map<IProperty<Double>, Double> factorMap = new HashMap<>();
                 
         /**
          * Constructs a new builder and computes the initial factors based on the passed based value.
@@ -206,7 +205,7 @@ public final class ElkSpacings {
          * @return an immutable list of the currently configured factors.
          */
         public Map<IProperty<Double>, Double> getFactors() {
-            return ImmutableMap.copyOf(factorMap);
+            return Collections.unmodifiableMap(new HashMap<>(factorMap));
         }
 
         /**
@@ -276,7 +275,7 @@ public final class ElkSpacings {
             // Early exit if we are not allowed to overwrite any options and if the specified base matches the default
             // values anyway
             if (!overwrite
-                    && DoubleMath.fuzzyEquals(baseSpacing, getBaseSpacingOption().getDefault(), DOUBLE_EQ_EPSILON)) {
+                    && Math.abs(baseSpacing - getBaseSpacingOption().getDefault()) <= DOUBLE_EQ_EPSILON) {
                 return e -> { };
             }
 

@@ -14,12 +14,13 @@
  *******************************************************************************/
 package org.eclipse.elk.core.comments;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Provides access to the objects that represent comments and the objects that represent possible attachment targets.
@@ -100,14 +101,14 @@ public interface IDataProvider<C, T> {
             /** Cache for targets. */
             private List<T> targetsCache = null;
             /** Cache for comment-specific targets. */
-            private final Multimap<C, T> commentTargetsCache = HashMultimap.create();
+            private final Map<C, Set<T>> commentTargetsCache = new HashMap<>();
             /** Cache for sub-level data providers. */
             private List<IDataProvider<C, T>> subProviderCache = null;
 
             @Override
             public Collection<C> provideComments() {
                 if (commentsCache == null) {
-                    commentsCache = Lists.newArrayList();
+                    commentsCache = new ArrayList<>();
                     commentsCache.addAll(IDataProvider.this.provideComments());
                 }
                 
@@ -117,7 +118,7 @@ public interface IDataProvider<C, T> {
             @Override
             public Collection<T> provideTargets() {
                 if (targetsCache == null) {
-                    targetsCache = Lists.newArrayList();
+                    targetsCache = new ArrayList<>();
                     targetsCache.addAll(IDataProvider.this.provideTargets());
                 }
                 
@@ -130,7 +131,9 @@ public interface IDataProvider<C, T> {
                     return commentTargetsCache.get(comment);
                 } else {
                     Collection<T> targets = IDataProvider.this.provideTargetsFor(comment);
-                    commentTargetsCache.putAll(comment, targets);
+                    if (!targets.isEmpty()) {
+                        commentTargetsCache.put(comment, new HashSet<>(targets));
+                    }
                     return targets;
                 }
             }
@@ -138,7 +141,7 @@ public interface IDataProvider<C, T> {
             @Override
             public Collection<IDataProvider<C, T>> provideSubHierarchies() {
                 if (subProviderCache == null) {
-                    subProviderCache = Lists.newArrayList();
+                    subProviderCache = new ArrayList<>();
                     
                     // Add cached versions of the providers
                     IDataProvider.this.provideSubHierarchies().stream()

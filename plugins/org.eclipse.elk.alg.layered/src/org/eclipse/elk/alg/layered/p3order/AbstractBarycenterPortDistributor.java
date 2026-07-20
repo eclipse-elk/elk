@@ -16,6 +16,7 @@ package org.eclipse.elk.alg.layered.p3order;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LNode;
@@ -26,7 +27,6 @@ import org.eclipse.elk.alg.layered.p3order.counting.IInitializable;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 import org.eclipse.elk.core.options.PortSide;
 
-import com.google.common.collect.Lists;
 
 /**
  * Calculates port ranks and distributes ports.
@@ -62,7 +62,7 @@ public abstract class AbstractBarycenterPortDistributor implements ISweepPortDis
      *            the number of layers in the graph.
      */
     public AbstractBarycenterPortDistributor(final int numLayers) {
-        inLayerPorts = Lists.newArrayList();
+        inLayerPorts = new ArrayList<>();
         nodePositions = new int[numLayers][];
     }
 

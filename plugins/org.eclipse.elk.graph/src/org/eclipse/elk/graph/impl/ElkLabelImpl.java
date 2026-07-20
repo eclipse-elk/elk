@@ -28,8 +28,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-import com.google.common.base.Strings;
-
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Elk Label</b></em>'.
@@ -269,7 +267,7 @@ public class ElkLabelImpl extends ElkShapeImpl implements ElkLabel {
 
         StringBuilder builder = new StringBuilder("ElkLabel");
         // Label text
-        if (!Strings.isNullOrEmpty(text)) {
+        if (text != null && !text.isEmpty()) {
             builder.append(" \"").append(text).append("\"");
         }
         // Position

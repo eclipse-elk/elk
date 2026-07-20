@@ -16,10 +16,10 @@ package org.eclipse.elk.alg.layered.graph;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.core.math.KVector;
 
-import com.google.common.collect.Lists;
 
 /**
  * A layer in a layered graph. A layer contains a list of nodes, which are
@@ -35,7 +35,7 @@ public final class Layer extends LGraphElement implements Iterable<LNode> {
     /** the size of the layer as drawn horizontally. */
     private final KVector size = new KVector();
     /** the nodes of the layer. */
-    private final List<LNode> nodes = Lists.newArrayList();
+    private final List<LNode> nodes = new ArrayList<>();
     
     /**
      * Creates a layer for the given layered graph. The layer is not added to the

@@ -18,12 +18,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.math.KVectorChain;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 /**
  * Represents a Non Uniform B-Spline. This spline is not rational, thus there is no weight for the
@@ -49,9 +49,9 @@ public class NubSpline {
 
     /** The knotVector of this NubSpline. (The traditionally added 0 at the beginning and 1 at the end
      *  of the knot vector is not added, as these elements are not relevant for the calculation) */
-    private List<Double> knotVector = Lists.newArrayList();
+    private List<Double> knotVector = new ArrayList<>();
     /** The control points of this NubSpline. */
-    private List<PolarCP> controlPoints = Lists.newArrayList();
+    private List<PolarCP> controlPoints = new ArrayList<>();
 
     /** The dimension of this NubSpline. All contained and constructible vectors have the same dim. */
     private int dimNUBS;
@@ -87,10 +87,10 @@ public class NubSpline {
         isClamped = nubSpline.isClamped;
         outerBox = nubSpline.outerBox;
         isBezier = nubSpline.isBezier;
-        knotVector = Lists.newLinkedList(nubSpline.knotVector);
+        knotVector = new LinkedList<>(nubSpline.knotVector);
         minKnot = nubSpline.minKnot;
         maxKnot = nubSpline.maxKnot;
-        controlPoints = Lists.newLinkedList(nubSpline.controlPoints);
+        controlPoints = new LinkedList<>(nubSpline.controlPoints);
     }
 
     /**
@@ -122,7 +122,7 @@ public class NubSpline {
             // create the knot vector
             createUniformKnotVector(clamped, kVectors.size() + dimNUBS - 1);
 
-            final List<Double> polarCoordinate = Lists.newArrayList();
+            final List<Double> polarCoordinate = new ArrayList<>();
             final Iterator<Double> knotIter = knotVector.iterator();
 
             // the first (dimNUBS - 1) elements of the knotVector for the "sliding window" that
@@ -150,7 +150,7 @@ public class NubSpline {
      * @param kVectors The control points of this NubSpline.
      */
     public NubSpline(final boolean clamped, final int dimension, final KVector... kVectors) {
-        this(clamped, dimension, Lists.newArrayList(kVectors));
+        this(clamped, dimension, new ArrayList<>(java.util.Arrays.asList(kVectors)));
     }
 
     /**
@@ -174,7 +174,7 @@ public class NubSpline {
         knotVector = knotVec;
         controlPoints = polarVectors;
         minKnot = knotVec.iterator().next();
-        maxKnot = Iterables.getLast(knotVec);
+        maxKnot = java.util.stream.StreamSupport.stream(knotVec.spliterator(), false).reduce((first, second) -> second).orElseThrow();
     }
 
     // ########################################################################################
@@ -193,9 +193,8 @@ public class NubSpline {
         final int oldDim = nubSpline.dimNUBS;
         final int newDim = oldDim - 1;
         final List<Double> oldKnotVector = nubSpline.knotVector;
-        final List<Double> newKnotVector = Lists.newLinkedList(
-                nubSpline.knotVector.subList(1, nubSpline.knotVector.size() - 1));
-        final List<KVector> newControlPoints = Lists.newArrayList();
+        final List<Double> newKnotVector = new LinkedList<>(nubSpline.knotVector.subList(1, nubSpline.knotVector.size() - 1));
+        final List<KVector> newControlPoints = new ArrayList<>();
 
         // Calculate the new control points.
         for (int i = 0; i < nubSpline.controlPoints.size() - 1; i++) {
@@ -207,9 +206,9 @@ public class NubSpline {
         }
 
         // Create the PolarCPs
-        final List<Double> polarCoordinate = Lists.newArrayList();
+        final List<Double> polarCoordinate = new ArrayList<>();
         final Iterator<Double> knotIter = newKnotVector.iterator();
-        final List<PolarCP> newPolarVectors = Lists.newArrayList();
+        final List<PolarCP> newPolarVectors = new ArrayList<>();
 
         // the first (dimNUBS - 1) elements of the knotVector for the "sliding window" that
         // determines the polarCoordinates of the PolarCP.
@@ -238,7 +237,7 @@ public class NubSpline {
      * @return The inverted NubSpline.
      */
     public static NubSpline generateInvertedNUBS(final NubSpline nubSpline) {
-        final List<Double> newKnotVector = Lists.newArrayList();
+        final List<Double> newKnotVector = new ArrayList<>();
         final double maxVector =  nubSpline.knotVector.get(nubSpline.knotVector.size() - 1); 
         for (final Double vector : nubSpline.knotVector) {
             newKnotVector.add(0, maxVector - vector);
@@ -246,9 +245,9 @@ public class NubSpline {
         final List<KVector> newControlPoints = KVectorChain.reverse(nubSpline.getControlPoints());
 
         // Create the PolarCPs
-        final List<Double> polarCoordinate = Lists.newArrayList();
+        final List<Double> polarCoordinate = new ArrayList<>();
         final Iterator<Double> knotIter = newKnotVector.iterator();
-        final List<PolarCP> newPolarVectors = Lists.newArrayList();
+        final List<PolarCP> newPolarVectors = new ArrayList<>();
 
         // the first (dimNUBS - 1) elements of the knotVector for the "sliding window" that
         // determines the polarCoordinates of the PolarCP.
@@ -347,7 +346,7 @@ public class NubSpline {
      * @return A copy of the knotVector.
      */
     public List<Double> getKnotVector() {
-        return Lists.newLinkedList(knotVector);
+        return new LinkedList<>(knotVector);
     }
 
 
@@ -521,7 +520,7 @@ public class NubSpline {
             iterKnot.add(knotToInsert);
 
             // We will first construct the new CPs and than add them.
-            final List<PolarCP> newCPs = Lists.newArrayList();
+            final List<PolarCP> newCPs = new ArrayList<>();
             // The first CP we need for the calculation.
             PolarCP secondCP = iterCP.next();
 
@@ -1029,7 +1028,7 @@ public class NubSpline {
          */
         PolarCP(final KVector controlPoint, final List<Double> polarCoordinate) {
             setCp(controlPoint.clone());
-            setPolarCoordinate(Lists.newLinkedList(polarCoordinate));
+            setPolarCoordinate(new LinkedList<>(polarCoordinate));
         }
 
         /**
@@ -1039,7 +1038,7 @@ public class NubSpline {
          */
         PolarCP(final PolarCP polarCP) {
             setCp(polarCP.getCp().clone());
-            setPolarCoordinate(Lists.newLinkedList(polarCP.getPolarCoordinate()));
+            setPolarCoordinate(new LinkedList<>(polarCP.getPolarCoordinate()));
         }
 
         /**
@@ -1059,7 +1058,7 @@ public class NubSpline {
          */
         PolarCP(final PolarCP firstCP, final PolarCP secondCP, final double newKnot) {
             final double firstFactor = firstCP.polarCoordinate.iterator().next();
-            final double secondFactor = Iterables.getLast(secondCP.polarCoordinate);
+            final double secondFactor = java.util.stream.StreamSupport.stream(secondCP.polarCoordinate.spliterator(), false).reduce((first, second) -> second).orElseThrow();
 
             // vectorC = ((b-c) * vectorA + (c-a) * vectorB) / (b-a)
             final KVector aScaled = firstCP.cp.clone().scale(secondFactor - newKnot);
@@ -1068,7 +1067,7 @@ public class NubSpline {
             total.scale(1.0 / (secondFactor - firstFactor));
 
             cp = total;
-            polarCoordinate = Lists.newArrayList();
+            polarCoordinate = new ArrayList<>();
 
             // Specifies, if the newKnot still needs to be added.
             boolean needsToBeAdded = true;

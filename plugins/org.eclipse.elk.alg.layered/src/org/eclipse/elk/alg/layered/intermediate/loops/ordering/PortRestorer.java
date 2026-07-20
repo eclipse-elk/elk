@@ -36,10 +36,9 @@ import org.eclipse.elk.alg.layered.options.SelfLoopOrderingStrategy;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ArrayTable;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Table;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Restores hidden ports assuming fixed side port constraints.
@@ -47,9 +46,9 @@ import com.google.common.collect.Table;
 public class PortRestorer {
     
     /** {@link SelfHyperLoop}s indexed by {@link SelfLoopType}. */
-    private ListMultimap<SelfLoopType, SelfHyperLoop> slLoopsByType;
+    private Map<SelfLoopType, List<SelfHyperLoop>> slLoopsByType;
     /** A table of all of the different areas around the node to place self loop ports. */
-    private Table<PortSide, PortSideArea, List<SelfLoopPort>> targetAreas;
+    private Map<PortSide, Map<PortSideArea, List<SelfLoopPort>>> targetAreas;
 
     /**
      * Restores all previously hidden ports at proper locations. This will also reset all hiding-related properties of
@@ -78,6 +77,7 @@ public class PortRestorer {
 
         // We're not hiding any ports anymore
         targetAreas.values().stream()
+            .flatMap(byArea -> byArea.values().stream())
             .flatMap(slPortList -> slPortList.stream())
             .forEach(slPort -> slPort.setHidden(false));
         slHolder.setPortsHidden(false);
@@ -91,14 +91,13 @@ public class PortRestorer {
      * of port side and port side area in {@link #targetAreas}.
      */
     private void initTargetAreas() {
-        // An array table is more efficient than other tables, but requires all row and column keys to be specified in
-        // advance
-        targetAreas = ArrayTable.create(Arrays.asList(PortSide.values()), Arrays.asList(PortSideArea.values()));
-        
+        targetAreas = new EnumMap<>(PortSide.class);
         for (PortSide side : PortSide.values()) {
+            Map<PortSideArea, List<SelfLoopPort>> areaMap = new EnumMap<>(PortSideArea.class);
             for (PortSideArea area : PortSideArea.values()) {
-                targetAreas.put(side, area, new ArrayList<>());
+                areaMap.put(area, new ArrayList<>());
             }
+            targetAreas.put(side, areaMap);
         }
     }
 
@@ -108,9 +107,11 @@ public class PortRestorer {
     /**
      * Gathers all of the self loops and distributes them by type.
      */
-    private ListMultimap<SelfLoopType, SelfHyperLoop> gatherSelfLoopsByType(final SelfLoopHolder slHolder) {
-        ListMultimap<SelfLoopType, SelfHyperLoop> loops = ArrayListMultimap.create();
-        slHolder.getSLHyperLoops().stream().forEach(slLoop -> loops.put(slLoop.getSelfLoopType(), slLoop));
+    private Map<SelfLoopType, List<SelfHyperLoop>> gatherSelfLoopsByType(final SelfLoopHolder slHolder) {
+        Map<SelfLoopType, List<SelfHyperLoop>> loops = new HashMap<>();
+        slHolder.getSLHyperLoops()
+                .forEach(slLoop -> loops.computeIfAbsent(slLoop.getSelfLoopType(), k -> new ArrayList<>())
+                        .add(slLoop));
         return loops;
     }
 
@@ -119,9 +120,9 @@ public class PortRestorer {
 
     private void processOneSideLoops(final SelfLoopOrderingStrategy ordering) {
         if (ordering == SelfLoopOrderingStrategy.REVERSE_STACKED) {
-            Collections.reverse(slLoopsByType.get(SelfLoopType.ONE_SIDE));
+            Collections.reverse(slLoopsByType.getOrDefault(SelfLoopType.ONE_SIDE, Collections.emptyList()));
         }
-        for (SelfHyperLoop slLoop : slLoopsByType.get(SelfLoopType.ONE_SIDE)) {
+        for (SelfHyperLoop slLoop : slLoopsByType.getOrDefault(SelfLoopType.ONE_SIDE, Collections.emptyList())) {
             // Obtain the port side
             PortSide side = slLoop.getSLPorts().get(0).getLPort().getSide();
             
@@ -193,7 +194,7 @@ public class PortRestorer {
     // Self Loop Placement (Two Sides)
 
     private void processTwoSideCornerLoops() {
-        for (SelfHyperLoop slLoop : slLoopsByType.get(SelfLoopType.TWO_SIDES_CORNER)) {
+        for (SelfHyperLoop slLoop : slLoopsByType.getOrDefault(SelfLoopType.TWO_SIDES_CORNER, Collections.emptyList())) {
             // Sort the port sides such that they follow a clockwise order
             PortSide[] sides = sortedTwoSideLoopPortSides(slLoop);
             
@@ -204,7 +205,7 @@ public class PortRestorer {
     }
 
     private void processTwoSideOpposingLoops() {
-        for (SelfHyperLoop slLoop : slLoopsByType.get(SelfLoopType.TWO_SIDES_OPPOSING)) {
+        for (SelfHyperLoop slLoop : slLoopsByType.getOrDefault(SelfLoopType.TWO_SIDES_OPPOSING, Collections.emptyList())) {
             // Sort the port sides such that they follow a clockwise order
             PortSide[] sides = sortedTwoSideLoopPortSides(slLoop);
             
@@ -243,7 +244,7 @@ public class PortRestorer {
     private static final PortSide[] WNE = { PortSide.WEST, PortSide.NORTH, PortSide.EAST };
 
     private void processThreeSideLoops() {
-        for (SelfHyperLoop slLoop : slLoopsByType.get(SelfLoopType.THREE_SIDES)) {
+        for (SelfHyperLoop slLoop : slLoopsByType.getOrDefault(SelfLoopType.THREE_SIDES, Collections.emptyList())) {
             // This array will yield the loop's start, middle, and end sides
             PortSide[] sides = determineLoopConstellation(slLoop);
             
@@ -275,7 +276,7 @@ public class PortRestorer {
     // Self Loop Placement (Four Sides)
 
     private void processFourSideLoops() {
-        for (SelfHyperLoop slLoop : slLoopsByType.get(SelfLoopType.FOUR_SIDES)) {
+        for (SelfHyperLoop slLoop : slLoopsByType.getOrDefault(SelfLoopType.FOUR_SIDES, Collections.emptyList())) {
             // Simply append to all port side's middle areas
             // Prepend to the start area, append to the other areas
             for (PortSide side : slLoop.getSLPortsBySide().keySet()) {
@@ -328,7 +329,7 @@ public class PortRestorer {
                 .collect(Collectors.toList());
 
         Collections.reverse(hiddenPorts);
-        List<SelfLoopPort> targetArea = targetAreas.get(portSide, area);
+        List<SelfLoopPort> targetArea = targetAreas.get(portSide).get(area);
         if (addMode == AddMode.PREPEND) {
             targetArea.addAll(0, hiddenPorts);
         } else {
@@ -352,51 +353,51 @@ public class PortRestorer {
         newPortList.clear();
         
         // Go over the target areas and add them in between the regular ports
-        addAll(targetAreas.get(PortSide.NORTH, PortSideArea.START), lNode);
+        addAll(targetAreas.get(PortSide.NORTH).get(PortSideArea.START), lNode);
         nextOldPortIndex = addAllThat(
                 oldPortList,
                 nextOldPortIndex,
                 (lPort) -> lPort.getSide() == PortSide.NORTH && isNorthSouthPortWithWestOrWestEastConnections(lPort),
                 newPortList);
-        addAll(targetAreas.get(PortSide.NORTH, PortSideArea.MIDDLE), lNode);
+        addAll(targetAreas.get(PortSide.NORTH).get(PortSideArea.MIDDLE), lNode);
         nextOldPortIndex = addAllThat(
                 oldPortList,
                 nextOldPortIndex,
                 (lPort) -> lPort.getSide() == PortSide.NORTH,
                 newPortList);
-        addAll(targetAreas.get(PortSide.NORTH, PortSideArea.END), lNode);
+        addAll(targetAreas.get(PortSide.NORTH).get(PortSideArea.END), lNode);
         
-        addAll(targetAreas.get(PortSide.EAST, PortSideArea.START), lNode);
-        addAll(targetAreas.get(PortSide.EAST, PortSideArea.MIDDLE), lNode);
+        addAll(targetAreas.get(PortSide.EAST).get(PortSideArea.START), lNode);
+        addAll(targetAreas.get(PortSide.EAST).get(PortSideArea.MIDDLE), lNode);
         nextOldPortIndex = addAllThat(
                 oldPortList,
                 nextOldPortIndex,
                 (lPort) -> lPort.getSide() == PortSide.EAST,
                 newPortList);
-        addAll(targetAreas.get(PortSide.EAST, PortSideArea.END), lNode);
+        addAll(targetAreas.get(PortSide.EAST).get(PortSideArea.END), lNode);
         
-        addAll(targetAreas.get(PortSide.SOUTH, PortSideArea.START), lNode);
+        addAll(targetAreas.get(PortSide.SOUTH).get(PortSideArea.START), lNode);
         nextOldPortIndex = addAllThat(
                 oldPortList,
                 nextOldPortIndex,
                 (lPort) -> lPort.getSide() == PortSide.SOUTH && isNorthSouthPortWithEastConnections(lPort),
                 newPortList);
-        addAll(targetAreas.get(PortSide.SOUTH, PortSideArea.MIDDLE), lNode);
+        addAll(targetAreas.get(PortSide.SOUTH).get(PortSideArea.MIDDLE), lNode);
         nextOldPortIndex = addAllThat(
                 oldPortList,
                 nextOldPortIndex,
                 (lPort) -> lPort.getSide() == PortSide.SOUTH,
                 newPortList);
-        addAll(targetAreas.get(PortSide.SOUTH, PortSideArea.END), lNode);
+        addAll(targetAreas.get(PortSide.SOUTH).get(PortSideArea.END), lNode);
         
-        addAll(targetAreas.get(PortSide.WEST, PortSideArea.START), lNode);
+        addAll(targetAreas.get(PortSide.WEST).get(PortSideArea.START), lNode);
         nextOldPortIndex = addAllThat(
                 oldPortList,
                 nextOldPortIndex,
                 (lPort) -> lPort.getSide() == PortSide.WEST,
                 newPortList);
-        addAll(targetAreas.get(PortSide.WEST, PortSideArea.MIDDLE), lNode);
-        addAll(targetAreas.get(PortSide.WEST, PortSideArea.END), lNode);
+        addAll(targetAreas.get(PortSide.WEST).get(PortSideArea.MIDDLE), lNode);
+        addAll(targetAreas.get(PortSide.WEST).get(PortSideArea.END), lNode);
         
         assert newPortList.size() >= oldPortList.size() && newPortList.size() >= slHolder.getSLPortMap().size();
         assert !slHolder.arePortsHidden() || newPortList.size() > oldPortList.size();

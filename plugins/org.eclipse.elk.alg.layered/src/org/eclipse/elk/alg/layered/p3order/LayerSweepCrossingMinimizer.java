@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 
 import org.eclipse.elk.alg.layered.IHierarchyAwareLayoutProcessor;
 import org.eclipse.elk.alg.layered.LayeredPhases;
@@ -45,8 +48,6 @@ import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * This class minimizes crossings by sweeping through a graph, holding the order of nodes in one layer fixed and
@@ -607,11 +608,11 @@ public class LayerSweepCrossingMinimizer
      * Traverses inclusion breadth-first and initializes each Graph.
      */
     private List<GraphInfoHolder> initialize(final LGraph rootGraph) {
-        graphInfoHolders = Lists.newArrayList();
+        graphInfoHolders = new ArrayList<>();
         random = rootGraph.getProperty(InternalProperties.RANDOM);
         randomSeed = random.nextLong();
-        List<GraphInfoHolder> graphsToSweepOn = Lists.newLinkedList();
-        List<LGraph> graphs = Lists.<LGraph>newArrayList(rootGraph);
+        List<GraphInfoHolder> graphsToSweepOn = new LinkedList<>();
+        List<LGraph> graphs = new ArrayList<>(java.util.Arrays.asList(rootGraph));
         int i = 0;
         while (i < graphs.size()) {
             LGraph graph = graphs.get(i);
@@ -624,7 +625,7 @@ public class LayerSweepCrossingMinimizer
             }
         }
     
-        graphsWhoseNodeOrderChanged = Sets.newHashSet();
+        graphsWhoseNodeOrderChanged = new HashSet<>();
     
         return graphsToSweepOn;
     }

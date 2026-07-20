@@ -17,6 +17,7 @@ package org.eclipse.elk.alg.layered.p4nodes.bk;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -25,7 +26,6 @@ import org.eclipse.elk.alg.layered.graph.Layer;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 import org.eclipse.elk.core.util.Pair;
 
-import com.google.common.collect.Lists;
 
 /**
  * Class holds neighborhood information for a layered graph that is used during bk node placing.
@@ -115,9 +115,9 @@ public final class NeighborhoodInformation {
         ni.neighborComparator = ni.new NeighborComparator();
         
         // determine all left and right neighbors of the graph's nodes
-        ni.leftNeighbors = Lists.newArrayListWithCapacity(ni.nodeCount);
+        ni.leftNeighbors = new ArrayList<>(ni.nodeCount);
         determineAllLeftNeighbors(ni, graph);
-        ni.rightNeighbors = Lists.newArrayListWithCapacity(ni.nodeCount);
+        ni.rightNeighbors = new ArrayList<>(ni.nodeCount);
         determineAllRightNeighbors(ni, graph);
         
         return ni;
@@ -132,7 +132,7 @@ public final class NeighborhoodInformation {
         for (Layer l : graph) {
             for (LNode n : l) {
 
-                List<Pair<LNode, LEdge>> result = Lists.newArrayList();
+                List<Pair<LNode, LEdge>> result = new ArrayList<>();
                 int maxPriority = 0;
                 
                 for (LEdge edge : n.getOutgoingEdges()) {
@@ -165,7 +165,7 @@ public final class NeighborhoodInformation {
         for (Layer l : graph) {
             for (LNode n : l) {
                 
-                List<Pair<LNode, LEdge>> result = Lists.newArrayList();
+                List<Pair<LNode, LEdge>> result = new ArrayList<>();
                 int maxPriority = 0;
                 
                 for (LEdge edge : n.getIncomingEdges()) {

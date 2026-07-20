@@ -31,16 +31,18 @@ import static org.eclipse.elk.core.options.PortSide.SIDES_SOUTH;
 import static org.eclipse.elk.core.options.PortSide.SIDES_SOUTH_WEST;
 import static org.eclipse.elk.core.options.PortSide.SIDES_WEST;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.core.options.PortSide;
-
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 
 /**
  * Represents a group of connected components grouped for layout purposes.
@@ -93,83 +95,87 @@ public class ComponentGroup {
      * port sides to a list of port side sets that must not already exist in this group for a
      * component to be added.</p>
      */
-    protected static final Multimap<Set<PortSide>, Set<PortSide>> CONSTRAINTS = HashMultimap.create();
+    protected static final Map<Set<PortSide>, Set<Set<PortSide>>> CONSTRAINTS = new HashMap<>();
+
+    private static void putConstraint(final Set<PortSide> key, final Set<PortSide> value) {
+        CONSTRAINTS.computeIfAbsent(key, k -> new HashSet<>()).add(value);
+    }
     
     static {
         // Setup constraints
-        CONSTRAINTS.put(SIDES_NONE, SIDES_NORTH_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_WEST, SIDES_NORTH_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_WEST, SIDES_NORTH_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_EAST, SIDES_NORTH_EAST_SOUTH);
-        CONSTRAINTS.put(SIDES_EAST, SIDES_NORTH_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH, SIDES_NORTH_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH, SIDES_NORTH_EAST_WEST);
-        CONSTRAINTS.put(SIDES_SOUTH, SIDES_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_SOUTH, SIDES_NORTH_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_SOUTH, SIDES_EAST_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_SOUTH, SIDES_NORTH_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_SOUTH, SIDES_NORTH_EAST_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_SOUTH, SIDES_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_EAST_WEST, SIDES_NORTH_SOUTH);
-        CONSTRAINTS.put(SIDES_EAST_WEST, SIDES_NORTH_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_EAST_WEST, SIDES_NORTH_EAST_SOUTH);
-        CONSTRAINTS.put(SIDES_EAST_WEST, SIDES_NORTH_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_WEST, SIDES_NORTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_WEST, SIDES_NORTH_EAST_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_WEST, SIDES_NORTH_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST, SIDES_NORTH_EAST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST, SIDES_NORTH_EAST_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST, SIDES_NORTH_EAST_SOUTH);
-        CONSTRAINTS.put(SIDES_SOUTH_WEST, SIDES_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_SOUTH_WEST, SIDES_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_SOUTH_WEST, SIDES_NORTH_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_EAST_SOUTH, SIDES_EAST_SOUTH);
-        CONSTRAINTS.put(SIDES_EAST_SOUTH, SIDES_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_EAST_SOUTH, SIDES_NORTH_EAST_SOUTH);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_WEST, SIDES_NORTH);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_WEST, SIDES_NORTH_SOUTH);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_WEST, SIDES_NORTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_WEST, SIDES_NORTH_EAST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_WEST, SIDES_NORTH_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_WEST, SIDES_NORTH_EAST_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_WEST, SIDES_NORTH_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_WEST, SIDES_NORTH_EAST_SOUTH);
-        CONSTRAINTS.put(SIDES_EAST_SOUTH_WEST, SIDES_SOUTH);
-        CONSTRAINTS.put(SIDES_EAST_SOUTH_WEST, SIDES_NORTH_SOUTH);
-        CONSTRAINTS.put(SIDES_EAST_SOUTH_WEST, SIDES_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_EAST_SOUTH_WEST, SIDES_EAST_SOUTH);
-        CONSTRAINTS.put(SIDES_EAST_SOUTH_WEST, SIDES_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_EAST_SOUTH_WEST, SIDES_NORTH_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_EAST_SOUTH_WEST, SIDES_NORTH_EAST_SOUTH);
-        CONSTRAINTS.put(SIDES_EAST_SOUTH_WEST, SIDES_NORTH_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_SOUTH_WEST, SIDES_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_SOUTH_WEST, SIDES_EAST_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_SOUTH_WEST, SIDES_NORTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_SOUTH_WEST, SIDES_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_SOUTH_WEST, SIDES_NORTH_EAST_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_SOUTH_WEST, SIDES_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_SOUTH_WEST, SIDES_NORTH_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_SOUTH_WEST, SIDES_NORTH_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH, SIDES_EAST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH, SIDES_EAST_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH, SIDES_NORTH_EAST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH, SIDES_EAST_SOUTH);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH, SIDES_NORTH_EAST_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH, SIDES_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH, SIDES_NORTH_EAST_SOUTH);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH, SIDES_NORTH_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_NONE);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_EAST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_NORTH);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_SOUTH);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_NORTH_SOUTH);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_EAST_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_NORTH_EAST_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_EAST_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_NORTH_SOUTH_WEST);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_NORTH_EAST_SOUTH);
-        CONSTRAINTS.put(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_NORTH_EAST_SOUTH_WEST);
+        putConstraint(SIDES_NONE, SIDES_NORTH_EAST_SOUTH_WEST);
+        putConstraint(SIDES_WEST, SIDES_NORTH_EAST_SOUTH_WEST);
+        putConstraint(SIDES_WEST, SIDES_NORTH_SOUTH_WEST);
+        putConstraint(SIDES_EAST, SIDES_NORTH_EAST_SOUTH);
+        putConstraint(SIDES_EAST, SIDES_NORTH_EAST_SOUTH_WEST);
+        putConstraint(SIDES_NORTH, SIDES_NORTH_EAST_SOUTH_WEST);
+        putConstraint(SIDES_NORTH, SIDES_NORTH_EAST_WEST);
+        putConstraint(SIDES_SOUTH, SIDES_EAST_SOUTH_WEST);
+        putConstraint(SIDES_SOUTH, SIDES_NORTH_EAST_SOUTH_WEST);
+        putConstraint(SIDES_NORTH_SOUTH, SIDES_EAST_WEST);
+        putConstraint(SIDES_NORTH_SOUTH, SIDES_NORTH_EAST_SOUTH_WEST);
+        putConstraint(SIDES_NORTH_SOUTH, SIDES_NORTH_EAST_WEST);
+        putConstraint(SIDES_NORTH_SOUTH, SIDES_EAST_SOUTH_WEST);
+        putConstraint(SIDES_EAST_WEST, SIDES_NORTH_SOUTH);
+        putConstraint(SIDES_EAST_WEST, SIDES_NORTH_SOUTH_WEST);
+        putConstraint(SIDES_EAST_WEST, SIDES_NORTH_EAST_SOUTH);
+        putConstraint(SIDES_EAST_WEST, SIDES_NORTH_EAST_SOUTH_WEST);
+        putConstraint(SIDES_NORTH_WEST, SIDES_NORTH_WEST);
+        putConstraint(SIDES_NORTH_WEST, SIDES_NORTH_EAST_WEST);
+        putConstraint(SIDES_NORTH_WEST, SIDES_NORTH_SOUTH_WEST);
+        putConstraint(SIDES_NORTH_EAST, SIDES_NORTH_EAST);
+        putConstraint(SIDES_NORTH_EAST, SIDES_NORTH_EAST_WEST);
+        putConstraint(SIDES_NORTH_EAST, SIDES_NORTH_EAST_SOUTH);
+        putConstraint(SIDES_SOUTH_WEST, SIDES_SOUTH_WEST);
+        putConstraint(SIDES_SOUTH_WEST, SIDES_EAST_SOUTH_WEST);
+        putConstraint(SIDES_SOUTH_WEST, SIDES_NORTH_SOUTH_WEST);
+        putConstraint(SIDES_EAST_SOUTH, SIDES_EAST_SOUTH);
+        putConstraint(SIDES_EAST_SOUTH, SIDES_EAST_SOUTH_WEST);
+        putConstraint(SIDES_EAST_SOUTH, SIDES_NORTH_EAST_SOUTH);
+        putConstraint(SIDES_NORTH_EAST_WEST, SIDES_NORTH);
+        putConstraint(SIDES_NORTH_EAST_WEST, SIDES_NORTH_SOUTH);
+        putConstraint(SIDES_NORTH_EAST_WEST, SIDES_NORTH_WEST);
+        putConstraint(SIDES_NORTH_EAST_WEST, SIDES_NORTH_EAST);
+        putConstraint(SIDES_NORTH_EAST_WEST, SIDES_NORTH_EAST_SOUTH_WEST);
+        putConstraint(SIDES_NORTH_EAST_WEST, SIDES_NORTH_EAST_WEST);
+        putConstraint(SIDES_NORTH_EAST_WEST, SIDES_NORTH_SOUTH_WEST);
+        putConstraint(SIDES_NORTH_EAST_WEST, SIDES_NORTH_EAST_SOUTH);
+        putConstraint(SIDES_EAST_SOUTH_WEST, SIDES_SOUTH);
+        putConstraint(SIDES_EAST_SOUTH_WEST, SIDES_NORTH_SOUTH);
+        putConstraint(SIDES_EAST_SOUTH_WEST, SIDES_SOUTH_WEST);
+        putConstraint(SIDES_EAST_SOUTH_WEST, SIDES_EAST_SOUTH);
+        putConstraint(SIDES_EAST_SOUTH_WEST, SIDES_EAST_SOUTH_WEST);
+        putConstraint(SIDES_EAST_SOUTH_WEST, SIDES_NORTH_SOUTH_WEST);
+        putConstraint(SIDES_EAST_SOUTH_WEST, SIDES_NORTH_EAST_SOUTH);
+        putConstraint(SIDES_EAST_SOUTH_WEST, SIDES_NORTH_EAST_SOUTH_WEST);
+        putConstraint(SIDES_NORTH_SOUTH_WEST, SIDES_WEST);
+        putConstraint(SIDES_NORTH_SOUTH_WEST, SIDES_EAST_WEST);
+        putConstraint(SIDES_NORTH_SOUTH_WEST, SIDES_NORTH_WEST);
+        putConstraint(SIDES_NORTH_SOUTH_WEST, SIDES_SOUTH_WEST);
+        putConstraint(SIDES_NORTH_SOUTH_WEST, SIDES_NORTH_EAST_WEST);
+        putConstraint(SIDES_NORTH_SOUTH_WEST, SIDES_EAST_SOUTH_WEST);
+        putConstraint(SIDES_NORTH_SOUTH_WEST, SIDES_NORTH_SOUTH_WEST);
+        putConstraint(SIDES_NORTH_SOUTH_WEST, SIDES_NORTH_EAST_SOUTH_WEST);
+        putConstraint(SIDES_NORTH_EAST_SOUTH, SIDES_EAST);
+        putConstraint(SIDES_NORTH_EAST_SOUTH, SIDES_EAST_WEST);
+        putConstraint(SIDES_NORTH_EAST_SOUTH, SIDES_NORTH_EAST);
+        putConstraint(SIDES_NORTH_EAST_SOUTH, SIDES_EAST_SOUTH);
+        putConstraint(SIDES_NORTH_EAST_SOUTH, SIDES_NORTH_EAST_WEST);
+        putConstraint(SIDES_NORTH_EAST_SOUTH, SIDES_EAST_SOUTH_WEST);
+        putConstraint(SIDES_NORTH_EAST_SOUTH, SIDES_NORTH_EAST_SOUTH);
+        putConstraint(SIDES_NORTH_EAST_SOUTH, SIDES_NORTH_EAST_SOUTH_WEST);
+        putConstraint(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_NONE);
+        putConstraint(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_WEST);
+        putConstraint(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_EAST);
+        putConstraint(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_NORTH);
+        putConstraint(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_SOUTH);
+        putConstraint(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_NORTH_SOUTH);
+        putConstraint(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_EAST_WEST);
+        putConstraint(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_NORTH_EAST_WEST);
+        putConstraint(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_EAST_SOUTH_WEST);
+        putConstraint(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_NORTH_SOUTH_WEST);
+        putConstraint(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_NORTH_EAST_SOUTH);
+        putConstraint(SIDES_NORTH_EAST_SOUTH_WEST, SIDES_NORTH_EAST_SOUTH_WEST);
     }
     
     
@@ -179,7 +185,7 @@ public class ComponentGroup {
     /**
      * A map mapping external port side combinations to components in this group.
      */
-    protected Multimap<Set<PortSide>, LGraph> components = ArrayListMultimap.create();
+    protected Map<Set<PortSide>, List<LGraph>> components = new HashMap<>();
     
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -216,9 +222,10 @@ public class ComponentGroup {
      */
     public boolean add(final LGraph component) {
         if (canAdd(component)) {
-            components.put(
-                component.getProperty(InternalProperties.EXT_PORT_CONNECTIONS),
-                component);
+            components
+                .computeIfAbsent(component.getProperty(InternalProperties.EXT_PORT_CONNECTIONS),
+                        k -> new ArrayList<>())
+                .add(component);
             return true;
         } else {
             return false;
@@ -235,10 +242,10 @@ public class ComponentGroup {
     protected boolean canAdd(final LGraph component) {
         // Check if we have a component with incompatible external port sides
         Set<PortSide> candidateSides = component.getProperty(InternalProperties.EXT_PORT_CONNECTIONS);
-        Collection<Set<PortSide>> constraints = CONSTRAINTS.get(candidateSides);
-        
+        Set<Set<PortSide>> constraints = CONSTRAINTS.getOrDefault(candidateSides, Collections.emptySet());
+
         for (Set<PortSide> constraint : constraints) {
-            if (!components.get(constraint).isEmpty()) {
+            if (!components.getOrDefault(constraint, Collections.emptyList()).isEmpty()) {
                 // A component with a conflicting external port side combination exists
                 return false;
             }
@@ -254,7 +261,14 @@ public class ComponentGroup {
      * @return all port sides in this component group.
      */
     public Collection<Set<PortSide>> getPortSides() {
-        return components.keys();
+        // Mirrors Multimap.keys(): each key appears with its multiplicity (one occurrence per value).
+        List<Set<PortSide>> result = new ArrayList<>();
+        for (Map.Entry<Set<PortSide>, List<LGraph>> entry : components.entrySet()) {
+            for (int i = 0; i < entry.getValue().size(); i++) {
+                result.add(entry.getKey());
+            }
+        }
+        return result;
     }
     
     /**
@@ -263,7 +277,11 @@ public class ComponentGroup {
      * @return the components in this component group.
      */
     public Collection<LGraph> getComponents() {
-        return components.values();
+        List<LGraph> result = new ArrayList<>();
+        for (List<LGraph> bucket : components.values()) {
+            result.addAll(bucket);
+        }
+        return result;
     }
     
     /**
@@ -275,6 +293,6 @@ public class ComponentGroup {
      *         returned.
      */
     public Collection<LGraph> getComponents(final Set<PortSide> connections) {
-        return components.get(connections);
+        return components.getOrDefault(connections, Collections.emptyList());
     }
 }
