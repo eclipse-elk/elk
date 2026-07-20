@@ -147,7 +147,7 @@ public class RoutingDirector {
      * loop is routed through. The exact routing we choose determines the number of edge crossings.
      */
     private void determineTwoSideOpposingLoopRoutes(final SelfHyperLoop slLoop) {
-        PortSide[] sides = slLoop.getSLPortsBySide().keySet().toArray(new PortSide[2]);
+        PortSide[] sides = PortRestorer.sortedTwoSideLoopPortSides(slLoop);
         assert sides.length == 2;
 
         SelfLoopHolder slHolder = slLoop.getSLHolder();
