@@ -14,7 +14,9 @@
  *******************************************************************************/
 package org.eclipse.elk.core;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
@@ -42,8 +44,6 @@ import org.eclipse.elk.graph.ElkLabel;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.properties.GraphFeature;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
-
-import com.google.common.collect.Lists;
 
 /**
  * Performs layout on a graph with hierarchy by executing a layout algorithm on each level of the
@@ -167,7 +167,7 @@ public class RecursiveGraphLayoutEngine implements IGraphLayoutEngine {
             }
             
             // We collect inside self loops of children and post-process them later
-            List<ElkEdge> childrenInsideSelfLoops = Lists.newArrayList();
+            List<ElkEdge> childrenInsideSelfLoops = new ArrayList<>();
             
             // If the layout provider supports hierarchy, it is expected to layout the node's compound
             // node children as well
@@ -185,7 +185,7 @@ public class RecursiveGraphLayoutEngine implements IGraphLayoutEngine {
                 nodeCount = countNodesWithHierarchy(layoutNode);
                 
                 // Look for nodes that stop the hierarchy handling, evaluating the inheritance on the way
-                final Queue<ElkNode> nodeQueue = Lists.newLinkedList();
+                final Queue<ElkNode> nodeQueue = new LinkedList<>();
                 nodeQueue.addAll(layoutNode.getChildren());
                 
                 while (!nodeQueue.isEmpty()) {
@@ -569,7 +569,7 @@ public class RecursiveGraphLayoutEngine implements IGraphLayoutEngine {
      */
     protected List<ElkEdge> gatherInsideSelfLoops(final ElkNode node) {
         if (node.getProperty(CoreOptions.INSIDE_SELF_LOOPS_ACTIVATE)) {
-            List<ElkEdge> insideSelfLoops = Lists.newArrayList();
+            List<ElkEdge> insideSelfLoops = new ArrayList<>();
             
             for (ElkEdge edge : ElkGraphUtil.allOutgoingEdges(node)) {
                 // MIGRATE Adapt to hyperedges and make error-safe

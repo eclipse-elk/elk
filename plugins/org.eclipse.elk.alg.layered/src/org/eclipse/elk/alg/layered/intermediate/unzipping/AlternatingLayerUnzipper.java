@@ -30,8 +30,8 @@ import org.eclipse.elk.core.alg.ILayoutProcessor;
 import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 import org.eclipse.elk.core.util.Pair;
+import org.eclipse.elk.alg.layered.graph.LGraphUtil;
 
-import com.google.common.collect.Lists;
 
 /**
  * Divides nodes up between layers to create a more compact final layout.
@@ -225,7 +225,9 @@ public class AlternatingLayerUnzipper implements ILayoutProcessor<LGraph> {
         int edgeCount = 0;
         // If there are no incoming edges, the nodeindex will have to be decreased by one
         boolean noIncomingEdges = true; 
-        List<LEdge> reversedIncomingEdges = Lists.reverse(Lists.newArrayList(node.getIncomingEdges()));
+        List<LEdge> incomingEdges = new ArrayList<>();
+        node.getIncomingEdges().forEach(incomingEdges::add);
+        List<LEdge> reversedIncomingEdges = LGraphUtil.reversed(incomingEdges);
         for (LEdge incomingEdge : reversedIncomingEdges) {
             noIncomingEdges = false;
             LEdge nextEdgeToSplit = incomingEdge;

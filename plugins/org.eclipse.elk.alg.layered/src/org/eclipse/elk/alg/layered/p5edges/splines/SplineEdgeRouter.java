@@ -21,6 +21,10 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import org.eclipse.elk.alg.layered.LayeredPhases;
 import org.eclipse.elk.alg.layered.graph.LEdge;
@@ -42,11 +46,6 @@ import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 import org.eclipse.elk.core.util.Pair;
-
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 /**
  * Implements a way of routing the edges with splines. Uses the dummy nodes as reference points for
@@ -155,27 +154,27 @@ public final class SplineEdgeRouter implements ILayoutPhase<LayeredPhases, LGrap
     
     // some variables valid during one iteration (a pair of layers)
     /** current edges of the layers in a current iteration. */
-    private final List<LEdge> edgesRemainingLayer = Lists.newArrayList();
+    private final List<LEdge> edgesRemainingLayer = new ArrayList<>();
     /** current spline segments of the layers in a current iteration. */
-    private final List<SplineSegment> splineSegmentsLayer = Lists.newArrayList();
+    private final List<SplineSegment> splineSegmentsLayer = new ArrayList<>();
     /** current ports on the left layer involved in a current iteration. */
-    private final Set<LPort> leftPortsLayer = Sets.newLinkedHashSet();
+    private final Set<LPort> leftPortsLayer = new LinkedHashSet<>();
     /** current ports on the right layer involved in a current iteration. */
-    private final Set<LPort> rightPortsLayer = Sets.newLinkedHashSet();
+    private final Set<LPort> rightPortsLayer = new LinkedHashSet<>();
     /** current self loops of the layers in a current iteration. */
-    private final Set<LEdge> selfLoopsLayer = Sets.newLinkedHashSet();
+    private final Set<LEdge> selfLoopsLayer = new LinkedHashSet<>();
     
     // variables for the whole edge routing process
     private LGraph lGraph;
     /** a collection of all edges that have a normal node as their source. */
-    private final List<LEdge> startEdges = Lists.newArrayList();
+    private final List<LEdge> startEdges = new ArrayList<>();
     /** all created spline segments. */
-    private final List<SplineSegment> allSplineSegments = Lists.newArrayList();
+    private final List<SplineSegment> allSplineSegments = new ArrayList<>();
     /** Maps {@link LEdge} to their representing segments. */
-    private final Map<LEdge, SplineSegment> edgeToSegmentMap = Maps.newHashMap();
+    private final Map<LEdge, SplineSegment> edgeToSegmentMap = new HashMap<>();
     /** A mapping pointing from an edge to it's succeeding edge, together with their connected 
        friends, they form a long-edge. */
-    private final Map<LEdge, LEdge> successingEdge = Maps.newHashMap();
+    private final Map<LEdge, LEdge> successingEdge = new HashMap<>();
     
     //////////////////////////////////////////////////
 
@@ -208,10 +207,10 @@ public final class SplineEdgeRouter implements ILayoutPhase<LayeredPhases, LGrap
         // check if the first and/or last layer are populated with external port dummies
         final Layer firstLayer = layeredGraph.getLayers().get(0);
         final boolean isLeftLayerExternal =
-                Iterables.all(firstLayer.getNodes(), PolylineEdgeRouter.PRED_EXTERNAL_WEST_OR_EAST_PORT);
+                java.util.stream.StreamSupport.stream(firstLayer.getNodes().spliterator(), false).allMatch(PolylineEdgeRouter.PRED_EXTERNAL_WEST_OR_EAST_PORT);
         final Layer lastLayer = layeredGraph.getLayers().get(layeredGraph.getLayers().size() - 1);
         final boolean isRightLayerExternal =
-                Iterables.all(lastLayer.getNodes(), PolylineEdgeRouter.PRED_EXTERNAL_WEST_OR_EAST_PORT);
+                java.util.stream.StreamSupport.stream(lastLayer.getNodes().spliterator(), false).allMatch(PolylineEdgeRouter.PRED_EXTERNAL_WEST_OR_EAST_PORT);
 
         final Iterator<Layer> layerIterator = layeredGraph.iterator();
         Layer leftLayer = null;
@@ -585,8 +584,8 @@ public final class SplineEdgeRouter implements ILayoutPhase<LayeredPhases, LGrap
         // Iterate through all ports on the side to process.
         for (final LPort singlePort : portsToProcess) {
             final double singlePortPosition = singlePort.getAbsoluteAnchor().y;
-            final Set<Pair<SideToProcess, LEdge>> upEdges = Sets.newHashSet();
-            final Set<Pair<SideToProcess, LEdge>> downEdges = Sets.newHashSet();
+            final Set<Pair<SideToProcess, LEdge>> upEdges = new HashSet<>();
+            final Set<Pair<SideToProcess, LEdge>> downEdges = new HashSet<>();
             
             // Find edges we could construct a hyper-edge from. If the edge is in the 
             // edgesRemaining set, there is no hyper-edge that represents this edge. 
@@ -710,8 +709,8 @@ public final class SplineEdgeRouter implements ILayoutPhase<LayeredPhases, LGrap
      * @param edges list of hypernodes
      */
     private static void breakCycles(final List<SplineSegment> edges, final Random random) {
-        final LinkedList<SplineSegment> sources = Lists.newLinkedList();
-        final LinkedList<SplineSegment> sinks = Lists.newLinkedList();
+        final LinkedList<SplineSegment> sources = new LinkedList<>();
+        final LinkedList<SplineSegment> sinks = new LinkedList<>();
         
         // initialize values for the algorithm
         int nextMark = -1;
@@ -739,11 +738,11 @@ public final class SplineEdgeRouter implements ILayoutPhase<LayeredPhases, LGrap
         }
     
         // assign marks to all nodes, ignore dependencies of weight zero
-        final Set<SplineSegment> unprocessed = Sets.newLinkedHashSet(edges);
+        final Set<SplineSegment> unprocessed = new LinkedHashSet<>(edges);
         final int markBase = edges.size();
         int nextLeft = markBase + 1;
         int nextRight = markBase - 1;
-        final List<SplineSegment> maxEdges = Lists.newArrayList();
+        final List<SplineSegment> maxEdges = new ArrayList<>();
 
         while (!unprocessed.isEmpty()) {
             while (!sinks.isEmpty()) {
@@ -857,8 +856,8 @@ public final class SplineEdgeRouter implements ILayoutPhase<LayeredPhases, LGrap
         // determine sources, targets, incoming count and outgoing count; targets are only
         // added to the list if they only connect westward ports (that is, if all their
         // horizontal segments point to the right)
-        final List<SplineSegment> sources = Lists.newLinkedList();
-        final List<SplineSegment> rightwardTargets = Lists.newLinkedList();
+        final List<SplineSegment> sources = new LinkedList<>();
+        final List<SplineSegment> rightwardTargets = new LinkedList<>();
         for (final SplineSegment edge : edges) {
             edge.rank = 0;
             edge.inweight = edge.incoming.size();
@@ -939,7 +938,7 @@ public final class SplineEdgeRouter implements ILayoutPhase<LayeredPhases, LGrap
     }
     
     private List<LEdge> getEdgeChain(final LEdge start) {
-        List<LEdge> edgeChain = Lists.newArrayList();
+        List<LEdge> edgeChain = new ArrayList<>();
         LEdge current = start;
         do {
             edgeChain.add(current);
@@ -949,7 +948,7 @@ public final class SplineEdgeRouter implements ILayoutPhase<LayeredPhases, LGrap
     }
     
     private List<SplineSegment> getSplinePath(final LEdge start) {
-        List<SplineSegment> segmentChain = Lists.newArrayList();
+        List<SplineSegment> segmentChain = new ArrayList<>();
         LEdge current = start;
         do {
             SplineSegment segment = edgeToSegmentMap.get(current);

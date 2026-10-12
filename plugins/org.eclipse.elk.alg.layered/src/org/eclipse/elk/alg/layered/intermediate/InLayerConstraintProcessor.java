@@ -15,6 +15,7 @@
 package org.eclipse.elk.alg.layered.intermediate;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.graph.LGraphUtil;
@@ -25,7 +26,6 @@ import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.core.alg.ILayoutProcessor;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
 
 /**
  * Makes sure that in-layer constraints are respected. This processor is only necessary
@@ -64,7 +64,7 @@ public final class InLayerConstraintProcessor implements ILayoutProcessor<LGraph
              */
             
             int topInsertionIndex = -1;
-            List<LNode> bottomConstrainedNodes = Lists.newArrayList();
+            List<LNode> bottomConstrainedNodes = new ArrayList<>();
             
             // Iterate through an array of its nodes
             LNode[] nodes = LGraphUtil.toNodeArray(layer.getNodes());

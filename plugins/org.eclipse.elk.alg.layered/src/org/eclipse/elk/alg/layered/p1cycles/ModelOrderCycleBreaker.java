@@ -15,6 +15,7 @@
 package org.eclipse.elk.alg.layered.p1cycles;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.LayeredPhases;
 import org.eclipse.elk.alg.layered.graph.LEdge;
@@ -30,7 +31,6 @@ import org.eclipse.elk.core.alg.ILayoutPhase;
 import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
 
 /**
  * A cycle breaker that reverses all edges that go against the model order or group model order,
@@ -60,7 +60,7 @@ public final class ModelOrderCycleBreaker implements ILayoutPhase<LayeredPhases,
         monitor.begin("Model order cycle breaking", 1);
         
         // gather edges that point to the wrong direction
-        List<LEdge> revEdges = Lists.newArrayList();
+        List<LEdge> revEdges = new ArrayList<>();
         
         // One needs an offset to make sure that the model order of nodes with port constraints is
         // always lower/higher than that of other nodes.

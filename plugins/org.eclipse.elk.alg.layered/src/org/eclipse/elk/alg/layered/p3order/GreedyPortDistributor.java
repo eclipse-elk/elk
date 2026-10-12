@@ -26,8 +26,8 @@ import org.eclipse.elk.alg.layered.p3order.counting.IInitializable;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.Pair;
+import org.eclipse.elk.alg.layered.graph.LGraphUtil;
 
-import com.google.common.collect.Lists;
 
 /**
  * Distribute ports greedily on a single node.
@@ -77,7 +77,7 @@ public class GreedyPortDistributor implements ISweepPortDistributor, IInitializa
 
         List<LPort> ports = node.getPortSideView(side);
         if (side == PortSide.SOUTH || side == PortSide.WEST) {
-            ports = Lists.reverse(ports);
+            ports = LGraphUtil.reversed(ports);
         }
         boolean improved = false;
         boolean continueSwitching;

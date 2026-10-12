@@ -15,11 +15,11 @@
 package org.eclipse.elk.alg.layered.intermediate.wrapping;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 
-import com.google.common.collect.Lists;
 
 /**
  * As opposed to the simple {@link ARDCutIndexHeuristic}, this heuristic tries to directly optimize the max scale value
@@ -57,7 +57,7 @@ public class MSDCutIndexHeuristic implements ICutIndexCalculator {
         int freedom = graph.getProperty(LayeredOptions.WRAPPING_CUTTING_MSD_FREEDOM);
 
         double bestMaxScale = Double.NEGATIVE_INFINITY;
-        List<Integer> bestCuts = Lists.newArrayList();
+        List<Integer> bestCuts = new ArrayList<>();
         
         // now find the best set of cut indexes
         for (int m = Math.max(0, cutCnt - freedom); 
@@ -68,7 +68,7 @@ public class MSDCutIndexHeuristic implements ICutIndexCalculator {
             double rowSum = total / (m + 1);
             double sumSoFar = 0;
             int index = 1;
-            List<Integer> cuts = Lists.newArrayList();
+            List<Integer> cuts = new ArrayList<>();
             
             // maximum of any row width
             double width = Double.NEGATIVE_INFINITY;

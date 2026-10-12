@@ -17,6 +17,7 @@ package org.eclipse.elk.alg.layered.p1cycles;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.LayeredPhases;
 import org.eclipse.elk.alg.layered.graph.LEdge;
@@ -31,7 +32,6 @@ import org.eclipse.elk.core.alg.ILayoutPhase;
 import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
 
 /**
  * Cycle breaker implementation that uses a greedy algorithm. Inspired by
@@ -73,9 +73,9 @@ public class GreedyCycleBreaker implements ILayoutPhase<LayeredPhases, LGraph> {
     /** mark for the nodes, inducing an ordering of the nodes. */
     private int[] mark;
     /** list of source nodes. */
-    private final LinkedList<LNode> sources = Lists.newLinkedList();
+    private final LinkedList<LNode> sources = new LinkedList<>();
     /** list of sink nodes. */
-    private final LinkedList<LNode> sinks = Lists.newLinkedList();
+    private final LinkedList<LNode> sinks = new LinkedList<>();
     
     /**
      * The graph
@@ -145,7 +145,7 @@ public class GreedyCycleBreaker implements ILayoutPhase<LayeredPhases, LGraph> {
         int nextRight = -1, nextLeft = 1;
 
         // assign marks to all nodes
-        List<LNode> maxNodes = Lists.newArrayList();
+        List<LNode> maxNodes = new ArrayList<>();
         random = layeredGraph.getProperty(InternalProperties.RANDOM);
         
         while (unprocessedNodeCount > 0) {

@@ -18,7 +18,7 @@ import java.util.Set;
 
 import org.eclipse.elk.core.util.AbstractRandomListAccessor;
 
-import com.google.common.collect.Sets;
+import java.util.HashSet;
 
 /**
  * Instances of this class specify {@link ILayoutProcessor layout processors} that should be executed in the different
@@ -241,7 +241,7 @@ public final class LayoutProcessorConfiguration<P extends Enum<P>, G>
      * @return set of processors.
      */
     private Set<ILayoutProcessorFactory<G>> processors(final int index) {
-        return Sets.newHashSet(getListItem(index));
+        return new HashSet<>(getListItem(index));
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -254,7 +254,7 @@ public final class LayoutProcessorConfiguration<P extends Enum<P>, G>
      */
     @Override
     protected Set<ILayoutProcessorFactory<G>> provideDefault() {
-        return Sets.newHashSet();
+        return new HashSet<>();
     }
 
 }

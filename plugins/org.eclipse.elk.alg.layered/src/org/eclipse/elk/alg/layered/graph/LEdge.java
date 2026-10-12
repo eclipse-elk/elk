@@ -15,6 +15,7 @@
 package org.eclipse.elk.alg.layered.graph;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.alg.layered.options.PortType;
@@ -23,8 +24,6 @@ import org.eclipse.elk.core.math.KVectorChain;
 import org.eclipse.elk.core.options.EdgeLabelPlacement;
 import org.eclipse.elk.core.options.PortSide;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 /**
  * An edge in a layered graph. Edges may only be connected to ports of a node, which represent the point where the edge
@@ -42,7 +41,7 @@ public final class LEdge extends LGraphElement {
     /** the target port. */
     private LPort target;
     /** labels assigned to this edge. */
-    private final List<LLabel> labels = Lists.newArrayListWithCapacity(3);
+    private final List<LLabel> labels = new ArrayList<>(3);
 
     /**
      * Reverses the edge, including its bend points. Negates the {@code REVERSED} property. (an edge that was marked as
@@ -260,7 +259,7 @@ public final class LEdge extends LGraphElement {
 
     @Override
     public String getDesignation() {
-        if (!labels.isEmpty() && !Strings.isNullOrEmpty(labels.get(0).getText())) {
+        if (!labels.isEmpty() && !(labels.get(0).getText() == null || labels.get(0).getText().isEmpty())) {
             return labels.get(0).getText();
         }
         return super.getDesignation();

@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
 import org.eclipse.elk.alg.common.nodespacing.NodeDimensionCalculation;
 import org.eclipse.elk.alg.layered.graph.LEdge;
@@ -44,8 +46,6 @@ import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.options.SizeConstraint;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * This processor does the job of routing edges connected to hierarchical ports.
@@ -158,7 +158,7 @@ public final class HierarchicalPortOrthogonalEdgeRouter implements ILayoutProces
      * @return the list of restored external port dummies.
      */
     private List<LNode> restoreNorthSouthDummies(final LGraph layeredGraph) {
-        List<LNode> restoredDummies = Lists.newArrayList();
+        List<LNode> restoredDummies = new ArrayList<>();
         
         if (!layeredGraph.hasProperty(InternalProperties.EXT_PORT_REPLACED_DUMMIES)) {
             return restoredDummies;
@@ -289,8 +289,8 @@ public final class HierarchicalPortOrthogonalEdgeRouter implements ILayoutProces
         double southY = graphSize.y + graphPadding.top + graphPadding.bottom - layeredGraph.getOffset().y;
         
         // Lists of northern and southern external port dummies
-        List<LNode> northernDummies = Lists.newArrayList();
-        List<LNode> southernDummies = Lists.newArrayList();
+        List<LNode> northernDummies = new ArrayList<>();
+        List<LNode> southernDummies = new ArrayList<>();
         
         for (LNode dummy : northSouthDummies) {
             // Set x coordinate
@@ -512,10 +512,10 @@ public final class HierarchicalPortOrthogonalEdgeRouter implements ILayoutProces
             final Iterable<LNode> northSouthDummies) {
         
         // Prepare south and target layers for northern and southern routing
-        Set<LNode> northernSourceLayer = Sets.newLinkedHashSet();
-        Set<LNode> northernTargetLayer = Sets.newLinkedHashSet();
-        Set<LNode> southernSourceLayer = Sets.newLinkedHashSet();
-        Set<LNode> southernTargetLayer = Sets.newLinkedHashSet();
+        Set<LNode> northernSourceLayer = new LinkedHashSet<>();
+        Set<LNode> northernTargetLayer = new LinkedHashSet<>();
+        Set<LNode> southernSourceLayer = new LinkedHashSet<>();
+        Set<LNode> southernTargetLayer = new LinkedHashSet<>();
         
         // Find some routing parameters
         double nodeSpacing = layeredGraph.getProperty(LayeredOptions.SPACING_NODE_NODE).doubleValue();
@@ -596,7 +596,7 @@ public final class HierarchicalPortOrthogonalEdgeRouter implements ILayoutProces
      * @param layeredGraph the layered graph.
      */
     private void removeTemporaryNorthSouthDummies(final LGraph layeredGraph) {
-        List<LNode> nodesToRemove = Lists.newArrayList();
+        List<LNode> nodesToRemove = new ArrayList<>();
         
         // Iterate through all layers
         for (Layer layer : layeredGraph) {

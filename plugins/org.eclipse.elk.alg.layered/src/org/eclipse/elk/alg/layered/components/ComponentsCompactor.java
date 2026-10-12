@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.elk.alg.layered.compaction.components.IComponent;
@@ -45,11 +47,9 @@ import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.BasicProgressMonitor;
 import org.eclipse.elk.core.util.Pair;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
-import com.google.common.math.DoubleMath;
+import java.util.EnumMap;
+
+import org.eclipse.elk.alg.layered.compaction.oned.CompareFuzzy;
 
 /**
  * Contains implementations of the {@link IConnectedComponents} and {@link IComponent} interfaces
@@ -158,10 +158,10 @@ public class ComponentsCompactor {
                         last = v;
                         continue;
                     }
-                    if (DoubleMath.fuzzyEquals(last.x, v.x, EPSILON)) {
+                    if (CompareFuzzy.fuzzyEquals(last.x, v.x, EPSILON)) {
                         yetAnotherOffset.x = Math.min(yetAnotherOffset.x, last.x);
                         compactedGraphSize.x = Math.max(compactedGraphSize.x, last.x);
-                    } else if (DoubleMath.fuzzyEquals(last.y, v.y, EPSILON)) {
+                    } else if (CompareFuzzy.fuzzyEquals(last.y, v.y, EPSILON)) {
                         yetAnotherOffset.y = Math.min(yetAnotherOffset.y, last.y);
                         compactedGraphSize.y = Math.max(compactedGraphSize.y, last.y);
                     }
@@ -212,21 +212,22 @@ public class ComponentsCompactor {
         // #2 convert external edges,
         //    while doing this, add further hull points contributed by inner segments
         //    and remember extreme points of external segments
-        Multimap<Direction, LEdge> externalExtensions = HashMultimap.create();
+        Map<Direction, Set<LEdge>> externalExtensions = new EnumMap<>(Direction.class);
         OuterSegments outerSegments = new OuterSegments();
         
         for (LNode node : graph.getLayerlessNodes()) {
             for (LEdge edge : node.getOutgoingEdges()) {
                 if (isExternalEdge(edge)) {
                     IExternalExtension<LEdge> iee = transformLEdge(edge, hullPoints, outerSegments);
-                    externalExtensions.put(iee.getDirection(), iee.getRepresentative());
+                    externalExtensions.computeIfAbsent(iee.getDirection(), k -> new HashSet<>())
+                            .add(iee.getRepresentative());
                 }
             }
         }
 
         // #3 create the common external extensions for this component
         //    (there can be 4 per component, one in each direction)
-        List<InternalUnionExternalExtension> extensions = Lists.newArrayList();
+        List<InternalUnionExternalExtension> extensions = new ArrayList<>();
         for (PortSide ps : component.getExternalExtensionSides()) {
             double min = outerSegments.min[ps.ordinal()];
             double max = outerSegments.max[ps.ordinal()];
@@ -293,7 +294,8 @@ public class ComponentsCompactor {
                 iuee.side = ps;
                 iuee.extension = extension;
                 iuee.placeholder = placeholder;
-                iuee.edges = Sets.newHashSet(externalExtensions.get(portSideToDirection(ps)));
+                iuee.edges = new HashSet<>(externalExtensions.getOrDefault(portSideToDirection(ps),
+                        java.util.Collections.emptySet()));
                 extensions.add(iuee);
             }
             
@@ -592,7 +594,7 @@ public class ComponentsCompactor {
      */
     private class InternalConnectedComponents implements IConnectedComponents<LNode, Set<LEdge>> {
 
-        private List<IComponent<LNode, Set<LEdge>>> components = Lists.newArrayList();
+        private List<IComponent<LNode, Set<LEdge>>> components = new ArrayList<>();
         private boolean containsExternalPorts = false;
         
         InternalConnectedComponents() { }
@@ -623,7 +625,7 @@ public class ComponentsCompactor {
         private boolean containsRegularNodes;
 
         private List<ElkRectangle> rectilinearConvexHull;
-        private List<IExternalExtension<Set<LEdge>>> externalExtensions = Lists.newArrayList();
+        private List<IExternalExtension<Set<LEdge>>> externalExtensions = new ArrayList<>();
         
         InternalComponent(final LGraph graph) {
             this.graph = graph;
@@ -654,7 +656,7 @@ public class ComponentsCompactor {
         }
         
         private List<LEdge> getExternalEdges() {
-            List<LEdge> edges = Lists.newArrayList();
+            List<LEdge> edges = new ArrayList<>();
             for (IExternalExtension<Set<LEdge>> ee : externalExtensions) {
                 edges.addAll(ee.getRepresentative());
             }
@@ -667,7 +669,7 @@ public class ComponentsCompactor {
      */
     private final class InternalUnionExternalExtension implements IExternalExtension<Set<LEdge>> {
 
-        private Set<LEdge> edges = Sets.newHashSet();
+        private Set<LEdge> edges = new HashSet<>();
         private PortSide side;
         private ElkRectangle extension;
         private ElkRectangle placeholder;
@@ -802,7 +804,7 @@ public class ComponentsCompactor {
      * Internal collector for inner and outer segments.
      */
     private static final class Segments {
-        private List<Pair<KVector, KVector>> innerSegments = Lists.newArrayList();
+        private List<Pair<KVector, KVector>> innerSegments = new ArrayList<>();
         private Pair<KVector, KVector> outerSegment;
     }
 

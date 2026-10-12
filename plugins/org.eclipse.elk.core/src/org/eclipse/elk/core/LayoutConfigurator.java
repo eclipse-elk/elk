@@ -14,6 +14,8 @@
  *******************************************************************************/
 package org.eclipse.elk.core;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,9 +35,6 @@ import org.eclipse.elk.graph.properties.IPropertyHolder;
 import org.eclipse.elk.graph.properties.MapPropertyHolder;
 import org.eclipse.elk.graph.properties.Property;
 import org.eclipse.elk.graph.util.ElkReflect;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * A layout configurator is a graph element visitor that applies layout option values. It can be
@@ -57,10 +56,10 @@ public class LayoutConfigurator implements IGraphElementVisitor {
     public static final IProperty<LayoutConfigurator> ADD_LAYOUT_CONFIG =
             new Property<LayoutConfigurator>("org.eclipse.elk.addLayoutConfig");
     
-    private final Map<ElkGraphElement, MapPropertyHolder> elementOptionMap = Maps.newHashMap();
-    private final Map<Class<? extends ElkGraphElement>, MapPropertyHolder> classOptionMap = Maps.newHashMap();
+    private final Map<ElkGraphElement, MapPropertyHolder> elementOptionMap = new HashMap<>();
+    private final Map<Class<? extends ElkGraphElement>, MapPropertyHolder> classOptionMap = new HashMap<>();
     private boolean clearLayout = false;
-    private final List<IOptionFilter> optionFilters = Lists.newArrayList();
+    private final List<IOptionFilter> optionFilters = new ArrayList<>();
     
     /**
      * Functional interface that allows to specify whether a certain property should be set for a certain graph element.
