@@ -42,7 +42,7 @@ public enum GraphFeature {
      * Edges that connect nodes from different hierarchy levels and are incident to compound nodes.
      * @see LayoutOptions#LAYOUT_HIERARCHY
      */
-    COMPOUND("Edges that connect nodes from different hierarchy levels"
+    COMPOUND("Edges that connect nodes from different hierarchy levels "
             + "and are incident to compound nodes."),
     /** Edges that connect nodes from different clusters, but not the cluster parent nodes. */
     CLUSTERS("Edges that connect nodes from different clusters, but not the cluster parent nodes."),
