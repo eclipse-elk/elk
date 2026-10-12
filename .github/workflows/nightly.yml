@@ -29,18 +29,16 @@ jobs:
       with:
         repository: eclipse-elk/elk-models
         path: elk-models
-    # Prepare and use a cache for maven
-    - uses: actions/cache@v4
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
     - name: Set up Java version ${{ matrix.java-version }}
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
         java-version: ${{ matrix.java-version }}
+        cache: maven
+    - name: Remove stale Tycho artifacts
+      run: |
+        rm -rf ~/.m2/repository/org/eclipse/tycho
+        rm -rf ~/.m2/repository/org/eclipse/tycho-p2
     - name: Build and verify with maven
       # Run mvn in the 'build' folder
       working-directory: /home/runner/work/elk/elk/elk/build/
