@@ -533,7 +533,7 @@
                   <pluginExecutionFilter>
                     <groupId>org.eclipse.tycho</groupId>
                     <artifactId>target-platform-configuration</artifactId>
-                    <versionRange>[4.0.12,)</versionRange>
+                    <versionRange>[4.0.13,)</versionRange>
                     <goals>
                       <goal>target-platform</goal>
                     </goals>
