@@ -46,8 +46,6 @@ jobs:
         tar -xzf "apache-maven-${MAVEN_VERSION}-bin.tar.gz"
         echo "$PWD/apache-maven-${MAVEN_VERSION}/bin" >> "$GITHUB_PATH"
         rm "apache-maven-${MAVEN_VERSION}-bin.tar.gz"
-    - name: Verify Maven version
-      run: mvn -version
     - name: Build and verify with maven
       # Run mvn in the 'build' folder
       working-directory: /home/runner/work/elk/elk/elk/build/
