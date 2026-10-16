@@ -39,6 +39,8 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: ${{ matrix.java-version }}
+    - name: troubleshoot
+      run: mvn --version
     - name: Build and verify with maven
       # Run mvn in the 'build' folder
       working-directory: /home/runner/work/elk/elk/elk/build/
