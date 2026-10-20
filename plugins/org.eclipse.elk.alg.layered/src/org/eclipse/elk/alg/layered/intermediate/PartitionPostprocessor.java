@@ -50,15 +50,7 @@ public class PartitionPostprocessor implements ILayoutProcessor<LGraph> {
         monitor.begin("Partition postprocessing", 1);
         // Remove all added ports and edges.
         for (Layer layer : lGraph) {
-            final Iterator<LNode> layerIterator = layer.iterator();
-            while (layerIterator.hasNext()) {
-                LNode node = layerIterator.next();
-                if (node.getProperty(InternalProperties.PARTITION_DUMMY)) {
-                    // Remove the node explicitly from the iterator to prevent
-                    // ConcurrentModificationExceptions. This removes the port from the underlying
-                    // collection and thus from the layer.
-                    layerIterator.remove();
-                }
+            for (LNode node : layer) {
                 final Iterator<LPort> ports = node.getPorts().iterator();
                 while (ports.hasNext()) {
                     LPort port = ports.next();
