@@ -41,6 +41,13 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: ${{ matrix.java-version }}
+    - name: Install Maven
+      run: |
+        MAVEN_VERSION=3.9.16
+        curl -fsSLO "https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz"
+        tar -xzf "apache-maven-${MAVEN_VERSION}-bin.tar.gz"
+        echo "$PWD/apache-maven-${MAVEN_VERSION}/bin" >> "$GITHUB_PATH"
+        rm "apache-maven-${MAVEN_VERSION}-bin.tar.gz"
     - name: Build and verify with maven
       # Run mvn in the 'build' folder
       working-directory: /home/runner/work/elk/elk/elk/build/
