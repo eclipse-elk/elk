@@ -21,10 +21,8 @@ import org.eclipse.elk.alg.layered.intermediate.LabelAndNodeSizeProcessor;
 import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.options.PortSide;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.function.Predicate;
 
 /**
  * A port in a layered graph. The position of the port is relative to the upper left corner
@@ -66,12 +64,12 @@ public final class LPort extends LShape {
     /** the margin area around this port. */
     private final LMargin margin = new LMargin();
     /** this port's labels. */
-    private final List<LLabel> labels = Lists.newArrayListWithCapacity(2);
+    private final List<LLabel> labels = new ArrayList<>(2);
 
     /** the edges going into the port. */
-    private final List<LEdge> incomingEdges = Lists.newArrayListWithCapacity(4);
+    private final List<LEdge> incomingEdges = new ArrayList<>(4);
     /** the edges going out of the port. */
-    private final List<LEdge> outgoingEdges = Lists.newArrayListWithCapacity(4);
+    private final List<LEdge> outgoingEdges = new ArrayList<>(4);
     /** All connected edges in a combined iterable. */
     private Iterable<LEdge> connectedEdges = new CombineIter<LEdge>(incomingEdges, outgoingEdges);
     
@@ -350,7 +348,7 @@ public final class LPort extends LShape {
      * @return an iterable over the connected ports
      */
     public Iterable<LPort> getConnectedPorts() {
-        return Iterables.concat(getPredecessorPorts(), getSuccessorPorts());
+        return LGraphUtil.concat(getPredecessorPorts(), getSuccessorPorts());
     }
     
     /**
@@ -370,7 +368,7 @@ public final class LPort extends LShape {
 
     @Override
     public String getDesignation() {
-        if (!labels.isEmpty() && !Strings.isNullOrEmpty(labels.get(0).getText())) {
+        if (!labels.isEmpty() && !(labels.get(0).getText() == null || labels.get(0).getText().isEmpty())) {
             return labels.get(0).getText();
         }
         String id = super.getDesignation();
@@ -401,8 +399,8 @@ public final class LPort extends LShape {
     }
 
     /**
-     * Combines two Iterables. We use this instead of {@link com.google.common.collect.Iterables#concat} because it is
-     * faster.
+     * Combines two Iterables. Local fast-path replacement for a generic {@code concat} because the
+     * lazy implementation here is faster for the small inputs seen in this hot path.
      * 
      * @param <T>
      */

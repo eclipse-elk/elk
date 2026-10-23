@@ -15,6 +15,7 @@
 package org.eclipse.elk.alg.layered.intermediate;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -29,7 +30,6 @@ import org.eclipse.elk.core.alg.ILayoutProcessor;
 import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
 
 /**
  * Post-processor for comment boxes. If any comments are found that were removed by the
@@ -55,7 +55,7 @@ public final class CommentPostprocessor implements ILayoutProcessor<LGraph> {
         monitor.begin("Comment post-processing", 1);
         
         for (Layer layer : layeredGraph) {
-            List<LNode> boxes = Lists.newArrayList();
+            List<LNode> boxes = new ArrayList<>();
             for (LNode node : layer) {
                 List<LNode> topBoxes = node.getProperty(InternalProperties.TOP_COMMENTS);
                 List<LNode> bottomBoxes = node.getProperty(InternalProperties.BOTTOM_COMMENTS);

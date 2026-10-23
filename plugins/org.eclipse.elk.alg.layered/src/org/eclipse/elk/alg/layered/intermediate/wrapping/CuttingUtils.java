@@ -15,6 +15,7 @@
 package org.eclipse.elk.alg.layered.intermediate.wrapping;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -29,7 +30,6 @@ import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IndividualSpacings;
 
-import com.google.common.collect.Lists;
 
 /**
  * Utility methods for cut index calculations used by more than one heuristic.
@@ -80,7 +80,7 @@ public final class CuttingUtils {
         int srcIndex = src.getLayer().getIndex();
         int tgtIndex = tgt.getLayer().getIndex();
         
-        List<LEdge> createdEdges = Lists.newArrayList();
+        List<LEdge> createdEdges = new ArrayList<>();
         
         for (int i = srcIndex; i <= tgtIndex; i++) {
             

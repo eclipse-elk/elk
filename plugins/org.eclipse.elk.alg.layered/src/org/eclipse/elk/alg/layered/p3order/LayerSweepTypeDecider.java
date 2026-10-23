@@ -26,7 +26,7 @@ import org.eclipse.elk.alg.layered.p3order.counting.IInitializable;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 import org.eclipse.elk.core.options.PortSide;
 
-import com.google.common.collect.Iterables;
+import org.eclipse.elk.alg.layered.graph.LGraphUtil;
 
 /**
  * In order to decide whether to sweep into the graph or not, we compare the number of paths to nodes whose position is
@@ -109,7 +109,7 @@ public class LayerSweepTypeDecider implements IInitializable {
                 // Do the same for north/south dummies: Increase counts of paths by the number outgoing edges times the
                 // influence and transfer information to dummies.
                 Iterable<LPort> northSouthPorts =
-                        Iterables.concat(node.getPortSideView(PortSide.NORTH), node.getPortSideView(PortSide.SOUTH));
+                        LGraphUtil.concat(node.getPortSideView(PortSide.NORTH), node.getPortSideView(PortSide.SOUTH));
                 for (LPort port : northSouthPorts) {
                     LNode nsDummy = port.getProperty(InternalProperties.PORT_DUMMY);
                     if (nsDummy != null) {
@@ -193,12 +193,12 @@ public class LayerSweepTypeDecider implements IInitializable {
 
     private boolean hasNoEasternPorts(final LNode node) {
         List<LPort> eastPorts = node.getPortSideView(PortSide.EAST);
-        return eastPorts.isEmpty() || !Iterables.any(eastPorts, p -> p.getConnectedEdges().iterator().hasNext());
+        return eastPorts.isEmpty() || !java.util.stream.StreamSupport.stream(eastPorts.spliterator(), false).anyMatch(p -> p.getConnectedEdges().iterator().hasNext());
     }
 
     private boolean hasNoWesternPorts(final LNode node) {
         List<LPort> westPorts = node.getPortSideView(PortSide.WEST);
-        return westPorts.isEmpty() || !Iterables.any(westPorts, p -> p.getConnectedEdges().iterator().hasNext());
+        return westPorts.isEmpty() || !java.util.stream.StreamSupport.stream(westPorts.spliterator(), false).anyMatch(p -> p.getConnectedEdges().iterator().hasNext());
     }
 
     private boolean isExternalPortDummy(final LNode node) {

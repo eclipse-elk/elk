@@ -17,8 +17,6 @@ package org.eclipse.elk.core.options;
 import java.util.EnumSet;
 import java.util.Set;
 
-import com.google.common.collect.Sets;
-
 /**
  * Options for controlling how port labels are placed by layout algorithms. The corresponding layout
  * option will usually accept an {@link EnumSet} over this enumeration, theoretically allowing
@@ -130,7 +128,7 @@ public enum PortLabelPlacement {
     public static boolean isValid(final Set<PortLabelPlacement> placement) {
         final Set<PortLabelPlacement> validInsideOutside =
                 EnumSet.of(PortLabelPlacement.INSIDE, PortLabelPlacement.OUTSIDE);
-        if (Sets.intersection(validInsideOutside, placement).size() > 1) {
+        if (validInsideOutside.stream().filter(placement::contains).count() > 1) {
             return false;
         }
 
@@ -138,7 +136,7 @@ public enum PortLabelPlacement {
                 EnumSet.of(PortLabelPlacement.ALWAYS_SAME_SIDE,
                         PortLabelPlacement.ALWAYS_OTHER_SAME_SIDE,
                         PortLabelPlacement.SPACE_EFFICIENT);
-        if (Sets.intersection(validPosition, placement).size() > 1) {
+        if (validPosition.stream().filter(placement::contains).count() > 1) {
             return false;
         }
 

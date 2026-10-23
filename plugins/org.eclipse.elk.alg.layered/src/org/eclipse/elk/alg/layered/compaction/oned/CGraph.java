@@ -16,10 +16,10 @@ package org.eclipse.elk.alg.layered.compaction.oned;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.core.options.Direction;
 
-import com.google.common.collect.Lists;
 
 /**
  * Internal representation of a constraint graph.
@@ -30,9 +30,9 @@ public final class CGraph {
     // Variables are public for convenience reasons since this class is used internally only.
     // SUPPRESS CHECKSTYLE NEXT 4 VisibilityModifier
     /** the list of {@link CNode}s modeling the constraints in this graph. */
-    public List<CNode> cNodes = Lists.newArrayList();
+    public List<CNode> cNodes = new ArrayList<>();
     /** groups of elements that are supposed to stay in the configuration they are. */
-    public List<CGroup> cGroups = Lists.newArrayList();
+    public List<CGroup> cGroups = new ArrayList<>();
     /** the directions that are supported for compaction. */
     private EnumSet<Direction> supportedDirections;
     

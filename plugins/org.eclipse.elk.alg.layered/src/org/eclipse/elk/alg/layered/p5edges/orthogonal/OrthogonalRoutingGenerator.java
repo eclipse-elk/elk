@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.eclipse.elk.alg.layered.DebugUtil;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -32,8 +34,6 @@ import org.eclipse.elk.alg.layered.p5edges.orthogonal.direction.RoutingDirection
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * Edge routing implementation that creates orthogonal bend points. Inspired by:
@@ -161,8 +161,8 @@ public final class OrthogonalRoutingGenerator {
             final double startPos) {
 
         // Keep track of our hyperedge segements, and which ports they were created for
-        Map<LPort, HyperEdgeSegment> portToEdgeSegmentMap = Maps.newHashMap();
-        List<HyperEdgeSegment> edgeSegments = Lists.newArrayList();
+        Map<LPort, HyperEdgeSegment> portToEdgeSegmentMap = new HashMap<>();
+        List<HyperEdgeSegment> edgeSegments = new ArrayList<>();
 
         // create hyperedge segments for eastern output ports of the left layer and for western output ports of the
         // right layer
@@ -494,8 +494,8 @@ public final class OrthogonalRoutingGenerator {
         // determine sources, targets, incoming count and outgoing count; targets are only
         // added to the list if they only connect westward ports (that is, if all their
         // horizontal segments point to the right)
-        List<HyperEdgeSegment> sources = Lists.newArrayList();
-        List<HyperEdgeSegment> rightwardTargets = Lists.newArrayList();
+        List<HyperEdgeSegment> sources = new ArrayList<>();
+        List<HyperEdgeSegment> rightwardTargets = new ArrayList<>();
         for (HyperEdgeSegment node : segments) {
             node.setInWeight(node.getIncomingSegmentDependencies().size());
             node.setOutWeight(node.getOutgoingSegmentDependencies().size());

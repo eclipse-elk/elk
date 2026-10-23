@@ -19,6 +19,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 import org.eclipse.elk.alg.layered.LayeredPhases;
 import org.eclipse.elk.alg.layered.graph.LEdge;
@@ -38,9 +42,6 @@ import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 import org.eclipse.elk.core.util.Pair;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 /**
  * This algorithm is an implementation for solving the node placement problem
@@ -137,7 +138,7 @@ public final class BKNodePlacer implements ILayoutPhase<LayeredPhases, LGraph> {
     
     private LGraph lGraph;
     /** List of edges involved in type 1 conflicts (see above). */
-    private final Set<LEdge> markedEdges = Sets.newHashSet();
+    private final Set<LEdge> markedEdges = new HashSet<>();
     /**  Precalculated information on nodes' neighborhoods etc. */
     private NeighborhoodInformation ni;
 
@@ -170,7 +171,7 @@ public final class BKNodePlacer implements ILayoutPhase<LayeredPhases, LGraph> {
         // Initialize four layouts which result from the two possible directions respectively.
         BKAlignedLayout rightdown = null, rightup = null, leftdown = null, leftup = null;
         // SUPPRESS CHECKSTYLE NEXT MagicNumber
-        List<BKAlignedLayout> layouts = Lists.newArrayListWithCapacity(4);
+        List<BKAlignedLayout> layouts = new ArrayList<>(4);
         switch (layeredGraph.getProperty(LayeredOptions.NODE_PLACEMENT_BK_FIXED_ALIGNMENT)) {
             case LEFTDOWN:
                 leftdown =
@@ -515,7 +516,7 @@ public final class BKNodePlacer implements ILayoutPhase<LayeredPhases, LGraph> {
      * @return The blocks of the given layout
      */
     static Map<LNode, List<LNode>> getBlocks(final BKAlignedLayout bal) {
-        Map<LNode, List<LNode>> blocks = Maps.newLinkedHashMap();
+        Map<LNode, List<LNode>> blocks = new LinkedHashMap<>();
         
         for (Layer layer : bal.layeredGraph.getLayers()) {
             for (LNode node : layer.getNodes()) {
@@ -523,7 +524,7 @@ public final class BKNodePlacer implements ILayoutPhase<LayeredPhases, LGraph> {
                 List<LNode> blockContents = blocks.get(root);
                 
                 if (blockContents == null) {
-                    blockContents = Lists.newArrayList();
+                    blockContents = new ArrayList<>();
                     blocks.put(root, blockContents);
                 }
                 
@@ -542,10 +543,10 @@ public final class BKNodePlacer implements ILayoutPhase<LayeredPhases, LGraph> {
      * @return The classes of the given layout
      */
     static Map<LNode, List<LNode>> getClasses(final BKAlignedLayout bal, final IElkProgressMonitor monitor) {
-        Map<LNode, List<LNode>> classes = Maps.newLinkedHashMap();
+        Map<LNode, List<LNode>> classes = new LinkedHashMap<>();
         
         // We need to enumerate all block roots
-        Set<LNode> roots = Sets.newLinkedHashSet(Arrays.asList(bal.root));
+        Set<LNode> roots = new LinkedHashSet<>(Arrays.asList(bal.root));
         for (LNode root : roots) {
             if (root == null) {
                 monitor.log("There are no classes in a balanced layout.");
@@ -555,7 +556,7 @@ public final class BKNodePlacer implements ILayoutPhase<LayeredPhases, LGraph> {
             List<LNode> classContents = classes.get(sink);
             
             if (classContents == null) {
-                classContents = Lists.newArrayList();
+                classContents = new ArrayList<>();
                 classes.put(sink, classContents);
             }
             

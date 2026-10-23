@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LNode;
@@ -26,9 +29,6 @@ import org.eclipse.elk.alg.layered.graph.LPort;
 import org.eclipse.elk.alg.layered.graph.Layer;
 import org.eclipse.elk.core.options.PortSide;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 /**
  * Crossings counter implementation specialized for hyperedges. It also works for normal edges,
@@ -71,8 +71,8 @@ public class HyperedgeCrossingsCounter {
      * Hyperedge representation.
      */
     private static class Hyperedge implements Comparable<Hyperedge> {
-        private List<LEdge> edges = Lists.newArrayList();
-        private List<LPort> ports = Lists.newArrayList();
+        private List<LEdge> edges = new ArrayList<>();
+        private List<LPort> ports = new ArrayList<>();
         private int upperLeft;
         private int lowerLeft;
         private int upperRight;
@@ -213,8 +213,8 @@ public class HyperedgeCrossingsCounter {
         }
         
         // Gather hyperedges
-        Map<LPort, Hyperedge> port2HyperedgeMap = Maps.newHashMap();
-        Set<Hyperedge> hyperedgeSet = Sets.newLinkedHashSet();
+        Map<LPort, Hyperedge> port2HyperedgeMap = new HashMap<>();
+        Set<Hyperedge> hyperedgeSet = new LinkedHashSet<>();
         for (LNode node : leftLayer) {
             for (LPort sourcePort : node.getPorts()) {
                 for (LEdge edge : sourcePort.getOutgoingEdges()) {

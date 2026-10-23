@@ -19,12 +19,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LPort;
 import org.eclipse.elk.alg.layered.p5edges.orthogonal.direction.BaseRoutingDirectionStrategy;
 import org.eclipse.elk.core.util.Pair;
 
-import com.google.common.collect.Lists;
 
 /**
  * Instances of this class represent the "trunk" of a hyper edge. In left-to-right layouts, this will be the vertical
@@ -61,7 +61,7 @@ public class HyperEdgeSegment implements Comparable<HyperEdgeSegment> {
     /** routing strategy which will ultimately decide how edges will be routed. */
     private final BaseRoutingDirectionStrategy routingStrategy;
     /** ports represented by this hypernode. */
-    private final List<LPort> ports = Lists.newArrayList();
+    private final List<LPort> ports = new ArrayList<>();
     
     /** mark value used for cycle breaking (to be accessed directly). */
     // SUPPRESS CHECKSTYLE NEXT Visibility 
@@ -76,18 +76,18 @@ public class HyperEdgeSegment implements Comparable<HyperEdgeSegment> {
     private double endPosition = Double.NaN;
     
     /** sorted list of coordinates where incoming connections enter this segment. */
-    private final LinkedList<Double> incomingConnectionCoordinates = Lists.newLinkedList();
+    private final LinkedList<Double> incomingConnectionCoordinates = new LinkedList<>();
     /** sorted list of coordinates where outgoing connections leave this segment. */
-    private final LinkedList<Double> outgoingConnectionCoordinates = Lists.newLinkedList();
+    private final LinkedList<Double> outgoingConnectionCoordinates = new LinkedList<>();
     
     /** list of outgoing dependencies to other edge segments. */
-    private final List<HyperEdgeSegmentDependency> outgoingSegmentDependencies = Lists.newArrayList();
+    private final List<HyperEdgeSegmentDependency> outgoingSegmentDependencies = new ArrayList<>();
     /** combined weight of all outgoing dependencies. */
     private int outDepWeight;
     /** combined weight of critical outgoing dependencies. */
     private int criticalOutDepWeight;
     /** list of incoming dependencies from other edge segments. */
-    private final List<HyperEdgeSegmentDependency> incomingSegmentDependencies = Lists.newArrayList();
+    private final List<HyperEdgeSegmentDependency> incomingSegmentDependencies = new ArrayList<>();
     /** combined weight of all incoming dependencies. */
     private int inDepWeight;
     /** combined weight of critical incoming dependencies. */

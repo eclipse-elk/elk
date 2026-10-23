@@ -17,16 +17,16 @@ package org.eclipse.elk.alg.layered.p4nodes.bk;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
+import java.util.HashSet;
+import java.util.LinkedList;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LNode;
 import org.eclipse.elk.alg.layered.graph.LPort;
 import org.eclipse.elk.alg.layered.p4nodes.bk.BKAlignedLayout.HDirection;
 import org.eclipse.elk.alg.layered.p4nodes.bk.BKAlignedLayout.VDirection;
+import org.eclipse.elk.alg.layered.compaction.oned.CompareFuzzy;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import com.google.common.math.DoubleMath;
 
 /**
  * 
@@ -52,12 +52,12 @@ public abstract class ThresholdStrategy {
     /**
      * We keep track of which blocks have been completely finished.
      */
-    protected Set<LNode> blockFinished = Sets.newHashSet();
+    protected Set<LNode> blockFinished = new HashSet<>();
 
     /**
      * A queue with blocks that are postponed during compaction.
      */
-    protected Queue<Postprocessable> postProcessablesQueue = Lists.newLinkedList();
+    protected Queue<Postprocessable> postProcessablesQueue = new LinkedList<>();
     
     /** 
      * A stack that is used to treat postponed nodes in reversed order.
@@ -392,7 +392,7 @@ public abstract class ThresholdStrategy {
             if (delta > 0 && delta < THRESHOLD) {
                 // target y larger than source y --> shift upwards?
                 double availableSpace = bal.checkSpaceAbove(block.getNode(), delta, ni);
-                assert DoubleMath.fuzzyEquals(availableSpace, 0, EPSILON) || availableSpace >= 0;
+                assert CompareFuzzy.fuzzyEquals(availableSpace, 0, EPSILON) || availableSpace >= 0;
                 bal.shiftBlock(block.getNode(), -availableSpace);
                 return availableSpace > 0;
             } else if (delta < 0 && -delta < THRESHOLD) {
@@ -400,7 +400,7 @@ public abstract class ThresholdStrategy {
                 // direction is up, we possibly shifted some blocks too far upward 
                 // for an edge to be straight, so check if we can shift down again
                 double availableSpace = bal.checkSpaceBelow(block.getNode(), -delta, ni);
-                assert DoubleMath.fuzzyEquals(availableSpace, 0, EPSILON) || availableSpace >= 0;
+                assert CompareFuzzy.fuzzyEquals(availableSpace, 0, EPSILON) || availableSpace >= 0;
                 bal.shiftBlock(block.getNode(), availableSpace);
                 return availableSpace > 0;
             }
