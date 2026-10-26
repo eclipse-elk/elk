@@ -5,6 +5,7 @@
 The Eclipse release process is described in more detail in the [Eclipse Project Handbook](https://www.eclipse.org/projects/handbook/#release). The review process is tracked in an [issue such as this](https://gitlab.eclipse.org/eclipsefdn/emo-team/emo/-/issues/258).
 
 1. Add a new release on ELK's [project page](https://projects.eclipse.org/projects/modeling.elk).
+    - Remember to add a release note page somewhere [here](https://github.com/eclipse-elk/elk/tree/master/docs/content/downloads/releasenotes).
 1. For major releases:
     1. Update NOTICE.md file with relevant information regarding used third-party content.
     2. Run `mvn org.eclipse.dash:license-tool-plugin:license-check -Dmaven.repo.local=./mvnrepo clean -Dtycho.target.eager=true -Dmaven.test.skip=true -Ddash.summary=../DEPENDENCIES` and commit the updated DEPENDENCIES file.
