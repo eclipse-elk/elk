@@ -1,0 +1,56 @@
+/*******************************************************************************
+ * Copyright (c) 2024 Kiel University and others.
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *******************************************************************************/
+package org.eclipse.elk.alg.indentedtree
+
+import org.eclipse.elk.alg.indentedtree.IndentedtreeLayoutProvider
+import org.eclipse.elk.core.math.ElkPadding
+
+bundle {
+    metadataClass IndentedtreeMetaDataProvider
+    idPrefix org.eclipse.elk.alg.indentedtree
+}
+
+algorithm indentedtree(IndentedtreeLayoutProvider) {
+    label "indentedtree"
+    description
+        "Create a filesystem-like layout for trees. Assume that the graph is a tree and that no ports exist."
+    metadataClass options.IndentedtreeOptions
+    supports org.eclipse.elk.padding = new ElkPadding(10)
+    supports verticalNodeSpacing
+    supports relativeIndentation
+    supports horizontalEdgeIndentation
+}
+
+option relativeIndentation: double {
+    label "relativeIndentation"
+    description
+        "indentation relative to the vertical edge to the left of this node"
+    default = 5.0
+    lowerBound = 0.0
+    targets nodes
+}
+
+option horizontalEdgeIndentation: double {
+    label "horizontalEdgeIndentation"
+    description
+        "horizontal indentation of the edge leading from a node to its children"
+    lowerBound = 0.0
+    // no default value, as that is dynamically set to half the parent node's width if option is not set
+    targets nodes
+}
+
+option verticalNodeSpacing: double {
+    label "verticalNodeSpacing"
+    description
+        "vertical spacing between a node and its successor"
+    default = 5.0
+    lowerBound = 0.0
+    targets nodes
+}
