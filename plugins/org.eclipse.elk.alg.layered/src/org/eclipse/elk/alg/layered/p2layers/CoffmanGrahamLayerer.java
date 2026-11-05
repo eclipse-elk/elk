@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.PriorityQueue;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.LayeredPhases;
 import org.eclipse.elk.alg.layered.graph.LEdge;
@@ -30,9 +31,9 @@ import org.eclipse.elk.core.alg.ILayoutPhase;
 import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Lists;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A layering algorithm that places nodes in layers subject to a bound on the maximum number of (original) nodes per 
@@ -69,7 +70,7 @@ public class CoffmanGrahamLayerer implements ILayoutPhase<LayeredPhases, LGraph>
     /** For each node, stores the positions of incoming nodes in the topological ordering. 
      *  Due to the way the positions are added to the lists, one can assume that the 
      *  lists are sorted. */
-    private ListMultimap<LNode, Integer> inTopo = ArrayListMultimap.create(); 
+    private Map<LNode, List<Integer>> inTopo = new HashMap<>();
     
     @Override
     public void process(final LGraph layeredGraph, final IElkProgressMonitor progressMonitor) {
@@ -135,7 +136,7 @@ public class CoffmanGrahamLayerer implements ILayoutPhase<LayeredPhases, LGraph>
                 }
                 LNode tgt = e.getTarget().getNode();
                 inDeg[tgt.id]--;
-                inTopo.put(tgt, topoOrd[v.id]);
+                inTopo.computeIfAbsent(tgt, k -> new ArrayList<>()).add(topoOrd[v.id]);
                 if (inDeg[tgt.id] == 0) {
                     sources.add(tgt); // 'tgt' is added according to its priority
                 }
@@ -163,7 +164,7 @@ public class CoffmanGrahamLayerer implements ILayoutPhase<LayeredPhases, LGraph>
         }
 
         // assign the layers
-        List<Layer> layers = Lists.newArrayList();
+        List<Layer> layers = new ArrayList<>();
         Layer currentLayer = createLayer(layeredGraph, layers);
         while (!sinks.isEmpty()) {
             // select a node for which all outgoing nodes have been placed,
@@ -231,8 +232,8 @@ public class CoffmanGrahamLayerer implements ILayoutPhase<LayeredPhases, LGraph>
     }
     
     private int compareNodesInTopo(final LNode u, final LNode v) {
-        List<Integer> inListU = inTopo.get(u);
-        List<Integer> inListV = inTopo.get(v);
+        List<Integer> inListU = inTopo.getOrDefault(u, Collections.emptyList());
+        List<Integer> inListV = inTopo.getOrDefault(v, Collections.emptyList());
         ListIterator<Integer> itU = inListU.listIterator(inListU.size());
         ListIterator<Integer> itV = inListV.listIterator(inListV.size());
         

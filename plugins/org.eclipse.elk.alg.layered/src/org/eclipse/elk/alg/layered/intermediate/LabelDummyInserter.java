@@ -32,9 +32,8 @@ import org.eclipse.elk.core.options.EdgeLabelPlacement;
 import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import java.util.function.Predicate;
+import java.util.ArrayList;
 
 /**
  * Processor that inserts dummy nodes into edges that have center labels to reserve space for them.
@@ -55,18 +54,15 @@ import com.google.common.collect.Lists;
 public final class LabelDummyInserter implements ILayoutProcessor<LGraph> {
     
     /** Predicate that checks for center labels. */
-    private static final Predicate<LLabel> CENTER_LABEL = new Predicate<LLabel>() {
-        public boolean apply(final LLabel label) {
-            return label.getProperty(LayeredOptions.EDGE_LABELS_PLACEMENT) == EdgeLabelPlacement.CENTER;
-        }
-    };
+    private static final Predicate<LLabel> CENTER_LABEL =
+            label -> label.getProperty(LayeredOptions.EDGE_LABELS_PLACEMENT) == EdgeLabelPlacement.CENTER;
     
     @Override
     public void process(final LGraph layeredGraph, final IElkProgressMonitor monitor) {
         monitor.begin("Label dummy insertions", 1);
         
         // We cannot add the nodes to the graph while we're iterating over it, so remember the dummy nodes we create
-        List<LNode> newDummyNodes = Lists.newArrayList();
+        List<LNode> newDummyNodes = new ArrayList<>();
         
         double edgeLabelSpacing = layeredGraph.getProperty(LayeredOptions.SPACING_EDGE_LABEL);
         double labelLabelSpacing = layeredGraph.getProperty(LayeredOptions.SPACING_LABEL_LABEL);
@@ -78,7 +74,7 @@ public final class LabelDummyInserter implements ILayoutProcessor<LGraph> {
                     double thickness = retrieveThickness(edge);
                     
                     // Create dummy node and remember represented labels (to be filled below)
-                    List<LLabel> representedLabels = Lists.newArrayListWithCapacity(edge.getLabels().size());
+                    List<LLabel> representedLabels = new ArrayList<>(edge.getLabels().size());
                     LNode dummyNode = createLabelDummy(layeredGraph, edge, thickness, representedLabels);
                     newDummyNodes.add(dummyNode);
                     
@@ -129,7 +125,7 @@ public final class LabelDummyInserter implements ILayoutProcessor<LGraph> {
      */
     private boolean edgeNeedsToBeProcessed(final LEdge edge) {
         return edge.getSource().getNode() != edge.getTarget().getNode()
-                && Iterables.any(edge.getLabels(), CENTER_LABEL);
+                && java.util.stream.StreamSupport.stream(edge.getLabels().spliterator(), false).anyMatch(CENTER_LABEL);
     }
     
     /**

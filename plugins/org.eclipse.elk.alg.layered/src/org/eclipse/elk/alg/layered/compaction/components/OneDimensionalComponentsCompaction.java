@@ -17,6 +17,8 @@ package org.eclipse.elk.alg.layered.compaction.components;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.eclipse.elk.alg.layered.compaction.oned.CGraph;
 import org.eclipse.elk.alg.layered.compaction.oned.CGroup;
@@ -27,8 +29,6 @@ import org.eclipse.elk.core.options.Direction;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 import org.eclipse.elk.core.util.Pair;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * Compacts connected components using a {@link OneDimensionalCompactor}. Consecutively applies
@@ -62,8 +62,8 @@ public final class OneDimensionalComponentsCompaction<N, E> {
         HORZ,
         VERT
     }
-    private static final Set<Direction> LEFT_RIGHT = Sets.newHashSet(Direction.LEFT, Direction.RIGHT);
-    private static final Set<Direction> UP_DOWN = Sets.newHashSet(Direction.UP, Direction.DOWN);
+    private static final Set<Direction> LEFT_RIGHT = new HashSet<>(java.util.Arrays.asList(Direction.LEFT, Direction.RIGHT));
+    private static final Set<Direction> UP_DOWN = new HashSet<>(java.util.Arrays.asList(Direction.UP, Direction.DOWN));
     
     /** Use {@link #init(IConnectedComponents, double)}. */
     private OneDimensionalComponentsCompaction() { }
@@ -102,9 +102,9 @@ public final class OneDimensionalComponentsCompaction<N, E> {
     public void compact(final IElkProgressMonitor monitor) {
         
         // separate vertical and horizontal extensions
-        List<CNode> allNodes = Lists.newArrayList();
-        verticalExternalExtensions = Lists.newArrayList();
-        horizontalExternalExtensions = Lists.newArrayList();
+        List<CNode> allNodes = new ArrayList<>();
+        verticalExternalExtensions = new ArrayList<>();
+        horizontalExternalExtensions = new ArrayList<>();
 
         for (Entry<IExternalExtension<E>, Pair<CGroup, CNode>> entry : transformer
                 .getExternalExtensions().entrySet()) {
@@ -324,7 +324,8 @@ public final class OneDimensionalComponentsCompaction<N, E> {
     private void addPlaceholders(final Dir dir) {
         Set<Direction> dirs = (dir == Dir.VERT) ? UP_DOWN : LEFT_RIGHT;
         for (Direction d : dirs) {
-            for (Pair<CGroup, CNode> pair : transformer.getExternalPlaceholder().get(d)) {
+            for (Pair<CGroup, CNode> pair : transformer.getExternalPlaceholder()
+                    .getOrDefault(d, java.util.Collections.emptyList())) {
                 compactionGraph.cNodes.add(pair.getSecond());
                 compactionGraph.cGroups.add(pair.getSecond().cGroup);
             }
@@ -334,7 +335,8 @@ public final class OneDimensionalComponentsCompaction<N, E> {
     private void removePlaceholders(final Dir dir) {
         Set<Direction> dirs = (dir == Dir.VERT) ? UP_DOWN : LEFT_RIGHT;
         for (Direction d : dirs) {
-            for (Pair<CGroup, CNode> pair : transformer.getExternalPlaceholder().get(d)) {
+            for (Pair<CGroup, CNode> pair : transformer.getExternalPlaceholder()
+                    .getOrDefault(d, java.util.Collections.emptyList())) {
                 compactionGraph.cNodes.remove(pair.getSecond());
                 compactionGraph.cGroups.remove(pair.getSecond().cGroup);
             }
@@ -344,7 +346,8 @@ public final class OneDimensionalComponentsCompaction<N, E> {
     private void updatePlaceholders(final Dir dir) {
         Set<Direction> dirs = (dir == Dir.VERT) ? UP_DOWN : LEFT_RIGHT;
         for (Direction d : dirs) {
-            for (Pair<CGroup, CNode> pair : transformer.getExternalPlaceholder().get(d)) {
+            for (Pair<CGroup, CNode> pair : transformer.getExternalPlaceholder()
+                    .getOrDefault(d, java.util.Collections.emptyList())) {
                 CNode cNode = pair.getSecond();
                 CGroup parentComponentGroup = pair.getFirst();
                 

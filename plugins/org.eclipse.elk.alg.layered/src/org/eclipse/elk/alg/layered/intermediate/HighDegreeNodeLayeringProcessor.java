@@ -26,9 +26,8 @@ import org.eclipse.elk.core.alg.ILayoutProcessor;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 import org.eclipse.elk.core.util.Pair;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import java.util.function.Function;
+import java.util.ArrayList;
 
 /**
  * Tries to improve the legibility of graphs that contain nodes of a very high degree. With such
@@ -86,7 +85,7 @@ public class HighDegreeNodeLayeringProcessor implements ILayoutProcessor<LGraph>
             // -----------------------------------------------------------------------
             //  #1 find high degree nodes and find their incoming and outgoing trees
             // -----------------------------------------------------------------------
-            List<Pair<LNode, HighDegreeNodeInformation>> highDegreeNodes = Lists.newArrayList();
+            List<Pair<LNode, HighDegreeNodeInformation>> highDegreeNodes = new ArrayList<>();
             int incMax = -1;
             int outMax = -1;
             for (LNode n : lay.getNodes()) {
@@ -101,7 +100,7 @@ public class HighDegreeNodeLayeringProcessor implements ILayoutProcessor<LGraph>
             // -----------------------------------------------------------------------
             //  #2 insert layers before the current layer and move the trees
             // -----------------------------------------------------------------------
-            List<Layer> preLayers = Lists.newArrayList();
+            List<Layer> preLayers = new ArrayList<>();
             for (int i = 0; i < incMax; ++i) {
                 preLayers.add(0, prependLayer(layerIt));
             }
@@ -120,7 +119,7 @@ public class HighDegreeNodeLayeringProcessor implements ILayoutProcessor<LGraph>
             // -----------------------------------------------------------------------
             //  #2 insert layers after the current layer and move the trees
             // -----------------------------------------------------------------------
-            List<Layer> afterLayers = Lists.newArrayList();
+            List<Layer> afterLayers = new ArrayList<>();
             for (int i = 0; i < outMax; ++i) {
                 afterLayers.add(appendLayer(layerIt));
             }
@@ -184,7 +183,7 @@ public class HighDegreeNodeLayeringProcessor implements ILayoutProcessor<LGraph>
 
                 // remember the tree root for later processing
                 if (hdni.incTreeRoots == null) {
-                    hdni.incTreeRoots = Lists.newArrayList();
+                    hdni.incTreeRoots = new ArrayList<>();
                 }
                 hdni.incTreeRoots.add(src);
             }
@@ -210,7 +209,7 @@ public class HighDegreeNodeLayeringProcessor implements ILayoutProcessor<LGraph>
                 hdni.outTreesMaxHeight = Math.max(hdni.outTreesMaxHeight, treeHeight);
 
                 if (hdni.outTreeRoots == null) {
-                    hdni.outTreeRoots = Lists.newArrayList();
+                    hdni.outTreeRoots = new ArrayList<>();
                 }
                 hdni.outTreeRoots.add(tgt);
             }
@@ -270,7 +269,7 @@ public class HighDegreeNodeLayeringProcessor implements ILayoutProcessor<LGraph>
     }
     
     private static int degree(final LNode node, final Function<LNode, Iterable<LEdge>> edgeSelector) {
-        return Iterables.size(edgeSelector.apply(node));
+        return ((int) java.util.stream.StreamSupport.stream(edgeSelector.apply(node).spliterator(), false).count());
     }
 
     /**
@@ -344,7 +343,7 @@ public class HighDegreeNodeLayeringProcessor implements ILayoutProcessor<LGraph>
         }
         
         // is it a leaf?
-        if (Iterables.isEmpty(descendantEdges.apply(root))) {
+        if (!descendantEdges.apply(root).iterator().hasNext()) {
             return 1;
         }
         

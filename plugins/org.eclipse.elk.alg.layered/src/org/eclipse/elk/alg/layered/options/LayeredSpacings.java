@@ -32,8 +32,7 @@ import org.eclipse.elk.core.util.ElkSpacings.ElkCoreSpacingsBuilder;
 import org.eclipse.elk.graph.properties.IProperty;
 import org.eclipse.elk.graph.properties.IPropertyHolder;
 
-import com.google.common.collect.Lists;
-import com.google.common.math.DoubleMath;
+import org.eclipse.elk.alg.layered.compaction.oned.CompareFuzzy;
 
 /**
  * Utility class to conveniently configure core spacing values ({@link LayeredOptions#SPACING_*}) for a graph element or
@@ -61,7 +60,7 @@ public final class LayeredSpacings {
         public static final IProperty<Double> BASE_SPACING_OPTION = LayeredOptions.SPACING_NODE_NODE;
         
         // @formatter:off
-        private static final List<IProperty<Double>> DEPENDENT_SPACING_OPTIONS = Lists.newArrayList(
+        private static final List<IProperty<Double>> DEPENDENT_SPACING_OPTIONS = java.util.Arrays.asList(
             // Sorted alphabetically
             // First the ones inherited from CoreOptions (with possibly overridden default value)
             LayeredOptions.SPACING_COMPONENT_COMPONENT,
@@ -84,7 +83,7 @@ public final class LayeredSpacings {
         static {
             assert BASE_SPACING_OPTION.getDefault() != null : "Base spacing default value must be non-null.";
             // Avoid division by zero.
-            assert !DoubleMath.fuzzyEquals(0.0d, BASE_SPACING_OPTION.getDefault(),
+            assert !CompareFuzzy.fuzzyEquals(0.0d, BASE_SPACING_OPTION.getDefault(),
                     DOUBLE_EQ_EPSILON) : "Base spacing default value must be different from 0.0d.";
         }
         

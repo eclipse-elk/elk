@@ -18,8 +18,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.ArrayList;
 
-import com.google.common.collect.Lists;
 
 /**
  * Simple scaffold for a scanline algorithm.
@@ -40,7 +40,8 @@ public final class Scanline<T> {
             final Iterable<EventHandler<T>> eventHandlers) {
         this.comparator = comparator;
         this.points = points;
-        this.eventHandlers = Lists.newArrayList(eventHandlers);
+        this.eventHandlers = new ArrayList<>();
+        eventHandlers.forEach(this.eventHandlers::add);
     }
 
     /**
@@ -57,7 +58,8 @@ public final class Scanline<T> {
     public static <T> void execute(final Iterable<T> points, final Comparator<T> comparator,
             final Iterable<EventHandler<T>> eventHandlers) {
         // copy the points! we will resort them!
-        List<T> copy = Lists.newArrayList(points);
+        List<T> copy = new ArrayList<>();
+        points.forEach(copy::add);
         new Scanline<T>(copy, comparator, eventHandlers).go();
     }
 

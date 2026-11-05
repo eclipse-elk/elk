@@ -25,12 +25,8 @@ import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.Pair;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import java.util.ArrayList;
+import java.util.function.Predicate;
 
 /**
  * A node in a layered graph.
@@ -89,9 +85,9 @@ public final class LNode extends LShape {
     /** the node's node type. */
     private NodeType type = NodeType.NORMAL;
     /** the ports of the node. */
-    private final List<LPort> ports = Lists.newArrayListWithCapacity(6);
+    private final List<LPort> ports = new ArrayList<>(6);
     /** this node's labels. */
-    private final List<LLabel> labels = Lists.newArrayListWithCapacity(2);
+    private final List<LLabel> labels = new ArrayList<>(2);
     /** the nested graph, or @{code null}. */
     private LGraph nestedGraph;
     /** the margin area around this node. */
@@ -244,9 +240,9 @@ public final class LNode extends LShape {
     public Iterable<LPort> getPorts(final PortType portType) {
         switch (portType) {
         case INPUT:
-            return Iterables.filter(ports, LPort.INPUT_PREDICATE);
+            return LGraphUtil.filter(ports, LPort.INPUT_PREDICATE);
         case OUTPUT:
-            return Iterables.filter(ports, LPort.OUTPUT_PREDICATE);
+            return LGraphUtil.filter(ports, LPort.OUTPUT_PREDICATE);
         default:
             return Collections.emptyList();
         }
@@ -261,13 +257,13 @@ public final class LNode extends LShape {
     public Iterable<LPort> getPorts(final PortSide side) {
         switch (side) {
         case NORTH:
-            return Iterables.filter(ports, LPort.NORTH_PREDICATE);
+            return LGraphUtil.filter(ports, LPort.NORTH_PREDICATE);
         case EAST:
-            return Iterables.filter(ports, LPort.EAST_PREDICATE);
+            return LGraphUtil.filter(ports, LPort.EAST_PREDICATE);
         case SOUTH:
-            return Iterables.filter(ports, LPort.SOUTH_PREDICATE);
+            return LGraphUtil.filter(ports, LPort.SOUTH_PREDICATE);
         case WEST:
-            return Iterables.filter(ports, LPort.WEST_PREDICATE);
+            return LGraphUtil.filter(ports, LPort.WEST_PREDICATE);
         default:
             return Collections.emptyList();
         }
@@ -334,7 +330,7 @@ public final class LNode extends LShape {
         }
         
         if (typePredicate != null && sidePredicate != null) {
-            return Iterables.filter(ports, Predicates.and(typePredicate, sidePredicate));
+            return LGraphUtil.filter(ports, typePredicate.and(sidePredicate));
         } else {
             return Collections.emptyList();
         }
@@ -346,12 +342,12 @@ public final class LNode extends LShape {
      * @return an iterable for all incoming edges.
      */
     public Iterable<LEdge> getIncomingEdges() {
-        List<Iterable<LEdge>> iterables = Lists.newArrayList();
+        List<Iterable<LEdge>> iterables = new ArrayList<>();
         for (LPort port : ports) {
             iterables.add(port.getIncomingEdges());
         }
         
-        return Iterables.concat(iterables);
+        return LGraphUtil.concat(iterables);
     }
     
     /**
@@ -360,12 +356,12 @@ public final class LNode extends LShape {
      * @return an iterable for all outgoing edges.
      */
     public Iterable<LEdge> getOutgoingEdges() {
-        List<Iterable<LEdge>> iterables = Lists.newArrayList();
+        List<Iterable<LEdge>> iterables = new ArrayList<>();
         for (LPort port : ports) {
             iterables.add(port.getOutgoingEdges());
         }
         
-        return Iterables.concat(iterables);
+        return LGraphUtil.concat(iterables);
     }
     
     /**
@@ -374,12 +370,12 @@ public final class LNode extends LShape {
      * @return an iterable for all connected edges.
      */
     public Iterable<LEdge> getConnectedEdges() {
-        List<Iterable<LEdge>> iterables = Lists.newArrayList();
+        List<Iterable<LEdge>> iterables = new ArrayList<>();
         for (LPort port : ports) {
             iterables.add(port.getConnectedEdges());
         }
         
-        return Iterables.concat(iterables);
+        return LGraphUtil.concat(iterables);
     }
     
     /**
@@ -515,7 +511,7 @@ public final class LNode extends LShape {
     }
 
     private void findPortIndices() {
-        portSideIndices = Maps.newEnumMap(PortSide.class);
+        portSideIndices = new EnumMap<>(PortSide.class);
         int firstIndexForCurrentSide = 0;
         PortSide currentSide = PortSide.NORTH;
         int currentIndex = 0;
@@ -535,7 +531,7 @@ public final class LNode extends LShape {
 
     @Override
     public String getDesignation() {
-        if (!labels.isEmpty() && !Strings.isNullOrEmpty(labels.get(0).getText())) {
+        if (!labels.isEmpty() && !(labels.get(0).getText() == null || labels.get(0).getText().isEmpty())) {
             return labels.get(0).getText();
         }
         String id = super.getDesignation();

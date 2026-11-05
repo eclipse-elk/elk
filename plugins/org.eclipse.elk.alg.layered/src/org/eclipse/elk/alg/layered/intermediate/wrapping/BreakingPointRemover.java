@@ -16,6 +16,7 @@ package org.eclipse.elk.alg.layered.intermediate.wrapping;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -32,8 +33,8 @@ import org.eclipse.elk.core.alg.ILayoutProcessor;
 import org.eclipse.elk.core.math.KVectorChain;
 import org.eclipse.elk.core.options.EdgeRouting;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
+import org.eclipse.elk.alg.layered.graph.LGraphUtil;
 
-import com.google.common.collect.Lists;
 
 /**
  * The processor locates any {@link NodeType#BREAKING_POINT} end dummies 
@@ -74,7 +75,7 @@ public class BreakingPointRemover implements ILayoutProcessor<LGraph> {
         
         edgeRouting = graph.getProperty(LayeredOptions.EDGE_ROUTING);
         for (Layer l : graph.getLayers()) {
-            for (LNode node : Lists.newArrayList(l.getNodes())) {
+            for (LNode node : new ArrayList<>(l.getNodes())) {
                 
                 if (BPInfo.isEnd(node)) {
                     BPInfo bpi = node.getProperty(InternalProperties.BREAKING_POINT_INFO);
@@ -112,15 +113,15 @@ public class BreakingPointRemover implements ILayoutProcessor<LGraph> {
                 List<LEdge> e3 = bpi.originalEdge.getProperty(InternalProperties.SPLINE_EDGE_CHAIN);
 
                 // join them (... and remember to reverse some of the segments)
-                List<SplineSegment> joinedSegments = Lists.newArrayList();
+                List<SplineSegment> joinedSegments = new ArrayList<>();
                 joinedSegments.addAll(s1);
                 s2.forEach(s -> s.inverseOrder = true);
-                joinedSegments.addAll(Lists.reverse(s2));
+                joinedSegments.addAll(LGraphUtil.reversed(s2));
                 joinedSegments.addAll(s3);
                 
-                List<LEdge> joinedEdges = Lists.newArrayList();
+                List<LEdge> joinedEdges = new ArrayList<>();
                 joinedEdges.addAll(e1);
-                joinedEdges.addAll(Lists.reverse(e2));
+                joinedEdges.addAll(LGraphUtil.reversed(e2));
                 joinedEdges.addAll(e3);
 
                 // transfer the information to the original edge
@@ -140,7 +141,7 @@ public class BreakingPointRemover implements ILayoutProcessor<LGraph> {
             case POLYLINE:
                 newBends.addAll(bpi.nodeStartEdge.getBendPoints());
                 newBends.add(bpi.start.getPosition());
-                newBends.addAll(Lists.reverse(bpi.startEndEdge.getBendPoints()));
+                newBends.addAll(LGraphUtil.reversed(bpi.startEndEdge.getBendPoints()));
                 newBends.add(bpi.end.getPosition());
                 newBends.addAll(bpi.originalEdge.getBendPoints());
                 break;
@@ -150,7 +151,7 @@ public class BreakingPointRemover implements ILayoutProcessor<LGraph> {
             // of bpi.start and bpi.end can be dropped since they lie on a straight line
             default: // ORTHOGONAL
                 newBends.addAll(bpi.nodeStartEdge.getBendPoints());
-                newBends.addAll(Lists.reverse(bpi.startEndEdge.getBendPoints()));
+                newBends.addAll(LGraphUtil.reversed(bpi.startEndEdge.getBendPoints()));
                 newBends.addAll(bpi.originalEdge.getBendPoints());
         }
 

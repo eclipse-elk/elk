@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.LinkedList;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -35,8 +36,6 @@ import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.math.KVectorChain;
 import org.eclipse.elk.graph.properties.IProperty;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 /**
  * A utility class for debugging of ELK Layered.
@@ -87,8 +86,8 @@ public final class JsonDebugUtil {
         beginGraph(writer, layeredGraph);
         beginChildNodeList(writer, 1);
 
-        String indent1 = Strings.repeat(INDENT, 2);
-        String indent2 = Strings.repeat(INDENT, 3); // SUPPRESS CHECKSTYLE MagicNumber
+        String indent1 = (INDENT).repeat(2);
+        String indent2 = (INDENT).repeat(3); // SUPPRESS CHECKSTYLE MagicNumber
         int edgeId = 0;
         
         Iterator<LinearSegment> segmentIterator = segmentList.iterator();
@@ -148,8 +147,8 @@ public final class JsonDebugUtil {
         beginGraph(writer, layeredGraph);
         beginChildNodeList(writer, 1);
 
-        String indent1 = Strings.repeat(INDENT, 2);
-        String indent2 = Strings.repeat(INDENT, 3); // SUPPRESS CHECKSTYLE MagicNumber
+        String indent1 = (INDENT).repeat(2);
+        String indent2 = (INDENT).repeat(3); // SUPPRESS CHECKSTYLE MagicNumber
         int edgeId = 0;
         
         Iterator<HyperEdgeSegment> hypernodeIterator = hypernodes.iterator();
@@ -291,7 +290,7 @@ public final class JsonDebugUtil {
         KVector offset = new KVector(lgraph.getOffset())
                 .add(lgraph.getPadding().left, lgraph.getPadding().top);
         
-        List<LEdge> edges = Lists.newLinkedList();
+        List<LEdge> edges = new LinkedList<>();
         beginChildNodeList(writer, indentation);
         
         // Write layerless nodes and collect edges
@@ -330,7 +329,7 @@ public final class JsonDebugUtil {
      *            the indentation level to use.
      */
     private static void beginChildNodeList(final StringWriter writer, final int indentation) {
-        writer.write(",\n" + Strings.repeat(INDENT, indentation) + "\"children\": [");
+        writer.write(",\n" + (INDENT).repeat(indentation) + "\"children\": [");
     }
 
 
@@ -343,7 +342,7 @@ public final class JsonDebugUtil {
      *            the indentation level to use.
      */
     private static void endChildNodeList(final StringWriter writer, final int indentation) {
-        writer.write("\n" + Strings.repeat(INDENT, indentation) + "],\n");
+        writer.write("\n" + (INDENT).repeat(indentation) + "],\n");
     }
 
 
@@ -377,12 +376,12 @@ public final class JsonDebugUtil {
             final int indentation, final KVector offset) {
         
         if (nodes.isEmpty()) {
-            return Lists.newLinkedList();
+            return new LinkedList<>();
         }
         
         writeNodes(writer, nodes, indentation, layerNumber, offset);
         
-        List<LEdge> edges = Lists.newLinkedList();
+        List<LEdge> edges = new LinkedList<>();
         
         // Collect the edges
         for (LNode node : nodes) {
@@ -413,8 +412,8 @@ public final class JsonDebugUtil {
     private static void writeNodes(final StringWriter writer, final List<LNode> nodes, final int indentation,
             final int layerNumber, final KVector offset) {
         
-        String indent0 = Strings.repeat(INDENT, indentation);
-        String indent1 = Strings.repeat(INDENT, indentation + 1);
+        String indent0 = (INDENT).repeat(indentation);
+        String indent1 = (INDENT).repeat(indentation + 1);
         int nodeNumber = -1;
         Iterator<LNode> nodesIterator = nodes.iterator();
         while (nodesIterator.hasNext()) {
@@ -459,9 +458,9 @@ public final class JsonDebugUtil {
     private static void writeEdges(final StringWriter writer, final List<LEdge> edges, final int indentation,
             final KVector offset) {
     
-        String indent0 = Strings.repeat(INDENT, indentation);
-        String indent1 = Strings.repeat(INDENT, indentation + 1);
-        String indent2 = Strings.repeat(INDENT, indentation + 2);
+        String indent0 = (INDENT).repeat(indentation);
+        String indent1 = (INDENT).repeat(indentation + 1);
+        String indent2 = (INDENT).repeat(indentation + 2);
         writer.write(indent0 + "\"edges\": [");
         Iterator<LEdge> edgesIterator = edges.iterator();
         while (edgesIterator.hasNext()) {
@@ -505,8 +504,8 @@ public final class JsonDebugUtil {
     private static void writeBendPoints(final StringWriter writer, final KVectorChain bendPoints,
             final int indentation, final KVector offset) {
         
-        String indent0 = Strings.repeat(INDENT, indentation);
-        String indent1 = Strings.repeat(INDENT, indentation + 1);
+        String indent0 = (INDENT).repeat(indentation);
+        String indent1 = (INDENT).repeat(indentation + 1);
         writer.write(indent0 + "\"bendPoints\": [");
         Iterator<KVector> pointsIterator = bendPoints.iterator();
         while (pointsIterator.hasNext()) {
@@ -530,9 +529,9 @@ public final class JsonDebugUtil {
      *            the indentation level to use.
      */
     private static void writePorts(final StringWriter writer, final List<LPort> ports, final int indentation) {
-            String indent0 = Strings.repeat(INDENT, indentation);
-            String indent1 = Strings.repeat(INDENT, indentation + 1);
-            String indent2 = Strings.repeat(INDENT, indentation + 2);
+            String indent0 = (INDENT).repeat(indentation);
+            String indent1 = (INDENT).repeat(indentation + 1);
+            String indent2 = (INDENT).repeat(indentation + 2);
             writer.write(indent0 + "\"ports\": [");
             Iterator<LPort> portsIterator = ports.iterator();
             while (portsIterator.hasNext()) {
@@ -566,8 +565,8 @@ public final class JsonDebugUtil {
     private static void writeProperties(final StringWriter writer, final Map<IProperty<?>, Object> properties,
             final int indentation) {
         
-        String indent0 = Strings.repeat(INDENT, indentation);
-        String indent1 = Strings.repeat(INDENT, indentation + 1);
+        String indent0 = (INDENT).repeat(indentation);
+        String indent1 = (INDENT).repeat(indentation + 1);
         writer.write(indent0 + "\"properties\": {");
         Iterator<Entry<IProperty<?>, Object>> propertiesIterator =
                 properties.entrySet().iterator();

@@ -27,9 +27,7 @@ import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.ElkPort;
 import org.eclipse.emf.ecore.EObject;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Sets;
+import java.util.HashSet;
 
 /**
  * Generates identifiers for graph elements where missing. Inside ELK, this class is mainly used to generate
@@ -219,7 +217,7 @@ public final class GraphIdentifierGenerator {
      * empty or {@code null} itself).
      */
     private String validateIdentifier(final String identifier) {
-        if (Strings.isNullOrEmpty(identifier)) {
+        if (identifier == null || identifier.isEmpty()) {
             return null;
         }
         
@@ -344,10 +342,14 @@ public final class GraphIdentifierGenerator {
     // Uniqueness
     
     private GraphIdentifierGenerator assertAllIdsUnique(final EObject element) {
-        Set<String> knownIds = Sets.newHashSet();
-        Iterator<ElkGraphElement> elementIt = Iterators.filter(element.eAllContents(), ElkGraphElement.class);
-        while (elementIt.hasNext()) {
-            ElkGraphElement e = elementIt.next();
+        Set<String> knownIds = new HashSet<>();
+        Iterator<EObject> allIt = element.eAllContents();
+        while (allIt.hasNext()) {
+            EObject obj = allIt.next();
+            if (!(obj instanceof ElkGraphElement)) {
+                continue;
+            }
+            ElkGraphElement e = (ElkGraphElement) obj;
             while (knownIds.contains(e.getIdentifier())) {
                 String newId = e.getIdentifier() + "_g" + fourDigitPaddedRandomNumber();
                 e.setIdentifier(newId);

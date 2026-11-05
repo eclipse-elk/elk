@@ -14,16 +14,15 @@
  *******************************************************************************/
 package org.eclipse.elk.core.alg;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.elk.core.util.AbstractRandomListAccessor;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * A builder class for algorithms which are structured into phases and intermediate processing slots. The assembler
@@ -150,7 +149,7 @@ public final class AlgorithmAssembler<P extends Enum<P>, G>
 
         configuredPhases = EnumSet.noneOf(phasesEnumClass);
         additionalProcessors = LayoutProcessorConfiguration.create();
-        cache = Maps.newHashMap();
+        cache = new HashMap<>();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -273,7 +272,7 @@ public final class AlgorithmAssembler<P extends Enum<P>, G>
         P[] phaseEnumConstants = phasesEnumClass.getEnumConstants();
 
         // Instantiate all configured phases
-        List<ILayoutPhase<P, G>> phaseImplementations = Lists.newArrayListWithCapacity(numberOfPhases);
+        List<ILayoutPhase<P, G>> phaseImplementations = new ArrayList<>(numberOfPhases);
         for (P phase : phaseEnumConstants) {
             ILayoutPhaseFactory<P, G> phaseFactory = getListItem(phase.ordinal());
             if (phaseFactory != null) {
@@ -293,7 +292,7 @@ public final class AlgorithmAssembler<P extends Enum<P>, G>
         processorConfiguration.addAll(additionalProcessors);
 
         // The list of processors the algorithm will be made up of
-        List<ILayoutProcessor<G>> algorithm = Lists.newArrayList();
+        List<ILayoutProcessor<G>> algorithm = new ArrayList<>();
 
         // Add processors and phases to the algorithm
         for (P phase : phaseEnumConstants) {
@@ -336,7 +335,7 @@ public final class AlgorithmAssembler<P extends Enum<P>, G>
      * @return the sorted list of instantiated processors.
      */
     private List<ILayoutProcessor<G>> retrieveProcessors(final Set<ILayoutProcessorFactory<G>> factories) {
-        List<ILayoutProcessor<G>> processors = Lists.newArrayListWithCapacity(factories.size());
+        List<ILayoutProcessor<G>> processors = new ArrayList<>(factories.size());
         factories.stream()
             .sorted(processorComparator)
             .forEach(factory -> processors.add(retrieveProcessor(factory)));

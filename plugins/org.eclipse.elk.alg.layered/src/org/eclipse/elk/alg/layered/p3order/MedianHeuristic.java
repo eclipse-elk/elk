@@ -23,7 +23,6 @@ import java.util.Random;
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LNode;
 import org.eclipse.elk.alg.layered.options.InternalProperties;
-import com.google.common.collect.Lists;
 
 /**
  * A Heuristic for minimizing crossings using weights and propagated medians. After assigning random weights to the
@@ -62,7 +61,7 @@ public class MedianHeuristic implements ICrossingMinimizationHeuristic {
         // determine first index (
         int firstIndex = forwardSweep ? 0 : Math.max(0, order.length - 1);
         // extract firstLayer from 2D-array
-        List<LNode> firstLayer = Lists.newArrayList(order[firstIndex]);
+        List<LNode> firstLayer = new ArrayList<>(java.util.Arrays.asList(order[firstIndex]));
         // set random weights for nodes in firstLayer
         for (LNode node : firstLayer) {
             node.setProperty(InternalProperties.WEIGHT, random.nextDouble());
@@ -91,7 +90,7 @@ public class MedianHeuristic implements ICrossingMinimizationHeuristic {
      */
     @Override
     public boolean minimizeCrossings(LNode[][] order, int freeLayerIndex, boolean forwardSweep, boolean isFirstSweep) {
-        List<LNode> freeLayer = Lists.newArrayList(order[freeLayerIndex]);
+        List<LNode> freeLayer = new ArrayList<>(java.util.Arrays.asList(order[freeLayerIndex]));
         // calculate Medians for the free Layer (does not sort the free layer)
         calculateMedians(freeLayer, forwardSweep ? freeLayerIndex - 1 : freeLayerIndex + 1);
         // sort the free Layer

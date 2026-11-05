@@ -15,6 +15,7 @@
 package org.eclipse.elk.graph.util;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -41,9 +42,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EContentsEList.FeatureFilter;
 import org.eclipse.emf.ecore.util.EContentsEList.FeatureIteratorImpl;
-
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 /**
  * Utility methods that make using the ElkGraph data structure a bit easier and thereby make ELK great again! The
@@ -420,10 +418,12 @@ public final class ElkGraphUtil {
      */
     public static ElkNode findLowestCommonAncestor(final ElkNode node1, final ElkNode node2) {
         // Retrieve iterators over the node ancestors
-        List<ElkNode> ancestors1 = Lists.newArrayList(new AncestorIterator(node1, true));
+        List<ElkNode> ancestors1 = new ArrayList<>();
+        new AncestorIterator(node1, true).forEachRemaining(ancestors1::add);
         ListIterator<ElkNode> iterator1 = ancestors1.listIterator(ancestors1.size());
 
-        List<ElkNode> ancestors2 = Lists.newArrayList(new AncestorIterator(node2, true));
+        List<ElkNode> ancestors2 = new ArrayList<>();
+        new AncestorIterator(node2, true).forEachRemaining(ancestors2::add);
         ListIterator<ElkNode> iterator2 = ancestors2.listIterator(ancestors2.size());
 
         // Traverse the ancestor hierarchies from the end as longs as the elements we find are the same
@@ -457,14 +457,12 @@ public final class ElkGraphUtil {
      * @return iterable with all incoming edges.
      */
     public static Iterable<ElkEdge> allIncomingEdges(final ElkNode node) {
-        List<Iterable<ElkEdge>> incomingEdgeIterables = Lists.newArrayListWithCapacity(1 + node.getPorts().size());
-
-        incomingEdgeIterables.add(node.getIncomingEdges());
+        List<ElkEdge> result = new ArrayList<>();
+        result.addAll(node.getIncomingEdges());
         for (ElkPort port : node.getPorts()) {
-            incomingEdgeIterables.add(port.getIncomingEdges());
+            result.addAll(port.getIncomingEdges());
         }
-
-        return Iterables.concat(incomingEdgeIterables);
+        return result;
     }
 
     /**
@@ -475,14 +473,12 @@ public final class ElkGraphUtil {
      * @return iterable with all outgoing edges.
      */
     public static Iterable<ElkEdge> allOutgoingEdges(final ElkNode node) {
-        List<Iterable<ElkEdge>> outgoingEdgeIterables = Lists.newArrayListWithCapacity(1 + node.getPorts().size());
-
-        outgoingEdgeIterables.add(node.getOutgoingEdges());
+        List<ElkEdge> result = new ArrayList<>();
+        result.addAll(node.getOutgoingEdges());
         for (ElkPort port : node.getPorts()) {
-            outgoingEdgeIterables.add(port.getOutgoingEdges());
+            result.addAll(port.getOutgoingEdges());
         }
-
-        return Iterables.concat(outgoingEdgeIterables);
+        return result;
     }
 
     /**
@@ -492,7 +488,10 @@ public final class ElkGraphUtil {
      * @return iterable with all incident edges.
      */
     public static Iterable<ElkEdge> allIncidentEdges(final ElkConnectableShape shape) {
-        return Iterables.concat(shape.getIncomingEdges(), shape.getOutgoingEdges());
+        List<ElkEdge> result = new ArrayList<>();
+        result.addAll(shape.getIncomingEdges());
+        result.addAll(shape.getOutgoingEdges());
+        return result;
     }
 
     /**
@@ -503,7 +502,14 @@ public final class ElkGraphUtil {
      * @return iterable with all incident edges.
      */
     public static Iterable<ElkEdge> allIncidentEdges(final ElkNode node) {
-        return Iterables.concat(allOutgoingEdges(node), allIncomingEdges(node));
+        List<ElkEdge> result = new ArrayList<>();
+        for (ElkEdge e : allOutgoingEdges(node)) {
+            result.add(e);
+        }
+        for (ElkEdge e : allIncomingEdges(node)) {
+            result.add(e);
+        }
+        return result;
     }
 
     /**
@@ -513,7 +519,10 @@ public final class ElkGraphUtil {
      * @return iterable with all incident shapes.
      */
     public static Iterable<ElkConnectableShape> allIncidentShapes(final ElkEdge edge) {
-        return Iterables.concat(edge.getSources(), edge.getTargets());
+        List<ElkConnectableShape> result = new ArrayList<>();
+        result.addAll(edge.getSources());
+        result.addAll(edge.getTargets());
+        return result;
     }
 
     /**
@@ -524,7 +533,10 @@ public final class ElkGraphUtil {
      * @return iterable over all incident sections.
      */
     public static Iterable<ElkEdgeSection> allIncidentSections(final ElkEdgeSection section) {
-        return Iterables.concat(section.getIncomingSections(), section.getOutgoingSections());
+        List<ElkEdgeSection> result = new ArrayList<>();
+        result.addAll(section.getIncomingSections());
+        result.addAll(section.getOutgoingSections());
+        return result;
     }
 
     /**

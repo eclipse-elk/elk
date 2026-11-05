@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.graph.LGraphUtil;
@@ -32,7 +33,6 @@ import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.Pair;
 
-import com.google.common.collect.Lists;
 
 /**
  * A processor that is able to split an input graph into connected components and to pack those
@@ -117,7 +117,7 @@ public final class ComponentsProcessor {
             }
             
             // Perform DFS starting on each node, collecting connected components
-            result = Lists.newArrayList();
+            result = new ArrayList<>();
             for (LNode node : graph.getLayerlessNodes()) {
                 Pair<List<LNode>, Set<PortSide>> componentData = dfs(node, null);
                 
@@ -192,7 +192,7 @@ public final class ComponentsProcessor {
             // Check if we already have a list of nodes for the connected component
             Pair<List<LNode>, Set<PortSide>> mutableData = data;
             if (mutableData == null) {
-                List<LNode> component = Lists.newArrayList();
+                List<LNode> component = new ArrayList<>();
                 Set<PortSide> extPortSides = EnumSet.noneOf(PortSide.class);
                 
                 mutableData = new Pair<List<LNode>, Set<PortSide>>(component, extPortSides);

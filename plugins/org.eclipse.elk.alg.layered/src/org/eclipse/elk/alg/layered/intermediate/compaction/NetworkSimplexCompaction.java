@@ -16,6 +16,8 @@ package org.eclipse.elk.alg.layered.intermediate.compaction;
 
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.eclipse.elk.alg.common.compaction.oned.CGroup;
 import org.eclipse.elk.alg.common.compaction.oned.CNode;
@@ -31,10 +33,11 @@ import org.eclipse.elk.alg.layered.graph.LPort;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.BasicProgressMonitor;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Compaction strategy for the {@link OneDimensionalCompactor} based on the network simplex
@@ -204,8 +207,8 @@ public class NetworkSimplexCompaction implements ICompactionAlgorithm {
     private void addEdgeConstraints() {
 
         // collect the original edges
-        Map<LNode, CNode> lNodeMap = Maps.newHashMap();
-        Multimap<LEdge, CNode> lEdgeMap = HashMultimap.create();
+        Map<LNode, CNode> lNodeMap = new HashMap<>();
+        Map<LEdge, Set<CNode>> lEdgeMap = new HashMap<>();
         for (CNode cNode : compactor.cGraph.cNodes) {
             LNode lNode = HorizontalGraphCompactor.getLNodeOrNull(cNode);
             if (lNode != null) {
@@ -214,7 +217,7 @@ public class NetworkSimplexCompaction implements ICompactionAlgorithm {
                 VerticalSegment vs = HorizontalGraphCompactor.getVerticalSegmentOrNull(cNode);
                 if (vs != null) {
                     for (LEdge e : vs.representedLEdges) {
-                        lEdgeMap.put(e, cNode);
+                        lEdgeMap.computeIfAbsent(e, k -> new HashSet<>()).add(cNode);
                     }
                 }
             } 
@@ -251,9 +254,9 @@ public class NetworkSimplexCompaction implements ICompactionAlgorithm {
                         .create();
                     
                     // keep vertical segments close to the node if they are inverted ports
-                    if (srcPort.getSide() == PortSide.WEST && LPort.OUTPUT_PREDICATE.apply(srcPort)) {
+                    if (srcPort.getSide() == PortSide.WEST && LPort.OUTPUT_PREDICATE.test(srcPort)) {
 
-                        for (CNode n : lEdgeMap.get(lEdge)) {
+                        for (CNode n : lEdgeMap.getOrDefault(lEdge, Collections.emptySet())) {
                             if (n.hitbox.x < cNode.hitbox.x) {
                                 NNode src = nNodes[n.cGroup.id];
                                 NNode tgt = nNodes[cNode.cGroup.id];
@@ -270,9 +273,9 @@ public class NetworkSimplexCompaction implements ICompactionAlgorithm {
                         }
                     }
 
-                    if (tgtPort.getSide() == PortSide.EAST && LPort.INPUT_PREDICATE.apply(tgtPort)) {
+                    if (tgtPort.getSide() == PortSide.EAST && LPort.INPUT_PREDICATE.test(tgtPort)) {
 
-                        for (CNode n : lEdgeMap.get(lEdge)) {
+                        for (CNode n : lEdgeMap.getOrDefault(lEdge, Collections.emptySet())) {
                             if (n.hitbox.x > cNode.hitbox.x) {
                                 NNode src = nNodes[cNode.cGroup.id];
                                 NNode tgt = nNodes[n.cGroup.id];
@@ -299,7 +302,7 @@ public class NetworkSimplexCompaction implements ICompactionAlgorithm {
      * node.
      */
     private void addArtificialSourceNode() {
-        List<NNode> sources = Lists.newLinkedList();
+        List<NNode> sources = new LinkedList<>();
         for (NNode n : networkSimplexGraph.nodes) {
             if (n.getIncomingEdges().isEmpty()) {
                 sources.add(n);

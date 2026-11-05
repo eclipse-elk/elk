@@ -15,6 +15,8 @@
 package org.eclipse.elk.core.comments;
 
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -24,10 +26,6 @@ import java.util.regex.Pattern;
 
 import org.eclipse.elk.core.util.Pair;
 import org.eclipse.elk.graph.ElkNode;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * A binary matcher that checks if target names are referenced in comment texts. This can either be the case or not,
@@ -80,7 +78,7 @@ public class NodeReferenceMatcher<C, T> implements IMatcher<C, T> {
     /** Whether to use fuzzy mode when looking for occurrences of a target's name in a comment's text. */
     private boolean fuzzy = false;
     /** The comment-target attachments we've found during preprocessing. */
-    private Map<C, T> foundAttachments = Maps.newHashMap();
+    private Map<C, T> foundAttachments = new HashMap<>();
     
     
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -203,22 +201,22 @@ public class NodeReferenceMatcher<C, T> implements IMatcher<C, T> {
         checkConfiguration();
         
         // Build up maps of comment texts
-        List<Pair<C, String>> commentTexts = Lists.newArrayList();
+        List<Pair<C, String>> commentTexts = new ArrayList<>();
         
         for (C comment : dataProvider.provideComments()) {
             String commentText = commentTextFunction.apply(comment);
             
-            if (!Strings.isNullOrEmpty(commentText)) {
+            if (commentText != null && !commentText.isEmpty()) {
                 commentTexts.add(Pair.of(comment, commentText));
             }
         }
 
         // Build up maps of target names
-        List<Pair<T, String>> targetNames = Lists.newArrayList();
+        List<Pair<T, String>> targetNames = new ArrayList<>();
         for (T target : dataProvider.provideTargets()) {
             String targetName = targetNameFunction.apply(target);
             
-            if (!Strings.isNullOrEmpty(targetName)) {
+            if (targetName != null && !targetName.isEmpty()) {
                 targetNames.add(Pair.of(target, targetName));
             }
         }
@@ -271,7 +269,7 @@ public class NodeReferenceMatcher<C, T> implements IMatcher<C, T> {
      */
     private void goFindMatches(final List<Pair<C, String>> commentTexts, final List<Pair<T, String>> targetNames) {
         // Produce regular expression patterns for all target names
-        List<Pair<T, Pattern>> targetRegexps = Lists.newArrayListWithCapacity(targetNames.size());
+        List<Pair<T, Pattern>> targetRegexps = new ArrayList<>(targetNames.size());
         for (Pair<T, String> targetNamePair : targetNames) {
             Pattern regexp = fuzzy
                     ? fuzzyRegexpFor(targetNamePair.getSecond())

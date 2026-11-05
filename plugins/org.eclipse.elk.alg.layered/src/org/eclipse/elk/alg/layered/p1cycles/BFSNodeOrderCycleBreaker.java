@@ -35,7 +35,6 @@ import org.eclipse.elk.core.alg.ILayoutPhase;
 import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Iterables;
 
 /**
  * Uses the Breadth-First-Search to traverse the graph and reverses edges if the node is already explored.
@@ -107,10 +106,10 @@ public class BFSNodeOrderCycleBreaker implements ILayoutPhase<LayeredPhases, LGr
         for (LNode node : nodes) {
             // The node id is used as index into our arrays
             node.id = index;
-            if (Iterables.isEmpty(node.getIncomingEdges())) {
+            if (!node.getIncomingEdges().iterator().hasNext()) {
                 sources.add(node);
             }
-            if (Iterables.isEmpty(node.getOutgoingEdges())) {
+            if (!node.getOutgoingEdges().iterator().hasNext()) {
                 sinks.add(node);
             }
             index++;

@@ -15,13 +15,13 @@
 package org.eclipse.elk.alg.layered.compaction.oned.algs;
 
 import java.util.Queue;
+import java.util.LinkedList;
 
 import org.eclipse.elk.alg.layered.compaction.oned.CGroup;
 import org.eclipse.elk.alg.layered.compaction.oned.CNode;
 import org.eclipse.elk.alg.layered.compaction.oned.OneDimensionalCompactor;
 import org.eclipse.elk.core.options.Direction;
 
-import com.google.common.collect.Lists;
 
 /**
  * Compacts a previously calculated constraint graph (
@@ -44,7 +44,7 @@ public class LongestPathCompaction implements ICompactionAlgorithm {
         }
         
         // finding the sinks of the constraint graph
-        Queue<CGroup> sinks = Lists.newLinkedList();
+        Queue<CGroup> sinks = new LinkedList<>();
         for (CGroup group : compactor.cGraph.cGroups) {
             group.startPos = minStartPos;
             if (group.outDegree == 0) {

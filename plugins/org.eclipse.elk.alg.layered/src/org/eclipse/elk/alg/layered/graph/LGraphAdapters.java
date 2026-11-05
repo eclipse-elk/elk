@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LNode.NodeType;
 import org.eclipse.elk.alg.layered.intermediate.loops.SelfLoopEdge;
@@ -38,7 +39,6 @@ import org.eclipse.elk.core.util.adapters.GraphAdapters.NodeAdapter;
 import org.eclipse.elk.core.util.adapters.GraphAdapters.PortAdapter;
 import org.eclipse.elk.graph.properties.IProperty;
 
-import com.google.common.collect.Lists;
 
 /**
  * Provides implementations of the {@link org.eclipse.elk.core.util.adapters.GraphAdapters
@@ -274,7 +274,7 @@ public final class LGraphAdapters {
         @Override
         public Iterable<NodeAdapter<?>> getNodes() {
             if (nodeAdapters == null) {
-                nodeAdapters = Lists.newArrayList();
+                nodeAdapters = new ArrayList<>();
                 // We completely ignore layerless nodes here since they are currently not of interest
                 // to anyone using these adapters
                 for (Layer l : element.getLayers()) {
@@ -355,7 +355,7 @@ public final class LGraphAdapters {
         @Override
         public Iterable<LabelAdapter<?>> getLabels() {
             if (labelAdapters == null) {
-                labelAdapters = Lists.newArrayListWithCapacity(element.getLabels().size());
+                labelAdapters = new ArrayList<>(element.getLabels().size());
                 for (LLabel l : element.getLabels()) {
                     labelAdapters.add(new LLabelAdapter(l));
                 }
@@ -366,7 +366,7 @@ public final class LGraphAdapters {
         @Override
         public Iterable<PortAdapter<?>> getPorts() {
             if (portAdapters == null) {
-                portAdapters = Lists.newArrayListWithCapacity(element.getPorts().size());
+                portAdapters = new ArrayList<>(element.getPorts().size());
                 for (LPort p : element.getPorts()) {
                     portAdapters.add(new LPortAdapter(p, transparentNorthSouthEdges));
                 }
@@ -473,7 +473,7 @@ public final class LGraphAdapters {
         @Override
         public Iterable<LabelAdapter<?>> getLabels() {
             if (labelAdapters == null) {
-                labelAdapters = Lists.newArrayListWithCapacity(element.getLabels().size());
+                labelAdapters = new ArrayList<>(element.getLabels().size());
                 for (LLabel l : element.getLabels()) {
                     labelAdapters.add(new LLabelAdapter(l));
                 }
@@ -500,7 +500,7 @@ public final class LGraphAdapters {
             if (transparentNorthSouthEdges && element.getNode().getType() == NodeType.NORTH_SOUTH_PORT) {
                 return Collections.emptyList();
             } else if (incomingEdgeAdapters == null) {
-                incomingEdgeAdapters = Lists.newArrayList();
+                incomingEdgeAdapters = new ArrayList<>();
                 for (LEdge e : element.getIncomingEdges()) {
                     incomingEdgeAdapters.add(new LEdgeAdapter(e));
                 }
@@ -531,7 +531,7 @@ public final class LGraphAdapters {
             if (transparentNorthSouthEdges && element.getNode().getType() == NodeType.NORTH_SOUTH_PORT) {
                 return Collections.emptyList();
             } else if (outgoingEdgeAdapters == null) {
-                outgoingEdgeAdapters = Lists.newArrayList();
+                outgoingEdgeAdapters = new ArrayList<>();
                 for (LEdge e : element.getOutgoingEdges()) {
                     outgoingEdgeAdapters.add(new LEdgeAdapter(e));
                 }
@@ -615,7 +615,7 @@ public final class LGraphAdapters {
         @Override
         public Iterable<LabelAdapter<?>> getLabels() {
             if (labelAdapters == null) {
-                labelAdapters = Lists.newArrayListWithCapacity(element.getLabels().size());
+                labelAdapters = new ArrayList<>(element.getLabels().size());
                 for (LLabel l : element.getLabels()) {
                     labelAdapters.add(new LLabelAdapter(l));
                 }

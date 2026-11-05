@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
@@ -29,7 +30,6 @@ import org.eclipse.elk.alg.layered.options.LayeredOptions;
 import org.eclipse.elk.core.alg.ILayoutProcessor;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.collect.Lists;
 
 /**
  * Intermediate processor that splits path-like graphs into 
@@ -124,7 +124,7 @@ public class SingleEdgeGraphWrapper implements ILayoutProcessor<LGraph> {
      * Validify {@code desiredCuts} by increasing every forbidden index (and its successors) until they are valid.
      */
     public static List<Integer> validifyIndexesGreedily(final GraphStats gs, final List<Integer> cuts) {
-        List<Integer> validCuts = Lists.newArrayList();
+        List<Integer> validCuts = new ArrayList<>();
         int offset = 0;
 
         Iterator<Integer> cutIt = cuts.iterator();
@@ -153,7 +153,7 @@ public class SingleEdgeGraphWrapper implements ILayoutProcessor<LGraph> {
         }
         
         // initialize array with valid cuts
-        List<Integer> validCuts = Lists.newArrayList();
+        List<Integer> validCuts = new ArrayList<>();
         validCuts.add(Integer.MIN_VALUE); // -inf
         for (int i = 1; i < gs.longestPath; ++i) {
             if (gs.isCutAllowed(i)) {
@@ -178,7 +178,7 @@ public class SingleEdgeGraphWrapper implements ILayoutProcessor<LGraph> {
         assert validCuts.get(validCuts.size() - 1) == Integer.MAX_VALUE;
 
         // turn cuts into valid cuts
-        List<Integer> finalCuts = Lists.newArrayList();
+        List<Integer> finalCuts = new ArrayList<>();
         int iIdx = 0;
         int cIdx = 0;
         int offset = 0;
@@ -253,7 +253,7 @@ public class SingleEdgeGraphWrapper implements ILayoutProcessor<LGraph> {
                 Layer oldLayer = graph.getLayers().get(index);
                 Layer newLayer = graph.getLayers().get(newIndex);
 
-                List<LNode> nodesToMove = Lists.newArrayList(oldLayer.getNodes()); 
+                List<LNode> nodesToMove = new ArrayList<>(oldLayer.getNodes()); 
                 for (LNode n : nodesToMove) {
                     
                     // first move the original node 
@@ -262,7 +262,8 @@ public class SingleEdgeGraphWrapper implements ILayoutProcessor<LGraph> {
 
                     // at the cut points the edges have to be re-routed
                     if (newIndex == 0) {
-                        List<LEdge> incEdges = Lists.newArrayList(n.getIncomingEdges());
+                        List<LEdge> incEdges = new ArrayList<>();
+                        n.getIncomingEdges().forEach(incEdges::add);
                         for (LEdge e : incEdges) {
                             e.reverse(graph, true);
                             graph.setProperty(InternalProperties.CYCLIC, true);

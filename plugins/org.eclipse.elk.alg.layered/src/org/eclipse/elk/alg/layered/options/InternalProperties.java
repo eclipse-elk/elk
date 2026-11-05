@@ -44,8 +44,6 @@ import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.graph.properties.IProperty;
 import org.eclipse.elk.graph.properties.Property;
 
-import com.google.common.collect.Multimap;
-
 /**
  * Container for property definitions for internal use of the algorithm. These properties should
  * not be accessed from outside. Some properties here are redefinitions of layout options in
@@ -339,8 +337,8 @@ public final class InternalProperties {
      * Map of original hierarchy crossing edges to a set of dummy edges by which the original edge
      * has been replaced.
      */
-    public static final IProperty<Multimap<LEdge, CrossHierarchyEdge>> CROSS_HIERARCHY_MAP =
-            new Property<Multimap<LEdge, CrossHierarchyEdge>>("crossHierarchyMap");
+    public static final IProperty<Map<LEdge, Set<CrossHierarchyEdge>>> CROSS_HIERARCHY_MAP =
+            new Property<Map<LEdge, Set<CrossHierarchyEdge>>>("crossHierarchyMap");
 
     /**
      * Offset to be added to the target anchor point of an edge when the layout is applied back to

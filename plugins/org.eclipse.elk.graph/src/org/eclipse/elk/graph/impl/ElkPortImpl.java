@@ -28,8 +28,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-import com.google.common.base.Strings;
-
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Elk Port</b></em>'.
@@ -218,11 +216,11 @@ public class ElkPortImpl extends ElkConnectableShapeImpl implements ElkPort {
         StringBuilder builder = new StringBuilder("ElkPort");
         // Use identifier or labels
         String id = getIdentifier();
-        if (!Strings.isNullOrEmpty(id)) {
+        if (id != null && !id.isEmpty()) {
             builder.append(" \"").append(id).append("\"");
         } else if (getLabels().size() > 0) {
             String text = getLabels().get(0).getText();
-            if (!Strings.isNullOrEmpty(text)) {
+            if (text != null && !text.isEmpty()) {
                 builder.append(" \"").append(text).append("\"");
             }
         }

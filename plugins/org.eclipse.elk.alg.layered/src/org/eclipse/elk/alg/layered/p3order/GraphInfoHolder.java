@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.ArrayList;
 
 import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.graph.LNode;
@@ -30,7 +31,6 @@ import org.eclipse.elk.alg.layered.p3order.LayerSweepCrossingMinimizer.CrossMinT
 import org.eclipse.elk.alg.layered.p3order.counting.AllCrossingsCounter;
 import org.eclipse.elk.alg.layered.p3order.counting.IInitializable;
 
-import com.google.common.collect.Lists;
 
 /**
  * Collects data needed for cross minimization and port distribution.
@@ -87,15 +87,15 @@ public class GraphInfoHolder implements IInitializable {
         parentGraphData = hasParent ? graphs.get(parent.getGraph().id) : null;
         Set<GraphProperties> graphProperties = graph.getProperty(InternalProperties.GRAPH_PROPERTIES);
         hasExternalPorts = graphProperties.contains(GraphProperties.EXTERNAL_PORTS);
-        childGraphs = Lists.newArrayList();
+        childGraphs = new ArrayList<>();
 
         // Init all objects needing initialization by graph traversal.
         crossingsCounter = new AllCrossingsCounter(currentNodeOrder);
         Random random = lGraph.getProperty(InternalProperties.RANDOM);
         portDistributor = ISweepPortDistributor.create(crossMinType, random, currentNodeOrder);
         layerSweepTypeDecider = new LayerSweepTypeDecider(this);
-        List<IInitializable> initializables =
-                Lists.newArrayList(this, crossingsCounter, layerSweepTypeDecider, portDistributor);
+        List<IInitializable> initializables = new ArrayList<>(java.util.Arrays.asList(
+                this, crossingsCounter, layerSweepTypeDecider, portDistributor));
 
         if (crossMinType == CrossMinType.BARYCENTER
                 && !graph.getProperty(LayeredOptions.CROSSING_MINIMIZATION_FORCE_NODE_MODEL_ORDER)) {

@@ -17,10 +17,10 @@ package org.eclipse.elk.alg.layered.graph;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.ArrayList;
 
 import org.eclipse.elk.core.math.KVector;
 
-import com.google.common.collect.Lists;
 
 /**
  * A layered graph has a set of layers that contain the nodes, as well as a
@@ -63,12 +63,12 @@ public final class LGraph extends LGraphElement implements Iterable<Layer> {
     /**
      * Nodes that are not currently part of a layer.
      */
-    private final List<LNode> layerlessNodes = Lists.newArrayList();
+    private final List<LNode> layerlessNodes = new ArrayList<>();
     
     /**
      * The layers of the layered graph.
      */
-    private final List<Layer> layers = Lists.newArrayList();
+    private final List<Layer> layers = new ArrayList<>();
     
     /**
      * The parent node in which this graph is nested, or {@code null}.

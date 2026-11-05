@@ -29,8 +29,8 @@ import org.eclipse.elk.core.alg.ILayoutProcessor;
 import org.eclipse.elk.core.math.ElkMargin;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
+import java.util.function.Function;
+import java.util.Optional;
 
 /**
  * Interactive layout, for instance using
@@ -93,7 +93,7 @@ public class InteractiveExternalPortPositioner implements ILayoutProcessor<LGrap
                         // it's a WEST port
                         node.getPosition().x = minX - ARBITRARY_SPACING;
                         findYCoordinate(node, (e) -> e.getTarget().getNode())
-                            .transform((d) -> node.getPosition().y = d);
+                            .ifPresent(d -> node.getPosition().y = d);
                         break;
                     }
                     
@@ -101,21 +101,21 @@ public class InteractiveExternalPortPositioner implements ILayoutProcessor<LGrap
                         // it's a EAST port
                         node.getPosition().x = maxX + ARBITRARY_SPACING;
                         findYCoordinate(node, (e) -> e.getSource().getNode())
-                            .transform((d) -> node.getPosition().y = d);
+                            .ifPresent(d -> node.getPosition().y = d);
                         break;
                     }
 
                     InLayerConstraint ilc = node.getProperty(InternalProperties.IN_LAYER_CONSTRAINT);
                     if (ilc == InLayerConstraint.TOP) {
                         findNorthSouthPortXCoordinate(node)
-                            .transform((x) -> node.getPosition().x = x + ARBITRARY_SPACING);
+                            .ifPresent(x -> node.getPosition().x = x + ARBITRARY_SPACING);
                         node.getPosition().y = minY - ARBITRARY_SPACING;
                         break;
                     }
                     
                     if (ilc == InLayerConstraint.BOTTOM) {
                         findNorthSouthPortXCoordinate(node)
-                            .transform((x) -> node.getPosition().x = x + ARBITRARY_SPACING);
+                            .ifPresent(x -> node.getPosition().x = x + ARBITRARY_SPACING);
                         node.getPosition().y = maxY + ARBITRARY_SPACING;
                         break;
                     }
@@ -136,7 +136,7 @@ public class InteractiveExternalPortPositioner implements ILayoutProcessor<LGrap
             return Optional.of(other.getPosition().y + other.getSize().y / 2);
         }
 
-        return Optional.absent();
+        return Optional.empty();
     }
     
     private Optional<Double> findNorthSouthPortXCoordinate(final LNode dummy) {
@@ -174,6 +174,6 @@ public class InteractiveExternalPortPositioner implements ILayoutProcessor<LGrap
         }
         
         // we should never reach here
-        return Optional.absent();
+        return Optional.empty();
     }
 }

@@ -24,6 +24,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import org.eclipse.elk.alg.common.compaction.oned.CGraph;
 import org.eclipse.elk.alg.common.compaction.oned.CGroup;
@@ -46,11 +49,6 @@ import org.eclipse.elk.core.options.EdgeRouting;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.Pair;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
 /**
  * Manages the transformation of {@link LNode}s and {@link LEdge}s from an {@link LGraph} into
  * compactable {@link CNode}s and {@link CGroup}s.
@@ -64,12 +62,12 @@ public final class LGraphToCGraphTransformer {
     /** Current style of edge routing. */
     private EdgeRouting edgeRouting;
     /** remember comment boxes as we neglect them during compaction and offset them afterwards. */
-    private Map<LNode, Pair<LNode, KVector>> commentOffsets = Maps.newHashMap();
+    private Map<LNode, Pair<LNode, KVector>> commentOffsets = new HashMap<>();
     
     /* ------------------ Internal Mappings ------------------ */
-    private Map<LNode, CNode> nodesMap = Maps.newHashMap();
-    private Map<VerticalSegment, CNode> verticalSegmentsMap = Maps.newHashMap();
-    private Map<CNode, Quadruplet> lockMap = Maps.newHashMap();
+    private Map<LNode, CNode> nodesMap = new HashMap<>();
+    private Map<VerticalSegment, CNode> verticalSegmentsMap = new HashMap<>();
+    private Map<CNode, Quadruplet> lockMap = new HashMap<>();
     
     // for debugging
     private static final Function<CNode, String> NODE_TO_STRING_DELEGATE =
@@ -106,7 +104,7 @@ public final class LGraphToCGraphTransformer {
             l.id = index++;
             for (LNode n : l) {
                 // avoid calling Iterables.isEmpty unnecessarily
-                if (!hasEdges && !Iterables.isEmpty(n.getConnectedEdges())) {
+                if (!hasEdges && !!n.getConnectedEdges().iterator().hasNext()) {
                     hasEdges = true;
                 }
             }
@@ -134,8 +132,8 @@ public final class LGraphToCGraphTransformer {
                 // hence we can neglect them here without the risk
                 // of other nodes overlapping them after compaction
                 if (node.getProperty(LayeredOptions.COMMENT_BOX)) {
-                    if (!Iterables.isEmpty(node.getConnectedEdges())) {
-                        LEdge e = Iterables.get(node.getConnectedEdges(), 0);
+                    if (!!node.getConnectedEdges().iterator().hasNext()) {
+                        LEdge e = java.util.stream.StreamSupport.stream(node.getConnectedEdges().spliterator(), false).skip(0).findFirst().orElseThrow();
                         LNode other = e.getSource().getNode();
                         if (other == node) {
                             other = e.getTarget().getNode();
@@ -170,8 +168,8 @@ public final class LGraphToCGraphTransformer {
 
                 // locking the node for directions that fewer edges are connected in
                 // (only used if LEFT_RIGHT_CONNECTION_LOCKING is used)
-                int difference = Iterables.size(node.getIncomingEdges())
-                                 - Iterables.size(node.getOutgoingEdges());
+                int difference = ((int) java.util.stream.StreamSupport.stream(node.getIncomingEdges().spliterator(), false).count())
+                                 - ((int) java.util.stream.StreamSupport.stream(node.getOutgoingEdges().spliterator(), false).count());
                 if (difference < 0) {
                     nodeLock.set(true, Direction.LEFT);
                 } else if (difference > 0) {
@@ -217,7 +215,7 @@ public final class LGraphToCGraphTransformer {
     }
     
     private List<VerticalSegment> collectVerticalSegmentsOrthogonal() {
-        List<VerticalSegment> verticalSegments = Lists.newArrayList();
+        List<VerticalSegment> verticalSegments = new ArrayList<>();
         
         for (Layer layer : layeredGraph) {
             for (LNode node : layer) {
@@ -327,7 +325,7 @@ public final class LGraphToCGraphTransformer {
     }
     
     private List<VerticalSegment> collectVerticalSegmentsSplines() {
-        List<VerticalSegment> verticalSegments = Lists.newArrayList();
+        List<VerticalSegment> verticalSegments = new ArrayList<>();
         
         layeredGraph.getLayers().stream()
             .flatMap(l -> l.getNodes().stream())
@@ -410,8 +408,8 @@ public final class LGraphToCGraphTransformer {
         // segments belonging to multiple edges should be locked 
         // in the direction that fewer different ports are connected in
         // (only used if LEFT_RIGHT_CONNECTION_LOCKING is active)
-        Set<LPort> inc = Sets.newHashSet();
-        Set<LPort> out = Sets.newHashSet();
+        Set<LPort> inc = new HashSet<>();
+        Set<LPort> out = new HashSet<>();
         for (LEdge e : verticalSegment.representedLEdges) {
             inc.add(e.getSource());
             out.add(e.getTarget());
