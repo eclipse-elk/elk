@@ -109,8 +109,6 @@ public class InLayerConstraintProcessorTest extends TestGraphCreator {
                                 || lastConstraint == InLayerConstraint.NONE);
                         
                     }
-
-                    lastConstraint = currentConstraint;
                 }
                 
                 lastConstraint = currentConstraint;
