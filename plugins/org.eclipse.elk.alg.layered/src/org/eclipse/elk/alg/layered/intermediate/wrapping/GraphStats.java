@@ -292,6 +292,19 @@ public class GraphStats {
         cutsAllowed = new boolean[graph.getLayers().size()];
         cutsAllowed[0] = false;
         
+        // 'default' behavior as implemented by 'isCutAllowed(..)'
+        Iterator<Layer> layerIt = graph.getLayers().iterator();
+        // skip the first layer
+        if (layerIt.hasNext()) {
+            layerIt.next();
+        }
+        // now check for valid cut indexes
+        int i = 1;
+        while (layerIt.hasNext()) {
+            Layer layer = layerIt.next();
+            cutsAllowed[i++] = isCutAllowed(layer);
+        }
+        
         if (graph.hasProperty(LayeredOptions.WRAPPING_VALIDIFY_FORBIDDEN_INDICES)) {
             // user-specified forbidden indices
             List<Integer> forbidden = graph.getProperty(LayeredOptions.WRAPPING_VALIDIFY_FORBIDDEN_INDICES);
@@ -299,19 +312,6 @@ public class GraphStats {
                 if (f > 0 && f < cutsAllowed.length) {
                     cutsAllowed[f] = false;
                 }
-            }
-        } else {
-            // 'default' behavior as implemented by 'isCutAllowed(..)'
-            Iterator<Layer> layerIt = graph.getLayers().iterator();
-            // skip the first layer
-            if (layerIt.hasNext()) {
-                layerIt.next();
-            }
-            // now check for valid cut indexes
-            int i = 1;
-            while (layerIt.hasNext()) {
-                Layer layer = layerIt.next();
-                cutsAllowed[i++] = isCutAllowed(layer);
             }
         }
     }
