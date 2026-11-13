@@ -293,7 +293,7 @@ public final class LabelPlacer {
         // A side is not completely covered if either the leftmost or the rightmost port is placed on that side, so
         // that's easy to distinguish
         PortSide leftmostPortSide = slLoop.getLeftmostPort().getLPort().getSide();
-        PortSide rightmostPortSide = slLoop.getLeftmostPort().getLPort().getSide();
+        PortSide rightmostPortSide = slLoop.getRightmostPort().getLPort().getSide();
         
         // Remove inline edge label property since it is not valid in this case.
         for (LLabel label : slLoop.getSLLabels().getLLabels()) {
