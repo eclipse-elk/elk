@@ -585,8 +585,8 @@ public final class SplineEdgeRouter implements ILayoutPhase<LayeredPhases, LGrap
         // Iterate through all ports on the side to process.
         for (final LPort singlePort : portsToProcess) {
             final double singlePortPosition = singlePort.getAbsoluteAnchor().y;
-            final Set<Pair<SideToProcess, LEdge>> upEdges = Sets.newHashSet();
-            final Set<Pair<SideToProcess, LEdge>> downEdges = Sets.newHashSet();
+            final Set<Pair<SideToProcess, LEdge>> upEdges = Sets.newLinkedHashSet();
+            final Set<Pair<SideToProcess, LEdge>> downEdges = Sets.newLinkedHashSet();
             
             // Find edges we could construct a hyper-edge from. If the edge is in the 
             // edgesRemaining set, there is no hyper-edge that represents this edge. 
