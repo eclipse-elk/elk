@@ -33,14 +33,14 @@ import org.eclipse.elk.graph.util.ElkGraphUtil;
 import org.junit.Test;
 
 /**
- * Captures the current inside self-loop label coordinate behavior reported in issue #1232.
+ * Verifies that inside self-loop labels move with their node (issue #1232).
  */
 public class Issue1232Test {
 
     private static final double EPSILON = 0.000001;
 
     @Test
-    public void testLabelCurrentlyStaysBehindWhenRootPaddingMovesNode() {
+    public void testLabelMovesWithNodeWhenRootPaddingChanges() {
         ElkNode baseline = layout(12);
         ElkNode moved = layout(60);
         ElkEdge baselineEdge = baseline.getPorts().get(0).getOutgoingEdges().get(0);
@@ -53,13 +53,12 @@ public class Issue1232Test {
         assertEquals("Moving the node must preserve the local edge route",
                 route(baselineEdge, baseline), route(movedEdge, moved));
 
-        // Current bug (#1232): the route moves with the node, but the label stays in place.
         ElkLabel baselineLabel = baselineEdge.getLabels().get(0);
         ElkLabel movedLabel = movedEdge.getLabels().get(0);
-        assertEquals("The label currently keeps its root-relative x coordinate",
-                baselineLabel.getX(), movedLabel.getX(), EPSILON);
-        assertEquals("The label currently keeps its root-relative y coordinate",
-                baselineLabel.getY(), movedLabel.getY(), EPSILON);
+        assertEquals("Moving the node must preserve the local label x coordinate",
+                baselineLabel.getX() - baseline.getX(), movedLabel.getX() - moved.getX(), EPSILON);
+        assertEquals("Moving the node must preserve the local label y coordinate",
+                baselineLabel.getY() - baseline.getY(), movedLabel.getY() - moved.getY(), EPSILON);
     }
 
     private ElkNode layout(final double rootPadding) {
