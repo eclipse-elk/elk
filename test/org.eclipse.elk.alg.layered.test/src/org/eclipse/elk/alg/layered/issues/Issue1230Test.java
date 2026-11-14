@@ -36,7 +36,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 /**
- * Characterizes port order with inside self loops, including the current bug in issue 1230.
+ * Inside self loops must preserve fixed port order under compound layout (issue 1230).
  */
 @RunWith(Parameterized.class)
 public class Issue1230Test {
@@ -105,19 +105,7 @@ public class Issue1230Test {
 
         new RecursiveGraphLayoutEngine().layout(graph, new NullElkProgressMonitor());
 
-        if (hierarchyHandling == HierarchyHandling.INCLUDE_CHILDREN && insideLoop) {
-            // Issue 1230: record the current incorrect order until the production fix is applied.
-            // The fix must replace these expectations with w1, w2, w3, as in the other cases.
-            if (explicitIndices) {
-                assertTrue("Current WEST order with indices is w2, w1, w3",
-                        w2.getY() < w1.getY() && w1.getY() < w3.getY());
-            } else {
-                assertTrue("Current WEST order without indices is w1, w3, w2",
-                        w1.getY() < w3.getY() && w3.getY() < w2.getY());
-            }
-        } else {
-            assertTrue("WEST ports must retain their order", w1.getY() < w2.getY() && w2.getY() < w3.getY());
-        }
+        assertTrue("WEST ports must retain their order", w1.getY() < w2.getY() && w2.getY() < w3.getY());
         assertTrue("EAST ports must retain their order", e1.getY() < e2.getY() && e2.getY() < e3.getY());
         for (ElkPort port : Arrays.asList(w1, w2, w3)) {
             assertTrue("WEST ports must retain their side", port.getProperty(LayeredOptions.PORT_SIDE) == PortSide.WEST);
