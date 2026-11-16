@@ -191,7 +191,6 @@ public final class EndLabelSorter implements ILayoutProcessor<LGraph> {
         
         
         LabelGroup(final LEdge edge) {
-            this.labels.addAll(labels);
             this.edge = edge;
         }
         
