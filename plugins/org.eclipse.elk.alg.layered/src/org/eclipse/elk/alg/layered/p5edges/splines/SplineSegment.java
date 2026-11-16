@@ -79,7 +79,7 @@ public final class SplineSegment implements Comparable<SplineSegment> {
     
     // variables representing the characteristics of the segment 
     /** A set of all LEdges that are combined in this hyper-edge. */
-    public final Set<LEdge> edges = Sets.newHashSet();
+    public final Set<LEdge> edges = Sets.newLinkedHashSet();
     /** If true, the spline segment has no vertical segment, connecting two ports by a horizontal edge path. */
     public final boolean isStraight;
     /** An imaginary bounding box in which this spline segment should reside. */
