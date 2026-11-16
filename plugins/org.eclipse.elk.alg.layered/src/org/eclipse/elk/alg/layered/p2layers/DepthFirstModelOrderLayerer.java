@@ -26,7 +26,9 @@ import org.eclipse.elk.alg.layered.graph.LNode;
 import org.eclipse.elk.alg.layered.graph.LNode.NodeType;
 import org.eclipse.elk.alg.layered.graph.Layer;
 import org.eclipse.elk.alg.layered.intermediate.IntermediateProcessorStrategy;
+import org.eclipse.elk.alg.layered.options.CycleBreakingStrategy;
 import org.eclipse.elk.alg.layered.options.InternalProperties;
+import org.eclipse.elk.alg.layered.options.LayeredOptions;
 import org.eclipse.elk.core.UnsupportedGraphException;
 import org.eclipse.elk.core.alg.ILayoutPhase;
 import org.eclipse.elk.core.alg.LayoutProcessorConfiguration;
@@ -211,7 +213,32 @@ public final class DepthFirstModelOrderLayerer implements ILayoutPhase<LayeredPh
             layer.id = layerId;
             layerId++;
         }
+        checkEdgesPointToLaterLayers();
         monitor.done();
+    }
+    
+    /**
+     * Checks the postcondition that every edge points to a later layer. The layering assumes that edges follow
+     * the model order, which only a model order cycle breaker guarantees. An edge against the model order can end
+     * in the same or an earlier layer, and the following phases are not prepared for such edges.
+     * 
+     * @throws UnsupportedGraphException if an edge does not point to a later layer.
+     */
+    private void checkEdgesPointToLaterLayers() {
+        for (Layer layer : layeredGraph.getLayers()) {
+            for (LNode node : layer.getNodes()) {
+                for (LEdge edge : node.getOutgoingEdges()) {
+                    LNode target = edge.getTarget().getNode();
+                    if (target != node && target.getLayer() != null && target.getLayer().id <= layer.id) {
+                        throw new UnsupportedGraphException("The DF model order layer assigner placed the edge"
+                                + " from " + node + " to " + target + " in the same or an earlier layer. It requires"
+                                + " edges that follow the model order, which the cycle breaking strategy "
+                                + CycleBreakingStrategy.MODEL_ORDER + " ("
+                                + LayeredOptions.CYCLE_BREAKING_STRATEGY.getId() + ") ensures.");
+                    }
+                }
+            }
+        }
     }
     
     /**
