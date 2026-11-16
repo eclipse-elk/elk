@@ -283,11 +283,12 @@ group layering {
         targets nodes
     }
 
-    output option layerId: int {
+    option layerId: int {
         label "Layer ID"
         description
             "Layer identifier that was calculated by ELK Layered for a node.
-            This is only generated if interactiveLayot or generatePositionAndLayerIds is set."
+            This is only generated if interactiveLayot or generatePositionAndLayerIds is set.
+            This option is not usable as an input."
         default = -1
         lowerBound = -1
         targets nodes
@@ -483,11 +484,12 @@ group crossingMinimization {
         targets nodes
     }
 
-    output option positionId: int {
+    option positionId: int {
         label "Position ID"
         description
             "Position within a layer that was determined by ELK Layered for a node.
-            This is only generated if interactiveLayot or generatePositionAndLayerIds is set."
+            This is only generated if interactiveLayot or generatePositionAndLayerIds is set.
+            This option is not usable as an input."
         default = -1
         lowerBound = -1
         targets nodes
