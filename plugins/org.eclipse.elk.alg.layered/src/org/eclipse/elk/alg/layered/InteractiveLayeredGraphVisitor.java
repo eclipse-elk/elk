@@ -523,6 +523,14 @@ public class InteractiveLayeredGraphVisitor implements IGraphElementVisitor {
      */
     private void setCoordinatesOrthogonalToLayoutDirection(final List<ElkNode> nodesOfLayer, final int layerId,
             final Direction direction) {
+        // A relative constraint whose target is not in this layer cannot be met, for example because the target is
+        // connected to the node by an edge and was shifted to the next layer. Ignore it, so that the node is placed
+        // like a node without that constraint instead of being left out of the layer's order.
+        for (ElkNode node : nodesOfLayer) {
+            removeConstraintToOtherLayer(node, LayeredOptions.CROSSING_MINIMIZATION_IN_LAYER_PRED_OF, nodesOfLayer);
+            removeConstraintToOtherLayer(node, LayeredOptions.CROSSING_MINIMIZATION_IN_LAYER_SUCC_OF, nodesOfLayer);
+        }
+        
         // Separate nodes with and without constraints.
         List<ElkNode> allNodes = new ArrayList<ElkNode>();
         List<ElkNode> nodesWithoutC = new ArrayList<ElkNode>();
@@ -872,6 +880,21 @@ public class InteractiveLayeredGraphVisitor implements IGraphElementVisitor {
         parent.setProperty(LayeredOptions.CROSSING_MINIMIZATION_STRATEGY, CrossingMinimizationStrategy.LAYER_SWEEP);
     }
     
+    /**
+     * Removes the relative constraint {@code property} of {@code node} if its target is not one of the
+     * {@code nodesOfLayer}.
+     * 
+     * @param node The node whose constraint is checked
+     * @param property The relative constraint, {@code IN_LAYER_PRED_OF} or {@code IN_LAYER_SUCC_OF}
+     * @param nodesOfLayer The nodes of the layer the node is in
+     */
+    private void removeConstraintToOtherLayer(final ElkNode node, final IProperty<String> property,
+            final List<ElkNode> nodesOfLayer) {
+        if (node.hasProperty(property) && getElkNode(nodesOfLayer, node.getProperty(property)) == null) {
+            node.setProperty(property, null);
+        }
+    }
+
     /**
      * Gets the ElkNode with {@code id} as identifier.
      * 
