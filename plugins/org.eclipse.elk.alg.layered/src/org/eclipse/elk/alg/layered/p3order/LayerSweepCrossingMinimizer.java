@@ -191,7 +191,7 @@ public class LayerSweepCrossingMinimizer
         graphsWhoseNodeOrderChanged.clear();
 
         if (gData.lGraph().getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_CROSSING_COUNTER_NODE_INFLUENCE) != 0
-            || gData.lGraph().getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_CROSSING_COUNTER_NODE_INFLUENCE) != 0) {
+            || gData.lGraph().getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_CROSSING_COUNTER_PORT_INFLUENCE) != 0) {
             double bestCrossings = Double.MAX_VALUE;
             if (gData.lGraph().getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY) != OrderingStrategy.NONE) {
                 // The first run should begin with a forward sweep.
