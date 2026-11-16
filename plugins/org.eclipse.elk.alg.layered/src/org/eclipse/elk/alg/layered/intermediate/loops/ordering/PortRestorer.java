@@ -175,13 +175,13 @@ public class PortRestorer {
         // Find index of the first port with a non-negative net flow
         int nonNegativeNetFlowIndex = 0;
         for (; nonNegativeNetFlowIndex < sortedPorts.size(); nonNegativeNetFlowIndex++) {
-            if (sortedPorts.get(nonNegativeNetFlowIndex).getSLNetFlow() > 0) {
+            if (sortedPorts.get(nonNegativeNetFlowIndex).getSLNetFlow() >= 0) {
                 break;
             }
         }
         
         // If this is neither the first, nor the last port, return its index
-        if (nonNegativeNetFlowIndex > 0 && positiveNetFlowIndex < sortedPorts.size() - 1) {
+        if (nonNegativeNetFlowIndex > 0 && nonNegativeNetFlowIndex < sortedPorts.size() - 1) {
             return nonNegativeNetFlowIndex;
         }
         
