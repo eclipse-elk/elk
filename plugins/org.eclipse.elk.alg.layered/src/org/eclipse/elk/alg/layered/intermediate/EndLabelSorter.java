@@ -16,7 +16,7 @@ package org.eclipse.elk.alg.layered.intermediate;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -158,7 +158,7 @@ public final class EndLabelSorter implements ILayoutProcessor<LGraph> {
      * Creates a list of {@link LabelGroup}s that group labels from the same edge.
      */
     private List<LabelGroup> createLabelGroups(final LabelCell portLabelCell) {
-        Map<LEdge, LabelGroup> edgeToGroupMap = new HashMap<>();
+        Map<LEdge, LabelGroup> edgeToGroupMap = new LinkedHashMap<>();
         
         // Make sure every label is contained in a label group
         for (LabelAdapter<?> label : portLabelCell.getLabels()) {
