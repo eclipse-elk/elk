@@ -320,7 +320,7 @@
             name="org.eclipse.sdk.feature.group"/>
         <requirement
             name="com.google.guava"
-            versionRange="27.0.0"/>
+            versionRange="33.7.2"/>
         <requirement
             name="com.google.gson"
             versionRange="2.7.0"/>
