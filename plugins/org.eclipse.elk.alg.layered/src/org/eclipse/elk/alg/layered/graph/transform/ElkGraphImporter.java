@@ -35,6 +35,7 @@ import org.eclipse.elk.alg.layered.graph.LPort;
 import org.eclipse.elk.alg.layered.options.CrossingMinimizationStrategy;
 import org.eclipse.elk.alg.layered.options.CycleBreakingStrategy;
 import org.eclipse.elk.alg.layered.options.GraphProperties;
+import org.eclipse.elk.alg.layered.options.GroupOrderStrategy;
 import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 import org.eclipse.elk.alg.layered.options.LayeredSpacings;
@@ -43,6 +44,7 @@ import org.eclipse.elk.alg.layered.options.NodePlacementStrategy;
 import org.eclipse.elk.alg.layered.options.NodePromotionStrategy;
 import org.eclipse.elk.alg.layered.options.OrderingStrategy;
 import org.eclipse.elk.alg.layered.options.PortType;
+import org.eclipse.elk.core.UnsupportedConfigurationException;
 import org.eclipse.elk.core.UnsupportedGraphException;
 import org.eclipse.elk.core.labels.LabelManagementOptions;
 import org.eclipse.elk.core.math.ElkPadding;
@@ -372,6 +374,7 @@ class ElkGraphImporter {
                 if (nestedGraph != null) {
                     lnode.setNestedGraph(nestedGraph);
                     nestedGraph.setParentNode(lnode);
+                    ensureNoModelOrderStrategies(lnode, nestedGraph);
                     
                     elkGraphQueue.addAll(elknode.getChildren());
                 }
@@ -505,6 +508,62 @@ class ElkGraphImporter {
         return modelOrderCycleBreaking || modelOrderLayering || modelOrderCrossingMinimization;
     }    
     
+    /**
+     * Ensures that a nested graph laid out as part of its parent's hierarchy does not use a model order strategy that
+     * reads {@link InternalProperties#MAX_MODEL_ORDER_NODES} or {@link InternalProperties#CB_NUM_MODEL_ORDER_GROUPS}.
+     * Model order strategies are not supported with {@link HierarchyHandling#INCLUDE_CHILDREN}, since the model order
+     * is assigned across all levels of the hierarchy, and the two properties are only computed for the top-level graph.
+     * Without this check, these strategies fail with a {@link NullPointerException} while the nested graph is laid out.
+     * 
+     * @param lnode
+     *            the node that represents the nested graph in its parent graph.
+     * @param nestedGraph
+     *            the nested graph.
+     * @throws UnsupportedConfigurationException
+     *             if the nested graph is configured to use such a model order strategy.
+     */
+    private void ensureNoModelOrderStrategies(final LNode lnode, final LGraph nestedGraph) {
+        CycleBreakingStrategy cycleBreaking = nestedGraph.getProperty(LayeredOptions.CYCLE_BREAKING_STRATEGY);
+        String setting = null;
+        switch (cycleBreaking) {
+        case MODEL_ORDER:
+        case GREEDY_MODEL_ORDER:
+        case SCC_CONNECTIVITY:
+        case SCC_NODE_TYPE:
+            setting = LayeredOptions.CYCLE_BREAKING_STRATEGY.getId() + " " + cycleBreaking;
+            break;
+        case DFS_NODE_ORDER:
+        case BFS_NODE_ORDER:
+            if (nestedGraph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CB_GROUP_ORDER_STRATEGY)
+                    == GroupOrderStrategy.ENFORCED) {
+                setting = LayeredOptions.CYCLE_BREAKING_STRATEGY.getId() + " " + cycleBreaking + " with "
+                        + LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CB_GROUP_ORDER_STRATEGY.getId() + " "
+                        + GroupOrderStrategy.ENFORCED;
+            }
+            break;
+        default:
+        }
+        
+        OrderingStrategy orderingStrategy = nestedGraph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY);
+        if (setting == null && orderingStrategy != OrderingStrategy.NONE) {
+            setting = LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY.getId() + " " + orderingStrategy;
+        }
+        
+        // Only the barycenter heuristic of the layer sweep crossing minimizer reads the model order
+        if (setting == null && nestedGraph.getProperty(LayeredOptions.CROSSING_MINIMIZATION_FORCE_NODE_MODEL_ORDER)
+                && nestedGraph.getProperty(LayeredOptions.CROSSING_MINIMIZATION_STRATEGY)
+                        == CrossingMinimizationStrategy.LAYER_SWEEP) {
+            setting = LayeredOptions.CROSSING_MINIMIZATION_FORCE_NODE_MODEL_ORDER.getId() + " true";
+        }
+        
+        if (setting != null) {
+            throw new UnsupportedConfigurationException("Node '" + lnode.getDesignation() + "' sets " + setting
+                    + ", but it is laid out as part of its parent's hierarchy (hierarchy handling "
+                    + HierarchyHandling.INCLUDE_CHILDREN + "), which does not support model order strategies in "
+                    + "nested graphs. Remove the option or lay this subgraph out with hierarchy handling "
+                    + HierarchyHandling.SEPARATE_CHILDREN + ".");
+        }
+    }
 
     /**
      * Checks if the given node has any inside self loops.
