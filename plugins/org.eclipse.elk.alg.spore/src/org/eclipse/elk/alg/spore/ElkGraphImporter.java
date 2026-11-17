@@ -164,12 +164,7 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
                                          elkNode.getY() + halfHeight);
             
             // randomly shift identical points a tiny bit to make them unique
-            while (nodeMap.containsKey(vertex)) {
-                // SUPPRESS CHECKSTYLE NEXT 1 MagicNumber
-                vertex.add((Math.random() - 0.5) * 0.001, (Math.random() - 0.5) * 0.001);
-                // If two positions were identical, their corresponding edge in the spanning tree would be
-                // of zero length, had no direction, and couldn't be scaled by anything.
-            }
+            shiftUntilUnique(vertex, nodeMap);
             
             ElkMargin margin = elkNode.getProperty(CoreOptions.MARGINS);
             
@@ -233,10 +228,32 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
         // update nodes
         for (Node n : g.vertices) {
             Pair<Node, ElkNode> original = nodeMap.get(n.originalVertex);
-            n.originalVertex = n.rect.getCenter();
+            KVector center = n.rect.getCenter();
+            // overlap removal can move a node onto the center of another one, keep the centers unique
+            if (updatedNodeMap.containsKey(center)) {
+                KVector oldCenter = center.clone();
+                shiftUntilUnique(center, updatedNodeMap);
+                n.translate(center.clone().sub(oldCenter));
+            }
+            n.originalVertex = center;
             updatedNodeMap.put(n.originalVertex, original);
         }
         nodeMap = updatedNodeMap;
+    }
+    
+    /**
+     * Randomly shifts the given point a tiny bit until it is not a key of the given map. The centers of the nodes
+     * must be unique: if two positions were identical, their corresponding edge in the spanning tree would be of
+     * zero length, had no direction, and couldn't be scaled by anything.
+     * 
+     * @param vertex the point to shift
+     * @param vertexMap the map whose keys are the points already taken
+     */
+    private static void shiftUntilUnique(final KVector vertex, final Map<KVector, ?> vertexMap) {
+        while (vertexMap.containsKey(vertex)) {
+            // SUPPRESS CHECKSTYLE NEXT 1 MagicNumber
+            vertex.add((Math.random() - 0.5) * 0.001, (Math.random() - 0.5) * 0.001);
+        }
     }
 
     @Override
