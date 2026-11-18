@@ -128,7 +128,6 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
         spacingNodeNode = elkGraph.getProperty(SporeCompactionOptions.SPACING_NODE_NODE);
         
         // set the random number generator based on the random seed option
-        Random random;
         int randomSeed = elkGraph.getProperty(SporeCompactionOptions.RANDOM_SEED);
         if (randomSeed == 0) {
             random = new Random();
