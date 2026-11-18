@@ -37,6 +37,7 @@ algorithm sporeOverlap(OverlapRemovalLayoutProvider) {
     supports overlapRemoval.maxIterations
     supports overlapRemoval.runScanline
     supports org.eclipse.elk.debugMode = false
+    supports org.eclipse.elk.randomSeed = 1
 }
 
 algorithm sporeCompaction(ShrinkTreeLayoutProvider) {
@@ -58,6 +59,7 @@ algorithm sporeCompaction(ShrinkTreeLayoutProvider) {
     supports compaction.compactionStrategy
     supports compaction.orthogonal
     supports org.eclipse.elk.debugMode = false
+    supports org.eclipse.elk.randomSeed = 1
 }
 
 // options --------------

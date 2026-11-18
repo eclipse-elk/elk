@@ -15,6 +15,7 @@
 package org.eclipse.elk.alg.spore;
 
 import java.util.Map;
+import java.util.Random;
 
 import org.eclipse.elk.alg.common.ICostFunction;
 import org.eclipse.elk.alg.common.nodespacing.NodeDimensionCalculation;
@@ -124,6 +125,15 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
         RootSelection rootSelection = elkGraph.getProperty(SporeCompactionOptions.PROCESSING_ORDER_ROOT_SELECTION);
         spacingNodeNode = elkGraph.getProperty(SporeCompactionOptions.SPACING_NODE_NODE);
         
+        // set the random number generator based on the random seed option
+        Random random;
+        int randomSeed = elkGraph.getProperty(SporeCompactionOptions.RANDOM_SEED);
+        if (randomSeed == 0) {
+            random = new Random();
+        } else {
+            random = new Random(randomSeed);
+        }
+        
         ICostFunction costFunction = centerDistance;
         switch (costFunctionID) {
         case CENTER_DISTANCE:
@@ -166,7 +176,7 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
             // randomly shift identical points a tiny bit to make them unique
             while (nodeMap.containsKey(vertex)) {
                 // SUPPRESS CHECKSTYLE NEXT 1 MagicNumber
-                vertex.add((Math.random() - 0.5) * 0.001, (Math.random() - 0.5) * 0.001);
+                vertex.add((random.nextDouble() - 0.5) * 0.001, (random.nextDouble() - 0.5) * 0.001);
                 // If two positions were identical, their corresponding edge in the spanning tree would be
                 // of zero length, had no direction, and couldn't be scaled by anything.
             }
