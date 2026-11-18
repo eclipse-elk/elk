@@ -20,6 +20,7 @@ import org.eclipse.elk.alg.layered.p4nodes.InteractiveNodePlacer;
 import org.eclipse.elk.alg.layered.p4nodes.LinearSegmentsNodePlacer;
 import org.eclipse.elk.alg.layered.p4nodes.NetworkSimplexPlacer;
 import org.eclipse.elk.alg.layered.p4nodes.SimpleNodePlacer;
+import org.eclipse.elk.alg.layered.p4nodes.WalkerNodePlacer;
 import org.eclipse.elk.alg.layered.p4nodes.bk.BKNodePlacer;
 import org.eclipse.elk.core.alg.ILayoutPhase;
 import org.eclipse.elk.core.alg.ILayoutPhaseFactory;
@@ -58,7 +59,12 @@ public enum NodePlacementStrategy implements ILayoutPhaseFactory<LayeredPhases, 
      * {@link org.eclipse.elk.alg.layered.networksimplex.NetworkSimplex NetworkSimplex} 
      * algorithm to calculate a balanced placement with straight long edges.
      */
-    NETWORK_SIMPLEX;
+    NETWORK_SIMPLEX,
+    
+    /**
+     * Using the Walker Node Placer, only supports trees.
+     */
+    WALKER;
     
     @Override
     public ILayoutPhase<LayeredPhases, LGraph> create() {
@@ -77,6 +83,9 @@ public enum NodePlacementStrategy implements ILayoutPhaseFactory<LayeredPhases, 
             
         case NETWORK_SIMPLEX:
             return new NetworkSimplexPlacer();
+        
+        case WALKER:
+            return new WalkerNodePlacer();
             
         default:
             throw new IllegalArgumentException(
