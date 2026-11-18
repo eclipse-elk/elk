@@ -15,6 +15,7 @@
 package org.eclipse.elk.alg.spore;
 
 import java.util.Map;
+import java.util.Random;
 
 import org.eclipse.elk.alg.common.ICostFunction;
 import org.eclipse.elk.alg.common.nodespacing.NodeDimensionCalculation;
@@ -123,6 +124,15 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
                 elkGraph.getProperty(SporeCompactionOptions.COMPACTION_COMPACTION_STRATEGY);
         RootSelection rootSelection = elkGraph.getProperty(SporeCompactionOptions.PROCESSING_ORDER_ROOT_SELECTION);
         spacingNodeNode = elkGraph.getProperty(SporeCompactionOptions.SPACING_NODE_NODE);
+        
+        // set the random number generator based on the random seed option
+        Random random;
+        int randomSeed = elkGraph.getProperty(SporeCompactionOptions.RANDOM_SEED);
+        if (randomSeed == 0) {
+            random = new Random();
+        } else {
+            random = new Random(randomSeed);
+        }
         
         ICostFunction costFunction = centerDistance;
         switch (costFunctionID) {
@@ -252,7 +262,7 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
     private static void shiftUntilUnique(final KVector vertex, final Map<KVector, ?> vertexMap) {
         while (vertexMap.containsKey(vertex)) {
             // SUPPRESS CHECKSTYLE NEXT 1 MagicNumber
-            vertex.add((Math.random() - 0.5) * 0.001, (Math.random() - 0.5) * 0.001);
+            vertex.add((random.nextDouble() - 0.5) * 0.001, (random.nextDouble() - 0.5) * 0.001);
         }
     }
 
