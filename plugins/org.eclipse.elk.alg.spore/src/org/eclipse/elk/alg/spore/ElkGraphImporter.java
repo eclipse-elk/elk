@@ -56,6 +56,8 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
     private ElkNode elkGraph;
     /** Spacing between nodes. */
     private double spacingNodeNode;
+    /** The random number generator. */
+    private Random random;
 
     // callback functions ----------------------------------------------------------------------------------------------
     /** A cost function for the spanning tree calculation, that represents the euclidean distance between 
