@@ -56,6 +56,8 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
     private ElkNode elkGraph;
     /** Spacing between nodes. */
     private double spacingNodeNode;
+    /** The random number generator. */
+    private Random random;
 
     // callback functions ----------------------------------------------------------------------------------------------
     /** A cost function for the spanning tree calculation, that represents the euclidean distance between 
@@ -126,7 +128,6 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
         spacingNodeNode = elkGraph.getProperty(SporeCompactionOptions.SPACING_NODE_NODE);
         
         // set the random number generator based on the random seed option
-        Random random;
         int randomSeed = elkGraph.getProperty(SporeCompactionOptions.RANDOM_SEED);
         if (randomSeed == 0) {
             random = new Random();
@@ -174,12 +175,7 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
                                          elkNode.getY() + halfHeight);
             
             // randomly shift identical points a tiny bit to make them unique
-            while (nodeMap.containsKey(vertex)) {
-                // SUPPRESS CHECKSTYLE NEXT 1 MagicNumber
-                vertex.add((random.nextDouble() - 0.5) * 0.001, (random.nextDouble() - 0.5) * 0.001);
-                // If two positions were identical, their corresponding edge in the spanning tree would be
-                // of zero length, had no direction, and couldn't be scaled by anything.
-            }
+            shiftUntilUnique(vertex, nodeMap);
             
             ElkMargin margin = elkNode.getProperty(CoreOptions.MARGINS);
             
@@ -243,10 +239,32 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
         // update nodes
         for (Node n : g.vertices) {
             Pair<Node, ElkNode> original = nodeMap.get(n.originalVertex);
-            n.originalVertex = n.rect.getCenter();
+            KVector center = n.rect.getCenter();
+            // overlap removal can move a node onto the center of another one, keep the centers unique
+            if (updatedNodeMap.containsKey(center)) {
+                KVector oldCenter = center.clone();
+                shiftUntilUnique(center, updatedNodeMap);
+                n.translate(center.clone().sub(oldCenter));
+            }
+            n.originalVertex = center;
             updatedNodeMap.put(n.originalVertex, original);
         }
         nodeMap = updatedNodeMap;
+    }
+    
+    /**
+     * Randomly shifts the given point a tiny bit until it is not a key of the given map. The centers of the nodes
+     * must be unique: if two positions were identical, their corresponding edge in the spanning tree would be of
+     * zero length, had no direction, and couldn't be scaled by anything.
+     * 
+     * @param vertex the point to shift
+     * @param vertexMap the map whose keys are the points already taken
+     */
+    private void shiftUntilUnique(final KVector vertex, final Map<KVector, ?> vertexMap) {
+        while (vertexMap.containsKey(vertex)) {
+            // SUPPRESS CHECKSTYLE NEXT 1 MagicNumber
+            vertex.add((random.nextDouble() - 0.5) * 0.001, (random.nextDouble() - 0.5) * 0.001);
+        }
     }
 
     @Override

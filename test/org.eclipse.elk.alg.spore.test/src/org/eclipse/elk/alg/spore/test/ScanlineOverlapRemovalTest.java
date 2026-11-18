@@ -74,6 +74,31 @@ public class ScanlineOverlapRemovalTest {
         assertTrue(hasOverlaps(graph2));
 	}
 	
+	/**
+	 * Overlap removal must not fail with an {@link IllegalStateException} from the
+	 * {@link ScanlineOverlapCheck} on three overlapping nodes, and must remove their overlaps.
+	 */
+	@Test
+	public void scanlineThreeOverlappingNodesTest() {
+		ElkNode graph = ElkGraphUtil.createGraph();
+		ElkNode n0 = ElkGraphUtil.createNode(graph);
+		ElkNode n1 = ElkGraphUtil.createNode(graph);
+		ElkNode n2 = ElkGraphUtil.createNode(graph);
+		n0.setDimensions(40, 30);
+		n1.setDimensions(10, 20);
+		n2.setDimensions(10, 30);
+		n0.setLocation(10, 10);
+		n1.setLocation(10, 0);
+		n2.setLocation(20, 5);
+		graph.setProperty(CoreOptions.ALGORITHM, SporeOverlapRemovalOptions.ALGORITHM_ID);
+		assertTrue(hasOverlaps(graph));
+
+		LayoutMetaDataService.getInstance().registerLayoutMetaDataProviders(new SporeMetaDataProvider());
+		new RecursiveGraphLayoutEngine().layout(graph, new BasicProgressMonitor());
+
+		assertFalse(hasOverlaps(graph));
+	}
+	
 	private boolean hasOverlaps(ElkNode graph) {
 		
 		for (ElkNode na : graph.getChildren()) {
