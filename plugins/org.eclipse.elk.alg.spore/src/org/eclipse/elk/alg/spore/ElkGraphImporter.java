@@ -260,7 +260,7 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
      * @param vertex the point to shift
      * @param vertexMap the map whose keys are the points already taken
      */
-    private static void shiftUntilUnique(final KVector vertex, final Map<KVector, ?> vertexMap) {
+    private void shiftUntilUnique(final KVector vertex, final Map<KVector, ?> vertexMap) {
         while (vertexMap.containsKey(vertex)) {
             // SUPPRESS CHECKSTYLE NEXT 1 MagicNumber
             vertex.add((random.nextDouble() - 0.5) * 0.001, (random.nextDouble() - 0.5) * 0.001);
