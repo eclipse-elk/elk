@@ -134,8 +134,10 @@ public class CompoundGraphPreprocessor implements ILayoutProcessor<LGraph> {
            externalPort.setProperty(InternalProperties.INSIDE_CONNECTIONS, true);
            externalPort.setSide(dummyNode.getProperty(InternalProperties.EXT_PORT_SIDE)); 
            dummyNode.getProperty(InternalProperties.EXT_PORT_SIDE);
-           externalPort.getNode().setProperty(LayeredOptions.PORT_CONSTRAINTS,
-                   PortConstraints.FIXED_SIDE);
+           if (!externalPort.getNode().getProperty(LayeredOptions.PORT_CONSTRAINTS).isSideFixed()) {
+               externalPort.getNode().setProperty(LayeredOptions.PORT_CONSTRAINTS,
+                       PortConstraints.FIXED_SIDE);
+           }
            externalPort.getNode().getGraph().getProperty(InternalProperties.GRAPH_PROPERTIES)
                    .add(GraphProperties.NON_FREE_PORTS); 
        }
@@ -181,7 +183,7 @@ public class CompoundGraphPreprocessor implements ILayoutProcessor<LGraph> {
                         if (dummyNode == null) {
                             dummyNode = LGraphUtil.createExternalPortDummy(port,
                                     portConstraints, port.getSide(), -port.getNetFlow(),
-                                    null, new KVector(), port.getSize(),
+                                    node.getSize(), port.getPosition(), port.getSize(),
                                     nestedGraph.getProperty(LayeredOptions.DIRECTION), nestedGraph);
                             dummyNode.setProperty(InternalProperties.ORIGIN, port);
                             dummyNodeMap.put(port, dummyNode);
@@ -618,6 +620,8 @@ public class CompoundGraphPreprocessor implements ILayoutProcessor<LGraph> {
         if (!node.getProperty(LayeredOptions.INSIDE_SELF_LOOPS_ACTIVATE)) {
             return;
         }
+
+        PortConstraints portConstraints = node.getProperty(LayeredOptions.PORT_CONSTRAINTS);
         
         // Iterate over the edges and look for an inside self loop
         for (LPort lport : node.getPorts()) {
@@ -636,11 +640,11 @@ public class CompoundGraphPreprocessor implements ILayoutProcessor<LGraph> {
                     if (sourceExtPortDummy == null) {
                         sourceExtPortDummy = LGraphUtil.createExternalPortDummy(
                                 sourcePort,
-                                PortConstraints.FREE,
+                                portConstraints,
                                 sourcePort.getSide(),
                                 -1,
-                                null,
-                                null,
+                                node.getSize(),
+                                sourcePort.getPosition(),
                                 sourcePort.getSize(),
                                 nestedGraph.getProperty(LayeredOptions.DIRECTION),
                                 nestedGraph);
@@ -654,11 +658,11 @@ public class CompoundGraphPreprocessor implements ILayoutProcessor<LGraph> {
                     if (targetExtPortDummy == null) {
                         targetExtPortDummy = LGraphUtil.createExternalPortDummy(
                                 targetPort,
-                                PortConstraints.FREE,
+                                portConstraints,
                                 targetPort.getSide(),
                                 1,
-                                null,
-                                null,
+                                node.getSize(),
+                                targetPort.getPosition(),
                                 targetPort.getSize(),
                                 nestedGraph.getProperty(LayeredOptions.DIRECTION),
                                 nestedGraph);
