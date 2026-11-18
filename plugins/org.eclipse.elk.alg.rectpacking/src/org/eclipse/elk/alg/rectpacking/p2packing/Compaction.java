@@ -410,6 +410,7 @@ public final class Compaction {
             nextBlock.placeRectsIn(boundingWidth - (block.getX() + block.getWidth()));
             nextBlock.setLocation(block.getStack().getX() + block.getStack().getWidth(), row.getY());
             row.addBlock(nextBlock);
+            nextBlock.setParentRow(row);
             
             // Delete empty rows if needed.
             if (rows.size() > nextRowIndex) {
