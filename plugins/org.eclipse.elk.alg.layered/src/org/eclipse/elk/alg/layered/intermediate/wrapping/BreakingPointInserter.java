@@ -92,7 +92,7 @@ public class BreakingPointInserter implements ILayoutProcessor<LGraph> {
 
         // #2 improve cuts 
         if (graph.getProperty(LayeredOptions.WRAPPING_MULTI_EDGE_IMPROVE_CUTS)) {
-            cuts = improveCuts(graph, cuts);
+            cuts = improveCuts(graph, gs, cuts);
         }
         
         // #3 if they are not guaranteed to be valid, make them valid
@@ -108,6 +108,9 @@ public class BreakingPointInserter implements ILayoutProcessor<LGraph> {
                     // leave the cuts as they are
             }
         }
+
+        // Label-adjacent cuts are invalid for multi-edge wrapping, even when cut validification is disabled.
+        cuts = removeLabelAdjacentCuts(gs, cuts);
         
         if (cuts.isEmpty()) {
             progressMonitor.done();
@@ -244,8 +247,18 @@ public class BreakingPointInserter implements ILayoutProcessor<LGraph> {
         return noSplitEdges;
     }
     
-    @SuppressWarnings("unused")
-    private List<Integer> improveCuts(final LGraph graph, final List<Integer> cuts) {
+    private List<Integer> removeLabelAdjacentCuts(final GraphStats graphStats, final List<Integer> cuts) {
+        List<Integer> legalCuts = Lists.newArrayList();
+        for (int cut : cuts) {
+            if (graphStats.isCutAllowedForMultiEdge(cut)) {
+                legalCuts.add(cut);
+            }
+        }
+        return legalCuts;
+    }
+
+    private List<Integer> improveCuts(final LGraph graph, final GraphStats graphStats,
+            final List<Integer> cuts) {
         
         List<Integer> improvedCuts = Lists.newArrayList();
        
@@ -275,6 +288,9 @@ public class BreakingPointInserter implements ILayoutProcessor<LGraph> {
             double bestScore = Double.POSITIVE_INFINITY;
             
             for (int idx = 1; idx < graph.getLayers().size(); ++idx) {
+                if (!graphStats.isCutAllowedForMultiEdge(idx)) {
+                    continue;
+                }
             
                 Cut hit;
                 int rDist = rCut != null ? Math.abs(rCut.index - idx) : Math.abs(idx - lCut.index) + 1;
