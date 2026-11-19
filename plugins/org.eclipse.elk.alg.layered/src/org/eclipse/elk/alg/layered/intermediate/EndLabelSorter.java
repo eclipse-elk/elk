@@ -4,14 +4,19 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.alg.layered.intermediate;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -153,7 +158,7 @@ public final class EndLabelSorter implements ILayoutProcessor<LGraph> {
      * Creates a list of {@link LabelGroup}s that group labels from the same edge.
      */
     private List<LabelGroup> createLabelGroups(final LabelCell portLabelCell) {
-        Map<LEdge, LabelGroup> edgeToGroupMap = new HashMap<>();
+        Map<LEdge, LabelGroup> edgeToGroupMap = new LinkedHashMap<>();
         
         // Make sure every label is contained in a label group
         for (LabelAdapter<?> label : portLabelCell.getLabels()) {
@@ -186,7 +191,6 @@ public final class EndLabelSorter implements ILayoutProcessor<LGraph> {
         
         
         LabelGroup(final LEdge edge) {
-            this.labels.addAll(labels);
             this.edge = edge;
         }
         

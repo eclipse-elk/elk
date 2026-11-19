@@ -4,16 +4,25 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  * 
- * SPDX-License-Identifier: EPL-2.0 
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later 
  *******************************************************************************/
 package org.eclipse.elk.alg.rectpacking.intermediate;
 
+import org.eclipse.elk.alg.common.nodespacing.NodeLabelAndSizeCalculator;
 import org.eclipse.elk.alg.rectpacking.options.InternalProperties;
 import org.eclipse.elk.core.alg.ILayoutProcessor;
 import org.eclipse.elk.core.math.KVector;
 import org.eclipse.elk.core.util.ElkUtil;
 import org.eclipse.elk.core.util.IElkProgressMonitor;
+import org.eclipse.elk.core.util.adapters.ElkGraphAdapters;
+import org.eclipse.elk.core.util.adapters.GraphAdapters.GraphAdapter;
+import org.eclipse.elk.core.util.adapters.GraphAdapters.NodeAdapter;
 import org.eclipse.elk.graph.ElkNode;
 
 /**
@@ -36,7 +45,19 @@ public class MinSizePreProcessor implements ILayoutProcessor<ElkNode> {
     @Override
     public void process(ElkNode graph, IElkProgressMonitor progressMonitor) {
         progressMonitor.begin("Min Size Preprocessing", 1);
+        // Get minimum size based on children.
         KVector minSize = ElkUtil.effectiveMinSizeConstraintFor(graph);
+        
+        // Get minimum size based on labels.
+        if (graph.getParent() != null) {
+            // only possible if a parent exists.
+            GraphAdapter<?> graphAdapter = ElkGraphAdapters.adapt(graph.getParent());
+            NodeAdapter<?> nodeAdapter = ElkGraphAdapters.adaptSingleNode(graph);
+            
+            KVector minSize2 = NodeLabelAndSizeCalculator.process(graphAdapter, nodeAdapter, false, true);
+            minSize.x = Math.max(minSize.x, minSize2.x);
+            minSize.y = Math.max(minSize.y, minSize2.y);
+        }
         graph.setProperty(InternalProperties.MIN_WIDTH, minSize.x);
         graph.setProperty(InternalProperties.MIN_HEIGHT, minSize.y);
         progressMonitor.done();

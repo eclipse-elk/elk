@@ -16,12 +16,12 @@ The [Documentation]({{< relref "documentation/_index.md" >}}) section has lots o
 
 ## Forum and Chat
 
-We have [a Gitter chat](https://gitter.im/eclipse/elk) available for you to ask questions. Questions can also be asked by filing an issue over at [GitHub](https://github.com/eclipse/elk/issues).
+We have [a Gitter chat](https://app.gitter.im/#/room/#eclipse_elk:gitter.im) available for you to ask questions. Questions can also be asked by filing an issue over at [GitHub](https://github.com/eclipse-elk/elk/issues).
 
 
 ## Reporting Bugs
 
-Use our [GitHub Issues](https://github.com/eclipse/elk/issues) to report bugs you have found (or be told that what you've found is actually a feature). Please provide a reduced example that reproduces the bug to give us a chance to find out where things are going wrong.
+Use our [GitHub Issues](https://github.com/eclipse-elk/elk/issues) to report bugs you have found (or be told that what you've found is actually a feature). Please provide a reduced example that reproduces the bug to give us a chance to find out where things are going wrong.
 
 
 ## Mailing Lists

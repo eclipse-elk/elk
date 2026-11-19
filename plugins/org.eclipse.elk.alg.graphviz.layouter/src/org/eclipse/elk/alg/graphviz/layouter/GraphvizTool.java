@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.alg.graphviz.layouter;
 
@@ -16,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.List;
 
 import org.eclipse.elk.alg.graphviz.dot.transform.Command;
@@ -54,7 +60,7 @@ public class GraphvizTool {
     /** preference constant for timeout. */
     public static final String PREF_TIMEOUT = "graphviz.timeout";
     /** default timeout for waiting for Graphviz to give some output. */
-    public static final int PROCESS_DEF_TIMEOUT = 20000;
+    public static final AtomicInteger PROCESS_DEF_TIMEOUT = new AtomicInteger(20000);
     /** minimal timeout for waiting for Graphviz to give some output. */
     public static final int PROCESS_MIN_TIMEOUT = 200;
     
@@ -546,7 +552,7 @@ public class GraphvizTool {
                 }
                 
                 // retrieve the current timeout value
-                int timeout = PROCESS_DEF_TIMEOUT;
+                int timeout = PROCESS_DEF_TIMEOUT.get();
                 if (EclipseRuntimeDetector.isEclipseRunning()) {
                     int timeoutPreference =
                             GraphvizLayouterPreferenceStoreAccess.getUISaveInt(PREF_TIMEOUT);
@@ -554,7 +560,7 @@ public class GraphvizTool {
                         timeout = timeoutPreference;
                     }
                 }
-                
+
                 boolean interrupted = false;
                 try {
                     Thread.sleep(timeout);

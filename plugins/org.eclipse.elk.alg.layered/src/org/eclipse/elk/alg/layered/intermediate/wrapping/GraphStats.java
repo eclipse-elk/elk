@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.alg.layered.intermediate.wrapping;
 
@@ -287,6 +292,19 @@ public class GraphStats {
         cutsAllowed = new boolean[graph.getLayers().size()];
         cutsAllowed[0] = false;
         
+        // 'default' behavior as implemented by 'isCutAllowed(..)'
+        Iterator<Layer> layerIt = graph.getLayers().iterator();
+        // skip the first layer
+        if (layerIt.hasNext()) {
+            layerIt.next();
+        }
+        // now check for valid cut indexes
+        int i = 1;
+        while (layerIt.hasNext()) {
+            Layer layer = layerIt.next();
+            cutsAllowed[i++] = isCutAllowed(layer);
+        }
+        
         if (graph.hasProperty(LayeredOptions.WRAPPING_VALIDIFY_FORBIDDEN_INDICES)) {
             // user-specified forbidden indices
             List<Integer> forbidden = graph.getProperty(LayeredOptions.WRAPPING_VALIDIFY_FORBIDDEN_INDICES);
@@ -294,19 +312,6 @@ public class GraphStats {
                 if (f > 0 && f < cutsAllowed.length) {
                     cutsAllowed[f] = false;
                 }
-            }
-        } else {
-            // 'default' behavior as implemented by 'isCutAllowed(..)'
-            Iterator<Layer> layerIt = graph.getLayers().iterator();
-            // skip the first layer
-            if (layerIt.hasNext()) {
-                layerIt.next();
-            }
-            // now check for valid cut indexes
-            int i = 1;
-            while (layerIt.hasNext()) {
-                Layer layer = layerIt.next();
-                cutsAllowed[i++] = isCutAllowed(layer);
             }
         }
     }

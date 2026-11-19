@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.core.util;
 
@@ -194,6 +199,11 @@ public class BoxLayoutProvider extends AbstractLayoutProvider {
         double stddev = areaStdDev(sortedBoxes, mean);
         
         totalArea += (sortedBoxes.size() * 1 * stddev);
+        // add top and bottom padding to total area
+        totalArea += Math.sqrt(totalArea) * (padding.getBottom() + padding.getTop());
+        // add left and right padding
+        totalArea += Math.sqrt(totalArea) * (padding.getRight());
+
 
         // calculate the required row width w to achieve the desired aspect ratio,
         //  i.e.:  w*h=area s.t. w/h=dar  ->  w=sqrt(area * dar) 

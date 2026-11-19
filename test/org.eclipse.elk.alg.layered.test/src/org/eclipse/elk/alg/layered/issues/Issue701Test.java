@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.alg.layered.issues;
 
@@ -112,7 +117,7 @@ public class Issue701Test {
         }
 
         // TODO: To complete. I'm not sure that the current behavior is OK. Maybe to review for
-        // https://github.com/eclipse/elk/issues/638.
+        // https://github.com/eclipse-elk/elk/issues/638.
         // Here, we should have similar tests than in {@link #testInsideLabels(ElkNode)}.
     }
 
@@ -128,7 +133,7 @@ public class Issue701Test {
         // Ensure there is no label overlaps
         if (GraphTestUtils.haveOverlaps(assembleLabels(containerForMixInsideOutsideLabels))) {
             // TODO: Check deactivated because it fails for "MyCont2": case with 2 border nodes without edges. Maybe to
-            // review for https://github.com/eclipse/elk/issues/638.
+            // review for https://github.com/eclipse-elk/elk/issues/638.
             // fail("Overlaps between labels detected in \"Container_SeveralBorderNodes_LabelInsideAndOutside\"!");
         }
 
@@ -145,7 +150,7 @@ public class Issue701Test {
         assertNodeWidthAccordingToPortWidth(node2, node2Port1, node2Port2, true);
         assertNodeHeightAccordingToPortHeight(node2, node2Port1, node2Port2, true);
         // Ports on east and on west sides with a node inside the container without edge
-        // TODO: Ignored. The behavior seems KO. Maybe to review for https://github.com/eclipse/elk/issues/638.
+        // TODO: Ignored. The behavior seems KO. Maybe to review for https://github.com/eclipse-elk/elk/issues/638.
         // ElkNode cont2 = GraphTestUtils.getChild(containerForMixInsideOutsideLabels, "MyCont2");
         // Ports on east and on west sides with a node inside the container and linked to the ports, check width of the
         // container
@@ -328,7 +333,7 @@ public class Issue701Test {
         // assertNodeWidthAccordingToPortWidth(node2Bis, node2BisPort1, node2BisPort2, true);
         // assertNodeHeightAccordingToPortHeight(node2, node2BisPort1, node2BisPort2, true);
         // Ports on east and on west sides with a node inside the container without edge
-        // TODO: Ignored. The behavior seems KO. Maybe to review for https://github.com/eclipse/elk/issues/638.
+        // TODO: Ignored. The behavior seems KO. Maybe to review for https://github.com/eclipse-elk/elk/issues/638.
         // ElkNode cont2 = GraphTestUtils.getChild(containerForMixInsideOutsideLabels, "MyCont2");
         // Ports on east and on west sides with a node inside the container and linked to the ports, check width of the
         // container

@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.alg.layered.intermediate.loops.routing;
 
@@ -13,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.elk.alg.layered.graph.LLabel;
 import org.eclipse.elk.alg.layered.graph.LMargin;
 import org.eclipse.elk.alg.layered.graph.LNode;
 import org.eclipse.elk.alg.layered.graph.LPort;
@@ -139,6 +145,13 @@ public final class LabelPlacer {
      * stacked.
      */
     private void assignOneSidedSimpleSideAndAlignment(final SelfHyperLoop slLoop, final PortSide loopSide) {
+        // Remove inline edge label property since it is not valid in this case.
+        for (LLabel label : slLoop.getSLLabels().getLLabels()) {
+            label.setProperty(LayeredOptions.EDGE_LABELS_INLINE, null);
+        }
+        
+        // The alignment depends on the side. For eastern and western loops, we always align to the topmost port.
+        // For northern or southern loops, we always center the label.
         switch (loopSide) {
         case EAST:
         case WEST:
@@ -219,6 +232,11 @@ public final class LabelPlacer {
         PortSide leftmostPortSide = slLoop.getLeftmostPort().getLPort().getSide();
         PortSide rightmostPortSide = slLoop.getRightmostPort().getLPort().getSide();
         
+        // Remove inline edge label property since it is not valid in this case.
+        for (LLabel label : slLoop.getSLLabels().getLLabels()) {
+            label.setProperty(LayeredOptions.EDGE_LABELS_INLINE, null);
+        }
+        
         if (leftmostPortSide == PortSide.NORTH) {
             assignSideAndAlignment(slLoop, PortSide.NORTH, Alignment.LEFT, slLoop.getLeftmostPort());
         } else if (rightmostPortSide == PortSide.NORTH) {
@@ -237,15 +255,33 @@ public final class LabelPlacer {
         // side, for example, the whole southern side is covered and we can center the label there. If it's the western
         // side, on the other hand, we will left-align the label on the northern side.
         Set<PortSide> occupiedSides = slLoop.getOccupiedPortSides();
+        // Check whether the hyperloop has inline labels
+        boolean hasInlineLabels = false;
+        for (LLabel label : slLoop.getSLLabels().getLLabels()) {
+            if (label.getProperty(LayeredOptions.EDGE_LABELS_INLINE)) {
+                hasInlineLabels = true;
+                break;
+            }
+        }
         
         if (!occupiedSides.contains(PortSide.NORTH)) {
+            // This also works for inline edge labels since the label will be "in the middle".
             assignSideAndAlignment(slLoop, PortSide.SOUTH, Alignment.CENTER, null);
         } else if (!occupiedSides.contains(PortSide.SOUTH)) {
+            // This also works for inline edge labels since the label will be "in the middle".
             assignSideAndAlignment(slLoop, PortSide.NORTH, Alignment.CENTER, null);
         } else if (!occupiedSides.contains(PortSide.WEST)) {
-            assignSideAndAlignment(slLoop, PortSide.NORTH, Alignment.LEFT, slLoop.getLeftmostPort());
+            // If we have inline labels, we can center them on the eastern side. Otherwise, we left-align them on the
+            // northern side, which is the default for edge labels.
+            assignSideAndAlignment(slLoop, hasInlineLabels ? PortSide.EAST : PortSide.NORTH,
+                    hasInlineLabels ? Alignment.CENTER : Alignment.LEFT,
+                    hasInlineLabels ? null : slLoop.getLeftmostPort());
         } else if (!occupiedSides.contains(PortSide.EAST)) {
-            assignSideAndAlignment(slLoop, PortSide.NORTH, Alignment.RIGHT, slLoop.getRightmostPort());
+            // If we have inline labels, we can center them on the western side. Otherwise, we right-align them on the
+            // northern side, which is the default for edge labels.
+            assignSideAndAlignment(slLoop, hasInlineLabels ? PortSide.WEST : PortSide.NORTH,
+                    hasInlineLabels ? Alignment.CENTER : Alignment.RIGHT,
+                    hasInlineLabels ? null : slLoop.getRightmostPort());
         } else {
             assert false;
         }
@@ -257,7 +293,12 @@ public final class LabelPlacer {
         // A side is not completely covered if either the leftmost or the rightmost port is placed on that side, so
         // that's easy to distinguish
         PortSide leftmostPortSide = slLoop.getLeftmostPort().getLPort().getSide();
-        PortSide rightmostPortSide = slLoop.getLeftmostPort().getLPort().getSide();
+        PortSide rightmostPortSide = slLoop.getRightmostPort().getLPort().getSide();
+        
+        // Remove inline edge label property since it is not valid in this case.
+        for (LLabel label : slLoop.getSLLabels().getLLabels()) {
+            label.setProperty(LayeredOptions.EDGE_LABELS_INLINE, null);
+        }
         
         if (leftmostPortSide == PortSide.NORTH || rightmostPortSide == PortSide.NORTH) {
             assignSideAndAlignment(slLoop, PortSide.SOUTH, Alignment.CENTER, null);
@@ -289,6 +330,8 @@ public final class LabelPlacer {
         KVector lNodeSize = lNode.getSize();
         LMargin lNodeMargins = slLoop.getSLHolder().getLNode().getMargin();
         
+        // targetWidth determines the maximum horizontal space available for label placement.
+        // This may be used by LabelManagement to introduce line breaks in the label.
         double targetWidth = 0;
         
         switch (slLabels.getAlignment()) {
@@ -317,6 +360,7 @@ public final class LabelPlacer {
             assert false;
         }
         
+        // Make the label fit the target width or whatever the label manager deems necessary to do.
         slLabels.applyLabelManagement(
                 labelManager,
                 Math.max(targetWidth, LabelManagementProcessor.MIN_WIDTH_EDGE_LABELS));

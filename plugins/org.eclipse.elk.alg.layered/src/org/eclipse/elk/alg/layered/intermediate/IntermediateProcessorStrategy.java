@@ -4,14 +4,19 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.alg.layered.intermediate;
 
 import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.intermediate.compaction.HorizontalGraphCompactor;
-import org.eclipse.elk.alg.layered.intermediate.unzipping.GeneralLayerUnzipper;
+import org.eclipse.elk.alg.layered.intermediate.unzipping.AlternatingLayerUnzipper;
 import org.eclipse.elk.alg.layered.intermediate.wrapping.BreakingPointInserter;
 import org.eclipse.elk.alg.layered.intermediate.wrapping.BreakingPointProcessor;
 import org.eclipse.elk.alg.layered.intermediate.wrapping.BreakingPointRemover;
@@ -97,7 +102,7 @@ public enum IntermediateProcessorStrategy implements ILayoutProcessorFactory<LGr
     /** Position self loops after phase 3. */
     SELF_LOOP_PORT_RESTORER,
     /** Unzips layers for compaction. */
-    LAYER_UNZIPPER,
+    ALTERNATING_LAYER_UNZIPPER,
     /** Wraps graphs such that they better fit a given drawing area, allowing only a single edge per cut. */
     SINGLE_EDGE_GRAPH_WRAPPER,
     /** Makes sure that in-layer constraints are handled. */
@@ -126,6 +131,7 @@ public enum IntermediateProcessorStrategy implements ILayoutProcessorFactory<LGr
     HIERARCHICAL_PORT_DUMMY_SIZE_PROCESSOR,
 
     // Before Phase 5
+    NODE_PLACEMENT_REPEATER,
 
     /** Calculate the size of layers and the graph's height and offset. */
     LAYER_SIZE_AND_GRAPH_HEIGHT_CALCULATOR,
@@ -295,6 +301,9 @@ public enum IntermediateProcessorStrategy implements ILayoutProcessorFactory<LGr
         case LONG_EDGE_SPLITTER:
             return new LongEdgeSplitter();
             
+        case NODE_PLACEMENT_REPEATER:
+            return new NodePlacementRepeater();
+            
         case NODE_PROMOTION:
             return new NodePromotion();
 
@@ -331,8 +340,8 @@ public enum IntermediateProcessorStrategy implements ILayoutProcessorFactory<LGr
         case SELF_LOOP_PORT_RESTORER:
             return new SelfLoopPortRestorer();
         
-        case LAYER_UNZIPPER:
-            return new GeneralLayerUnzipper();
+        case ALTERNATING_LAYER_UNZIPPER:
+            return new AlternatingLayerUnzipper();
 
         case SELF_LOOP_POSTPROCESSOR:
             return new SelfLoopPostProcessor();

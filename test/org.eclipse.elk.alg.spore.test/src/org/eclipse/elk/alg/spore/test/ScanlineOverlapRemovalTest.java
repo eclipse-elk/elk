@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.alg.spore.test;
 
@@ -67,6 +72,31 @@ public class ScanlineOverlapRemovalTest {
         // test
         assertFalse(hasOverlaps(graph1));
         assertTrue(hasOverlaps(graph2));
+	}
+	
+	/**
+	 * Overlap removal must not fail with an {@link IllegalStateException} from the
+	 * {@link ScanlineOverlapCheck} on three overlapping nodes, and must remove their overlaps.
+	 */
+	@Test
+	public void scanlineThreeOverlappingNodesTest() {
+		ElkNode graph = ElkGraphUtil.createGraph();
+		ElkNode n0 = ElkGraphUtil.createNode(graph);
+		ElkNode n1 = ElkGraphUtil.createNode(graph);
+		ElkNode n2 = ElkGraphUtil.createNode(graph);
+		n0.setDimensions(40, 30);
+		n1.setDimensions(10, 20);
+		n2.setDimensions(10, 30);
+		n0.setLocation(10, 10);
+		n1.setLocation(10, 0);
+		n2.setLocation(20, 5);
+		graph.setProperty(CoreOptions.ALGORITHM, SporeOverlapRemovalOptions.ALGORITHM_ID);
+		assertTrue(hasOverlaps(graph));
+
+		LayoutMetaDataService.getInstance().registerLayoutMetaDataProviders(new SporeMetaDataProvider());
+		new RecursiveGraphLayoutEngine().layout(graph, new BasicProgressMonitor());
+
+		assertFalse(hasOverlaps(graph));
 	}
 	
 	private boolean hasOverlaps(ElkNode graph) {

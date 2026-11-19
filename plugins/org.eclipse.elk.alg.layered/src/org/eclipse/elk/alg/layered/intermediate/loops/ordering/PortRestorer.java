@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.alg.layered.intermediate.loops.ordering;
 
@@ -170,13 +175,13 @@ public class PortRestorer {
         // Find index of the first port with a non-negative net flow
         int nonNegativeNetFlowIndex = 0;
         for (; nonNegativeNetFlowIndex < sortedPorts.size(); nonNegativeNetFlowIndex++) {
-            if (sortedPorts.get(nonNegativeNetFlowIndex).getSLNetFlow() > 0) {
+            if (sortedPorts.get(nonNegativeNetFlowIndex).getSLNetFlow() >= 0) {
                 break;
             }
         }
         
         // If this is neither the first, nor the last port, return its index
-        if (nonNegativeNetFlowIndex > 0 && positiveNetFlowIndex < sortedPorts.size() - 1) {
+        if (nonNegativeNetFlowIndex > 0 && nonNegativeNetFlowIndex < sortedPorts.size() - 1) {
             return nonNegativeNetFlowIndex;
         }
         

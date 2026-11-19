@@ -3,9 +3,9 @@ Automatic-Module-Name: org.eclipse.elk.alg.common
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK Common Algorithms
 Bundle-SymbolicName: org.eclipse.elk.alg.common;singleton:=true
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.13.0.qualifier
 Bundle-Vendor: Eclipse Modeling Project
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: com.google.guava,
  org.eclipse.emf.ecore;bundle-version="2.10.0",
  org.eclipse.elk.core,
@@ -17,6 +17,8 @@ Export-Package: org.eclipse.elk.alg.common,
  org.eclipse.elk.alg.common.networksimplex,
  org.eclipse.elk.alg.common.nodespacing,
  org.eclipse.elk.alg.common.nodespacing.cellsystem,
+ org.eclipse.elk.alg.common.nodespacing.internal;x-internal:=true,
+ org.eclipse.elk.alg.common.nodespacing.internal.algorithm;x-internal:=true,
  org.eclipse.elk.alg.common.overlaps,
  org.eclipse.elk.alg.common.polyomino,
  org.eclipse.elk.alg.common.polyomino.structures,

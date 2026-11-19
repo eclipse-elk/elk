@@ -5,7 +5,12 @@
   terms of the Eclipse Public License 2.0 which is available at
   http://www.eclipse.org/legal/epl-2.0.
 
-  SPDX-License-Identifier: EPL-2.0
+  This Source Code may also be made available under the following Secondary
+  Licenses when the conditions for such availability set forth in the Eclipse
+  Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+  https://www.gnu.org/licenses/gpl-3.0-standalone.html.
+
+  SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
@@ -14,16 +19,19 @@
   <groupId>org.eclipse.elk</groupId>
   <name>Eclipse Layout Kernel</name>
   <url>https://www.eclipse.org/elk/</url>
-  <version>0.10.0-SNAPSHOT</version>
+  <version>0.13.0-SNAPSHOT</version>
   <description>An infrastructure for automatic graph layout and implementations of different layout algorithms.</description>
   <packaging>pom</packaging>
 
 
   <!-- Define a few properties used throughout all build profiles. -->
   <properties>
-    <targetJdk>11</targetJdk>
-    <tycho-version>2.7.3</tycho-version>
-    <xtext-version>2.28.0</xtext-version>
+    <targetJdk>17</targetJdk>
+    <maven.compiler.release>${targetJdk}</maven.compiler.release>
+    <maven.compiler.source>${targetJdk}</maven.compiler.source>
+    <maven.compiler.target>${targetJdk}</maven.compiler.target>
+    <tycho-version>4.0.13</tycho-version>
+    <xtext-version>2.36.0</xtext-version>
     <elk-version>${project.version}</elk-version>
 
     <!-- chsch: copied from https://eclipse.googlesource.com/recommenders/org.eclipse.recommenders/+/3dae4575d3370da2da25a1cbce3dfcff198f0611/features/pom.xml -->
@@ -34,7 +42,6 @@
          due to xtend's template symbols («) when running maven on windows. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
-    <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
   </properties>
 
 
@@ -62,7 +69,6 @@
       <id>elk-meta</id>
 
       <modules>
-        <module>org.eclipse.elk.targetplatform</module>
         <module>../plugins/org.eclipse.elk.graph</module>
         <module>../plugins/org.eclipse.elk.core.meta</module>
       </modules>
@@ -109,6 +115,126 @@
       </distributionManagement>
       <build>
         <plugins>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.8.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>central</publishingServerId>
+              <autoPublish>false</autoPublish>
+              <waitUntil>published</waitUntil>
+              <centralSnapshotsUrl>
+                https://central.sonatype.com/repository/maven-snapshots/</centralSnapshotsUrl>
+              <excludeArtifacts>
+                <excludeArtifact>
+                  org.eclipse.elk.alg.disco.debug
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.conn.gmf
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.core.debug.grandom.ide
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.core.debug.grandom.ui
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.core.debug.grandom
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.core.debug
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.core.meta.ui
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.core.ui
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.graph.json.text.ui
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.graph.text.ui
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.alg.common.test
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.alg.disco.test
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.alg.force.test
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.alg.layered.test
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.alg.mrtree.test
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.alg.radial.test
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.alg.rectpacking.test
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.alg.spore.test
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.alg.test
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.alg.topdown.test
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.core.test
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.graph.json.test
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.graph.test
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.shared.test
+                </excludeArtifact>
+                <excludeArtifact>
+                  test
+                </excludeArtifact>
+                <excludeArtifact>
+                  features
+                </excludeArtifact>
+                <excludeArtifact>
+                  plugins
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.algorithms.feature
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.graphviz.feature
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.gmf.feature
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.ui.feature
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.graph.json.feature
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.feature
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.libavoid.feature
+                </excludeArtifact>
+                <excludeArtifact>
+                  org.eclipse.elk.sdk.feature
+                </excludeArtifact>
+              </excludeArtifacts>
+            </configuration>
+          </plugin>
           <!-- Create GPG signatures. -->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -140,6 +266,21 @@
   <!-- Modify the build process to add Tycho and configure some utility plug-ins. -->
   <build>
     <plugins>
+    
+      <!-- license-check plugin to automatically generate dependency list -->
+      <plugin>
+        <groupId>org.eclipse.dash</groupId>
+        <artifactId>license-tool-plugin</artifactId>
+        <version>1.1.0</version>
+        <executions>
+          <execution>
+            <id>license-check</id>
+            <goals>
+              <goal>license-check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
 
       <!-- We need tycho to build eclipse plugins -->
       <plugin>
@@ -155,12 +296,16 @@
         <artifactId>target-platform-configuration</artifactId>
         <version>${tycho-version}</version>
         <configuration>
+          <requireEagerResolve>true</requireEagerResolve>
           <target>
             <artifact>
               <groupId>org.eclipse.elk</groupId>
               <artifactId>org.eclipse.elk.targetplatform</artifactId>
               <version>${elk-version}</version>
             </artifact>
+          </target>
+          <target>
+            <file>${maven.multiModuleProjectDirectory}/org.eclipse.elk.targetplatform/org.eclipse.elk.targetplatform.target</file>
           </target>
           <environments>
             <environment>
@@ -179,17 +324,6 @@
               <arch>x86_64</arch>
             </environment>
           </environments>
-          <dependency-resolution>
-            <extraRequirements>
-              <!-- to force the same version of jdt.compiler.apt
-                and jdt.core (for xtext-maven-plugin) -->
-              <requirement>
-                <type>eclipse-plugin</type>
-                <id>org.eclipse.jdt.compiler.apt</id>
-                <versionRange>0.0.0</versionRange>
-              </requirement>
-            </extraRequirements>
-          </dependency-resolution>
         </configuration>
       </plugin>
 
@@ -225,15 +359,6 @@
         <version>${tycho-version}</version>
         <configuration>
           <enableAssertions>true</enableAssertions>
-          <!-- There seems to be an issue with executing several tests in parallel in that
-               it can happen that failed tests are eventually reported as having succeeded.
-               A resolution is to set forkCount=1 and reuseForks=false
-               See, e.g. the following stackoverflow post:
-               https://stackoverflow.com/questions/3365628/junit-tests-pass-in-eclipse-but-fail-in-maven-surefire -->
-          <!-- parallel>classes</parallel -->
-          <!-- threadCount>4</threadCount -->
-          <reuseForks>false</reuseForks>
-          <forkCount>1</forkCount>
           <excludes>
             <exclude>**/TestUtil.java</exclude>
           </excludes>
@@ -294,6 +419,7 @@
           <version>${xtext-version}</version>
           <configuration>
             <outputDirectory>${basedir}/xtend-gen</outputDirectory>
+            <javaSourceVersion>${maven.compiler.release}</javaSourceVersion>
           </configuration>
           <executions>
             <execution>
@@ -383,6 +509,7 @@
                       <goal>build-qualifier-aggregator</goal>
                       <goal>validate-id</goal>
                       <goal>validate-version</goal>
+                      <goal>package-plugin</goal>
                     </goals>
                   </pluginExecutionFilter>
                   <action>
@@ -406,7 +533,7 @@
                   <pluginExecutionFilter>
                     <groupId>org.eclipse.tycho</groupId>
                     <artifactId>target-platform-configuration</artifactId>
-                    <versionRange>[2.7.3,)</versionRange>
+                    <versionRange>[4.0.13,)</versionRange>
                     <goals>
                       <goal>target-platform</goal>
                     </goals>
@@ -428,6 +555,14 @@
   <!-- Maven plugin repositories -->
   <pluginRepositories>
     <pluginRepository>
+      <id>dash-licenses-releases</id>
+      <url>https://repo.eclipse.org/content/repositories/dash-licenses-releases/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+
+    <pluginRepository>
       <id>central</id>
       <name>Maven Plugin Repository</name>
       <url>https://repo.maven.apache.org/maven2</url>
@@ -447,17 +582,17 @@
 
   <!-- Information about where the ELK code lives. -->
   <scm>
-    <connection>scm:git:git://github.com/eclipse/elk.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com:eclipse/elk.git</developerConnection>
-    <url>https://github.com/eclipse/elk</url>
+    <connection>scm:git:git://github.com/eclipse-elk/elk.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:eclipse-elk/elk.git</developerConnection>
+    <url>https://github.com/eclipse-elk/elk</url>
   </scm>
 
 
   <!-- The license ELK is available as. -->
   <licenses>
     <license>
-      <name>Eclipse Public License - v 2.0</name>
-      <url>http://www.eclipse.org/legal/epl-v20.html</url>
+      <name>EPL-2.0</name>
+      <url>https://www.eclipse.org/legal/epl-2.0</url>
     </license>
   </licenses>
 
@@ -476,17 +611,9 @@
     </developer>
 
     <developer>
-      <id>christoph.schulze</id>
-      <name>Christoph Daniel Schulze</name>
-      <email>cds@informatik.uni-kiel.de</email>
-      <organization>Kiel University</organization>
-      <organizationUrl>https://www.rtsys.informatik.uni-kiel.de/</organizationUrl>
-    </developer>
-
-    <developer>
-      <id>ulf.rueegg</id>
-      <name>Ulf Rüegg</name>
-      <email>uru@informatik.uni-kiel.de</email>
+      <id>maximilian.kasperowski</id>
+      <name>Maximilian Kasperowski</name>
+      <email>mka@informatik.uni-kiel.de</email>
       <organization>Kiel University</organization>
       <organizationUrl>https://www.rtsys.informatik.uni-kiel.de/</organizationUrl>
     </developer>

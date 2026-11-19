@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.alg.libavoid.server;
 
@@ -455,6 +460,17 @@ public class LibavoidServer {
         error.append('.');
     }
 
+    /** interrupt Server operation */
+    public void cancelProcess() {
+        synchronized (nextJob) {
+            Process myProcess = process;
+            if (myProcess != null) {
+                libavoidStream = null;
+                myProcess.destroy();
+            }
+        }
+    }
+
     /** default timeout for waiting for the server to give some output. */
     public static final int PROCESS_DEF_TIMEOUT = 10000;
 
@@ -496,14 +512,7 @@ public class LibavoidServer {
                 }
 
                 if (!interrupted) {
-                    synchronized (nextJob) {
-                        // timeout has occurred! kill the process so the main thread will wake
-                        Process myProcess = process;
-                        if (myProcess != null) {
-                            libavoidStream = null;
-                            myProcess.destroy();
-                        }
-                    }
+                    cancelProcess();
                 }
 
             } while (watchdog == this);

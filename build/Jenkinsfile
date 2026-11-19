@@ -4,8 +4,13 @@
 // This program and the accompanying materials are made available under the
 // terms of the Eclipse Public License 2.0 which is available at
 // http://www.eclipse.org/legal/epl-2.0.
-//
-// SPDX-License-Identifier: EPL-2.0
+// 
+// This Source Code may also be made available under the following Secondary
+// Licenses when the conditions for such availability set forth in the Eclipse
+// Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+// https://www.gnu.org/licenses/gpl-3.0-standalone.html.
+// 
+// SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
 ///////////////////////////////////////////////////////////////////////////////
 
 pipeline {
@@ -26,7 +31,7 @@ kind: Pod
 spec:
   containers:
   - name: maven
-    image: maven:3.6-openjdk-17
+    image: maven:3.9-eclipse-temurin-17
     command:
     - cat
     tty: true
@@ -138,6 +143,8 @@ spec:
 
     // Keep at most 14 builds for at most 14 days
     buildDiscarder logRotator(artifactDaysToKeepStr: '14', artifactNumToKeepStr: '4', daysToKeepStr: '14', numToKeepStr: '14')
+    disableConcurrentBuilds()
+    timeout(time: 90, unit: 'MINUTES')    
   }
 
   stages {
@@ -163,7 +170,7 @@ spec:
               ]
             ],
             submoduleCfg: [],
-            userRemoteConfigs: [[url: 'https://github.com/eclipse/elk.git']]
+            userRemoteConfigs: [[url: 'https://github.com/eclipse-elk/elk.git']]
           ]
         )
 
@@ -185,7 +192,7 @@ spec:
               ]
             ],
             submoduleCfg: [],
-            userRemoteConfigs: [[url: 'https://github.com/eclipse/elk-models.git']]
+            userRemoteConfigs: [[url: 'https://github.com/eclipse-elk/elk-models.git']]
           ]
         )
       }

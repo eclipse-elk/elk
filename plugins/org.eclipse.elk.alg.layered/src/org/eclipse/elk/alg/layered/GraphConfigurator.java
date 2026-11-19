@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.alg.layered;
 
@@ -22,6 +27,7 @@ import org.eclipse.elk.alg.layered.options.GraphProperties;
 import org.eclipse.elk.alg.layered.options.GreedySwitchType;
 import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
+import org.eclipse.elk.alg.layered.options.NodeFlexibility;
 import org.eclipse.elk.alg.layered.options.NodePromotionStrategy;
 import org.eclipse.elk.alg.layered.options.OrderingStrategy;
 import org.eclipse.elk.alg.layered.options.Spacings;
@@ -299,8 +305,8 @@ final class GraphConfigurator {
         }
         
         switch (lgraph.getProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY)) {
-        case N_LAYERS:
-            configuration.addBefore(LayeredPhases.P4_NODE_PLACEMENT, IntermediateProcessorStrategy.LAYER_UNZIPPER);
+        case ALTERNATING:
+            configuration.addBefore(LayeredPhases.P4_NODE_PLACEMENT, IntermediateProcessorStrategy.ALTERNATING_LAYER_UNZIPPER);
             break;
         default:
             break;
@@ -325,6 +331,11 @@ final class GraphConfigurator {
         if (lgraph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY) != OrderingStrategy.NONE) {
             configuration
                 .addBefore(LayeredPhases.P3_NODE_ORDERING, IntermediateProcessorStrategy.SORT_BY_INPUT_ORDER_OF_MODEL);
+        }
+        
+        if (lgraph.getLayerlessNodes().stream().anyMatch(n -> NodeFlexibility.getNodeFlexibility(n) != null)
+                && lgraph.hasProperty(LayeredOptions.NODE_PLACEMENT_NETWORK_SIMPLEX_NODE_FLEXIBILITY_RECOMPUTE_NODE_PLACEMENT)) {
+            configuration.addAfter(LayeredPhases.P4_NODE_PLACEMENT, IntermediateProcessorStrategy.NODE_PLACEMENT_REPEATER);
         }
         
         return configuration;

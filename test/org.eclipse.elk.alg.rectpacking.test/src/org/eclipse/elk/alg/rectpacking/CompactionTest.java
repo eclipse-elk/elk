@@ -5,17 +5,28 @@ package org.eclipse.elk.alg.rectpacking;
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.elk.alg.rectpacking.options.RectPackingOptions;
 import org.eclipse.elk.alg.rectpacking.p1widthapproximation.WidthApproximationStrategy;
 import org.eclipse.elk.alg.test.PlainJavaInitialization;
 import org.eclipse.elk.core.math.ElkPadding;
+import org.eclipse.elk.core.math.ElkRectangle;
 import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.core.util.BasicProgressMonitor;
 import org.eclipse.elk.graph.ElkNode;
@@ -558,6 +569,44 @@ public class CompactionTest {
         assertEquals("", 15.0, n5.getY(), 1);
         assertEquals("", 105.0, n6.getX(), 1);
         assertEquals("", 0.0, n6.getY(), 1);   
+    }
+
+    /**
+     * Test the compaction step for the case that a block, which was in the next row after placement, is placed next to
+     * the current block and the row is compacted again afterwards because of the row height reevaluation. The moved
+     * block must then be treated as a block of the current row. If it is not, it is added to the row a second time and
+     * the compaction never terminates.
+     */
+    @Test(timeout = 10000)
+    public void testPlaceBlockFromNextRowRightWithRowHeightReevaluation() {
+        ElkNode parent = ElkGraphUtil.createGraph();
+        parent.setProperty(CoreOptions.ALGORITHM, RectPackingOptions.ALGORITHM_ID);
+        parent.setProperty(RectPackingOptions.WIDTH_APPROXIMATION_TARGET_WIDTH, 288.0);
+        parent.setProperty(RectPackingOptions.WIDTH_APPROXIMATION_STRATEGY, WidthApproximationStrategy.TARGET_WIDTH);
+        parent.setProperty(RectPackingOptions.PACKING_COMPACTION_ROW_HEIGHT_REEVALUATION, true);
+        double[][] sizes = { { 117, 91 }, { 31, 64 }, { 124, 27 }, { 88, 86 }, { 38, 24 }, { 23, 86 }, { 38, 90 } };
+        List<ElkNode> nodes = new ArrayList<>();
+        for (double[] size : sizes) {
+            ElkNode node = ElkGraphUtil.createNode(parent);
+            node.setDimensions(size[0], size[1]);
+            nodes.add(node);
+        }
+
+        RectPackingLayoutProvider layoutProvider = new RectPackingLayoutProvider();
+        layoutProvider.layout(parent, new BasicProgressMonitor());
+
+        for (ElkNode node : nodes) {
+            ElkRectangle rect = new ElkRectangle(node.getX(), node.getY(), node.getWidth(), node.getHeight());
+            assertTrue("Node outside of its parent: " + rect, rect.x >= 0 && rect.y >= 0
+                    && rect.getMaxX() <= parent.getWidth() && rect.getMaxY() <= parent.getHeight());
+            for (ElkNode other : nodes) {
+                if (other != node) {
+                    ElkRectangle otherRect =
+                            new ElkRectangle(other.getX(), other.getY(), other.getWidth(), other.getHeight());
+                    assertFalse("Nodes overlap: " + rect + " and " + otherRect, rect.intersects(otherRect));
+                }
+            }
+        }
     }
 
 }

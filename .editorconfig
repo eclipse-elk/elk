@@ -1,0 +1,6 @@
+root = true
+
+[*.java]
+# A lot of files seem to contain trailing whitespace.
+# To prevent it showing up as changes on contributions, keep it around for now.
+trim_trailing_whitespace = false

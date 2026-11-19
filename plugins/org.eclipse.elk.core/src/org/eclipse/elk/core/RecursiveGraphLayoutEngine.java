@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.core;
 
@@ -23,6 +28,7 @@ import org.eclipse.elk.core.math.KVectorChain;
 import org.eclipse.elk.core.options.ContentAlignment;
 import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.core.options.HierarchyHandling;
+import org.eclipse.elk.core.options.ITopdownSizeApproximator;
 import org.eclipse.elk.core.options.TopdownNodeTypes;
 import org.eclipse.elk.core.options.TopdownSizeApproximator;
 import org.eclipse.elk.core.testing.TestController;
@@ -234,6 +240,7 @@ public class RecursiveGraphLayoutEngine implements IGraphLayoutEngine {
                             // provider if yes its size needs to be pre-computed before computing the layout
                             LayoutAlgorithmData localAlgorithmData = 
                                     childNode.getProperty(CoreOptions.RESOLVED_ALGORITHM);
+                            ElkPadding padding = childNode.getProperty(CoreOptions.PADDING);
                             if (childNode.getChildren().size() > 0
                                     && localAlgorithmData.getInstancePool().fetch() instanceof ITopdownLayoutProvider) {
                                 // topdownlayout providers should not be used on hierarchical nodes
@@ -248,13 +255,23 @@ public class RecursiveGraphLayoutEngine implements IGraphLayoutEngine {
                                 KVector requiredSize = topdownLayoutProvider.getPredictedGraphSize(childNode);
                                 childNode.setDimensions(Math.max(childNode.getWidth(), requiredSize.x), 
                                         Math.max(childNode.getHeight(), requiredSize.y));
-                            } else if (childNode.getProperty(CoreOptions.TOPDOWN_SIZE_APPROXIMATOR) != null) {
-                                TopdownSizeApproximator approximator = 
+                            } else if (childNode.getProperty(CoreOptions.TOPDOWN_SIZE_APPROXIMATOR) != null 
+                                    && childNode.getChildren() != null && childNode.getChildren().size() > 0) {
+                                ITopdownSizeApproximator approximator = 
                                         childNode.getProperty(CoreOptions.TOPDOWN_SIZE_APPROXIMATOR);
                                 KVector size = approximator.getSize(childNode);
-                                ElkPadding padding = childNode.getProperty(CoreOptions.PADDING);
                                 childNode.setDimensions(Math.max(childNode.getWidth(), size.x + padding.left + padding.right),
                                         Math.max(childNode.getHeight(), size.y + padding.top + padding.bottom));
+                            } else {
+                                // If no approximator is set, use the set sizes for atomic nodes and use the properties
+                                // that have been set for nodes containing further children
+                                if (childNode.getChildren().size() != 0) {
+                                    KVector size = new KVector(childNode.getProperty(CoreOptions.TOPDOWN_HIERARCHICAL_NODE_WIDTH), 
+                                            childNode.getProperty(CoreOptions.TOPDOWN_HIERARCHICAL_NODE_WIDTH) /
+                                            childNode.getProperty(CoreOptions.TOPDOWN_HIERARCHICAL_NODE_ASPECT_RATIO));
+                                    childNode.setDimensions(Math.max(childNode.getWidth(), size.x + padding.left + padding.right),
+                                            Math.max(childNode.getHeight(), size.y + padding.top + padding.bottom));
+                                }
                             }
                         }
                     }
@@ -596,6 +613,10 @@ public class RecursiveGraphLayoutEngine implements IGraphLayoutEngine {
                 bend.set(bend.getX() + xOffset, bend.getY() + yOffset);
             }
             
+            for (final ElkLabel label : selfLoop.getLabels()) {
+                label.setLocation(label.getX() + xOffset, label.getY() + yOffset);
+            }
+
             // Offset junction points by the node position
             selfLoop.getProperty(CoreOptions.JUNCTION_POINTS).offset(xOffset, yOffset);
         }

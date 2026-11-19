@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  * 
- * SPDX-License-Identifier: EPL-2.0 
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later 
  *******************************************************************************/
 package org.eclipse.elk.alg.layered.intermediate;
 
@@ -22,10 +27,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests the general n-way layer unzipper.
+ * Tests the general n-way alternating layer unzipper.
  *
  */
-public class GeneralLayerUnzipperTest {
+public class AlternatingLayerUnzipperTest {
     
     LayeredLayoutProvider layeredLayout;
     
@@ -71,7 +76,7 @@ public class GeneralLayerUnzipperTest {
         ElkGraphUtil.createSimpleEdge(node4, nodeFinal);
 
         
-        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.N_LAYERS);
+        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.ALTERNATING);
         graph.setProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY, OrderingStrategy.PREFER_EDGES);
         node2.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 2);
         
@@ -125,7 +130,7 @@ public class GeneralLayerUnzipperTest {
         ElkGraphUtil.createSimpleEdge(node4, nodeFinal);
         ElkGraphUtil.createSimpleEdge(node5, nodeFinal);
         
-        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.N_LAYERS);
+        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.ALTERNATING);
         graph.setProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY, OrderingStrategy.PREFER_EDGES);
         node2.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 3);
         
@@ -173,7 +178,7 @@ public class GeneralLayerUnzipperTest {
         ElkGraphUtil.createSimpleEdge(node1, node4);
         ElkGraphUtil.createSimpleEdge(node1, node5);
         
-        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.N_LAYERS);
+        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.ALTERNATING);
         graph.setProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY, OrderingStrategy.PREFER_EDGES);
         node2.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 2);
         
@@ -225,7 +230,7 @@ public class GeneralLayerUnzipperTest {
         ElkGraphUtil.createSimpleEdge(node4, nodeFinal);
         ElkGraphUtil.createSimpleEdge(node5, nodeFinal);
         
-        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.N_LAYERS);
+        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.ALTERNATING);
         graph.setProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY, OrderingStrategy.PREFER_EDGES);
         node2.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 2);
         
@@ -290,7 +295,7 @@ public class GeneralLayerUnzipperTest {
         ElkGraphUtil.createSimpleEdge(node4, node22);
         ElkGraphUtil.createSimpleEdge(node4, node23);
         
-        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.N_LAYERS);
+        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.ALTERNATING);
         graph.setProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY, OrderingStrategy.PREFER_EDGES);
         node1.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 2);
         node21.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 2);
@@ -354,7 +359,7 @@ public class GeneralLayerUnzipperTest {
         ElkGraphUtil.createSimpleEdge(node4, nodeFinal);
 
         
-        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.N_LAYERS);
+        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.ALTERNATING);
         graph.setProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY, OrderingStrategy.PREFER_EDGES);
         node2.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 2);
         
@@ -409,7 +414,7 @@ public class GeneralLayerUnzipperTest {
         ElkGraphUtil.createSimpleEdge(node4, nodeFinal);
 
         
-        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.N_LAYERS);
+        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.ALTERNATING);
         graph.setProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY, OrderingStrategy.PREFER_EDGES);
         node2.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 2);
         
@@ -466,7 +471,7 @@ public class GeneralLayerUnzipperTest {
         ElkGraphUtil.createSimpleEdge(node3, node6);
         ElkGraphUtil.createSimpleEdge(node4, node7);
         
-        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.N_LAYERS);
+        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.ALTERNATING);
         graph.setProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY, OrderingStrategy.PREFER_EDGES);
         node2.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 2);
         node5.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 2);
@@ -530,7 +535,7 @@ public class GeneralLayerUnzipperTest {
         ElkGraphUtil.createSimpleEdge(node3, node6);
         ElkGraphUtil.createSimpleEdge(node4, node7);
         
-        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.N_LAYERS);
+        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.ALTERNATING);
         graph.setProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY, OrderingStrategy.PREFER_EDGES);
         node2.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 2);
         node5.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 2);
@@ -598,7 +603,7 @@ public class GeneralLayerUnzipperTest {
         ElkGraphUtil.createSimpleEdge(node4, node22);
         ElkGraphUtil.createSimpleEdge(node4, node23);
         
-        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.N_LAYERS);
+        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.ALTERNATING);
         graph.setProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY, OrderingStrategy.PREFER_EDGES);
         node1.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 3);
         node21.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 2);
@@ -652,7 +657,7 @@ public class GeneralLayerUnzipperTest {
         
         ElkGraphUtil.createSimpleEdge(node4, node5);
         
-        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.N_LAYERS);
+        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.ALTERNATING);
         graph.setProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY, OrderingStrategy.PREFER_EDGES);
         node2.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 2);
         node2.setProperty(LayeredOptions.LAYER_UNZIPPING_RESET_ON_LONG_EDGES, true);
@@ -707,7 +712,7 @@ public class GeneralLayerUnzipperTest {
         ElkGraphUtil.createSimpleEdge(node4, node5);
         ElkGraphUtil.createSimpleEdge(node1, node6);
         
-        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.N_LAYERS);
+        graph.setProperty(LayeredOptions.LAYER_UNZIPPING_STRATEGY, LayerUnzippingStrategy.ALTERNATING);
         graph.setProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY, OrderingStrategy.PREFER_EDGES);
         node2.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 2);
         node2.setProperty(LayeredOptions.LAYER_UNZIPPING_RESET_ON_LONG_EDGES, false);

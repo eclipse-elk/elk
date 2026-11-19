@@ -5,23 +5,26 @@
   This program and the accompanying materials are made available under the
   terms of the Eclipse Public License 2.0 which is available at
   http://www.eclipse.org/legal/epl-2.0.
+
+  This Source Code may also be made available under the following Secondary
+  Licenses when the conditions for such availability set forth in the Eclipse
+  Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+  https://www.gnu.org/licenses/gpl-3.0-standalone.html.
   
-  SPDX-License-Identifier: EPL-2.0
+  SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.eclipse.elk</groupId>
     <artifactId>parent</artifactId>
-    <version>0.10.0-SNAPSHOT</version>
+    <version>0.13.0-SNAPSHOT</version>
     <relativePath>../../build/pom.xml</relativePath>
   </parent>
 
-  <groupId>org.eclipse.elk</groupId>
   <artifactId>org.eclipse.elk.graph.json</artifactId>
   <name>ELK Graph JSON</name>
   <description>JSON Format of the ELK Graph</description>
-  <version>0.10.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
 
   <dependencies>
@@ -33,7 +36,7 @@
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
-      <version>[2.7.0,2.9.0)</version>
+      <version>[2.7.0,)</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.elk</groupId>

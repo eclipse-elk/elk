@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  * 
- * SPDX-License-Identifier: EPL-2.0 
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later 
  *******************************************************************************/
 package org.eclipse.elk.alg.layered.intermediate.unzipping;
 
@@ -47,24 +52,59 @@ import com.google.common.collect.Lists;
  * </dl>
  *
  */
-public class GeneralLayerUnzipper implements ILayoutProcessor<LGraph> {
+public class AlternatingLayerUnzipper implements ILayoutProcessor<LGraph> {
     
     @Override
     public void process (LGraph graph, IElkProgressMonitor progressMonitor) {
-        
-        processLayerSplitProperty(graph);
         
         int insertionLayerOffset = 1;
         List<Pair<Layer, Integer>> newLayers = new ArrayList<>();
         for (int i = 0; i < graph.getLayers().size(); i++) {
             
-            int N = graph.getLayers().get(i).getProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT);
-            boolean resetOnLongEdges = graph.getLayers().get(i).getProperty(LayeredOptions.LAYER_UNZIPPING_RESET_ON_LONG_EDGES);
+            int N = getLayerSplitProperty(graph.getLayers().get(i));
+            boolean resetOnLongEdges = getResetOnLongEdgesProperty(graph.getLayers().get(i));
+            boolean minimizeEdgeLength = getMinimizeEdgeLengthProperty(graph.getLayers().get(i));
             
-            // only split if there are more nodes than the resulting sub-layers
+            if (minimizeEdgeLength) {
+                // get maximum node width and average node height
+                double maxWidth = 0.0;
+                double averageHeight = 0.0;
+                
+                for (LNode node : graph.getLayers().get(i)) {
+                    maxWidth = Math.max(maxWidth, node.getSize().x);
+                    averageHeight += node.getSize().y;
+                }
+                
+                averageHeight /= graph.getLayers().get(i).getNodes().size();
+                
+                // add spacings for heuristic to get closer to zero spacing situation
+                maxWidth += Math.max(2 * graph.getProperty(LayeredOptions.SPACING_EDGE_NODE_BETWEEN_LAYERS),
+                        Math.max(graph.getLayers().get(i).getNodes().size() 
+                                * graph.getProperty(LayeredOptions.SPACING_EDGE_EDGE_BETWEEN_LAYERS),
+                                graph.getProperty(LayeredOptions.SPACING_NODE_NODE_BETWEEN_LAYERS)));
+                
+                averageHeight += Math.max(
+                        graph.getProperty(LayeredOptions.SPACING_NODE_NODE),
+                        graph.getProperty(LayeredOptions.SPACING_EDGE_NODE));
+                
+                // apply heuristic
+                // this heuristic is for the decision between N=1 and N=2, it shouldn't be used with N > 2
+                //
+                // the intuition behind this heuristic is that there is a growth term S_n, determined mostly by
+                // the growth of the vertical edge segments as more nodes are added to a layer
+                // S_n grows roughly like n^2 / 4 and the cross-over point where splitting becomes favorable lies
+                // approximately at box_width / box_height = S_n / n, the approximation is more accurate for larger n
+                if (maxWidth / averageHeight >= graph.getLayers().get(i).getNodes().size() / 4.0) {
+                    // skip this layer and do not split it
+                    continue;
+                }
+                
+            }
+            
+            // only split if there enough nodes to fill the resulting sub-layers
             // an alternative would be to reduce N for this layer, this may or may
             // not be desirable
-            if (graph.getLayers().get(i).getNodes().size() > N) {
+            if (graph.getLayers().get(i).getNodes().size() >= N) {
                 
                 List<Layer> subLayers = new ArrayList<>();
                 // add current layer as first sub-layer
@@ -110,33 +150,61 @@ public class GeneralLayerUnzipper implements ILayoutProcessor<LGraph> {
         
         
     }
+
+    /**
+     * Checks all nodes of a layer for the layerSplit property and returns the lowest set value.
+     * 
+     * @param layer The layer to determine the layerSplit property for
+     * @return the layerSplit value
+     */
+    private int getLayerSplitProperty(Layer layer) {
+        int layerSplit = Integer.MAX_VALUE;
+        boolean propertyUnset = true;
+        for (int i = 0; i < layer.getNodes().size(); i++) {
+            if (layer.getNodes().get(i).hasProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT)) {
+                propertyUnset = false;
+                int nodeValue = layer.getNodes().get(i).getProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT);
+                layerSplit = layerSplit < nodeValue ? layerSplit : nodeValue;
+            }
+        }
+        if (propertyUnset) {
+            layerSplit = LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT.getDefault();
+        }
+        return layerSplit;
+    }
     
     /**
-     * checks the layer split property of the first node in a layer and copies the property to the layer
-     * @param graph
+     * Checks all nodes of a layer for the resetOnLongEdges property and if any sets the value to false, returns false.
+     * 
+     * @param layer The layer to determine the resetOnLongEdges property for.
+     * @return the resetOnLongEdges value
      */
-    private void processLayerSplitProperty(LGraph graph) {
-        for (Layer layer : graph.getLayers()) {
-            boolean setLayerSplit = false;
-            boolean setResetOnLongEdges = false;
-            for (LNode node : layer.getNodes()) {
-                if (!setLayerSplit && node.hasProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT)) {
-                    layer.setProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT, 
-                            node.getProperty(LayeredOptions.LAYER_UNZIPPING_LAYER_SPLIT));
-                    setLayerSplit = true;
-                }
-                if (!setResetOnLongEdges && node.hasProperty(LayeredOptions.LAYER_UNZIPPING_RESET_ON_LONG_EDGES)) {
-                    layer.setProperty(LayeredOptions.LAYER_UNZIPPING_RESET_ON_LONG_EDGES, 
-                            node.getProperty(LayeredOptions.LAYER_UNZIPPING_RESET_ON_LONG_EDGES));
-                    setResetOnLongEdges = true;
-                }
-                if (setLayerSplit && setResetOnLongEdges) {
-                    // all options have been set and we can skip the remaining nodes of the layer
-                    return;
+    private boolean getResetOnLongEdgesProperty(Layer layer) {
+        for (int i = 0; i < layer.getNodes().size(); i++) {
+            if (layer.getNodes().get(i).hasProperty(LayeredOptions.LAYER_UNZIPPING_RESET_ON_LONG_EDGES)) {
+                if (!layer.getNodes().get(i).getProperty(LayeredOptions.LAYER_UNZIPPING_RESET_ON_LONG_EDGES)) {
+                    return false;
                 }
             }
         }
-        
+        return true;
+    }
+    
+    /**
+     * Checks all nodes of a layer for the minimizeEdgeLength property and if any sets the value to true, returns true.
+     * 
+     * @param layer The layer to determine the minimizeEdgeLength property for.
+     * @return the minimizeEdgeLength value
+     */
+    private boolean getMinimizeEdgeLengthProperty(Layer layer) {
+        for (int i = 0; i < layer.getNodes().size(); i++) {
+            if (layer.getNodes().get(i).hasProperty(LayeredOptions.LAYER_UNZIPPING_MINIMIZE_EDGE_LENGTH)) {
+                if (layer.getNodes().get(i).getProperty(LayeredOptions.LAYER_UNZIPPING_MINIMIZE_EDGE_LENGTH)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

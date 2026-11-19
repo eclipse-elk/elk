@@ -128,7 +128,7 @@
     <setupTask
         xsi:type="git:GitCloneTask"
         id="git.clone"
-        remoteURI="eclipse/elk">
+        remoteURI="eclipse-elk/elk">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
@@ -149,7 +149,7 @@
     <setupTask
         xsi:type="git:GitCloneTask"
         id="git.clone-models"
-        remoteURI="eclipse/elk-models"
+        remoteURI="eclipse-elk/elk-models"
         checkoutBranch="master">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">

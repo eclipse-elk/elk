@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.alg.layered.p3order;
 
@@ -62,7 +67,6 @@ public class GraphInfoHolder implements IInitializable {
     private AllCrossingsCounter crossingsCounter;
     private int nPorts;
 
-
     /**
      * Create object collecting information about a graph.
      * 
@@ -76,7 +80,7 @@ public class GraphInfoHolder implements IInitializable {
     public GraphInfoHolder(final LGraph graph, final CrossMinType crossMinType, final List<GraphInfoHolder> graphs) {
         lGraph = graph;
         currentNodeOrder = graph.toNodeArray();
-        
+
         // Hierarchy information.
         parent = lGraph.getParentNode();
         hasParent = parent != null;
@@ -92,7 +96,7 @@ public class GraphInfoHolder implements IInitializable {
         layerSweepTypeDecider = new LayerSweepTypeDecider(this);
         List<IInitializable> initializables =
                 Lists.newArrayList(this, crossingsCounter, layerSweepTypeDecider, portDistributor);
-        
+
         if (crossMinType == CrossMinType.BARYCENTER
                 && !graph.getProperty(LayeredOptions.CROSSING_MINIMIZATION_FORCE_NODE_MODEL_ORDER)) {
             ForsterConstraintResolver constraintResolver = new ForsterConstraintResolver(currentNodeOrder);
@@ -105,6 +109,8 @@ public class GraphInfoHolder implements IInitializable {
             initializables.add(constraintResolver);
             crossMinimizer = new ModelOrderBarycenterHeuristic(constraintResolver, random,
                     (AbstractBarycenterPortDistributor) portDistributor, currentNodeOrder);
+        } else if (crossMinType == CrossMinType.MEDIAN) {
+            crossMinimizer = new MedianHeuristic(random);
         } else {
             crossMinimizer = new GreedySwitchHeuristic(crossMinType, this);
         }

@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+ * 
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk
 
@@ -300,6 +305,29 @@ advanced option omitNodeMicroLayout: boolean {
          this option allows to deactivate the micro layout."
     default = false
     targets parents
+}
+
+// --- JSON
+group json {
+    
+    option shapeCoords: ShapeCoords {
+        label "Shape Coords"
+        description
+            "For layouts transferred into JSON graphs, specify the coordinate system
+             to be used for nodes, ports, and labels of nodes and ports."
+        default = ShapeCoords.INHERIT
+        targets parents
+    }
+    
+    option edgeCoords: EdgeCoords {
+        label "Edge Coords"
+        description
+            "For layouts transferred into JSON graphs, specify the coordinate system
+             to be used for edge route points and edge labels."
+        default = EdgeCoords.INHERIT
+        targets parents
+    }
+    
 }
 
 // --- SPACING
@@ -716,6 +744,17 @@ programmatic option labelManager: ILabelManager {
     targets parents, labels
 }
 
+option softwrappingFuzziness: double {
+    label "Softwrapping Fuzziness"
+    description
+        "Determines the amount of fuzziness to be used when performing softwrapping on labels.
+         The value expresses the percent of overhang that is permitted for each line.
+         If the next line would take up less space than this threshold, it is appended to the
+         current line instead of being placed in a new line."
+    default = 0.0
+    targets labels
+}
+
 option margins: ElkMargin {
     label "Margins"
     description
@@ -870,6 +909,30 @@ advanced option topdownLayout: boolean {
 }
 
 group topdown {
+    
+    advanced option sizeCategories: int {
+        label "Number of size categories"
+        description
+            "Defines the number of categories to use for the FIXED_INTEGER_RATIO_BOXES size approximator."
+        default = 3
+        lowerBound = 1
+        targets parents
+        requires sizeApproximator == TopdownSizeApproximator.FIXED_INTEGER_RATIO_BOXES
+    }
+    
+    advanced option sizeCategoriesHierarchicalNodeWeight: int {
+        label "Weight of a node containing children for determining the graph size"
+        description
+            "When determining the graph size for the size categorisation, this value determines how many times a node 
+             containing children is weighted more than a simple node. For example setting this value to four would 
+             result in a graph containing a simple node and a hierarchical node to be counted as having a size of five."
+        default = 4
+        lowerBound = 1
+        targets parents
+        requires sizeCategories
+        
+    }
+    
     programmatic option scaleFactor: double {
         label "Topdown Scale Factor"
         description
@@ -882,7 +945,7 @@ group topdown {
         requires nodeType == TopdownNodeTypes.HIERARCHICAL_NODE
     }
     
-    advanced option sizeApproximator: TopdownSizeApproximator {
+    advanced option sizeApproximator: ITopdownSizeApproximator {
         label "Topdown Size Approximator"
         description
             "The size approximator to be used to set sizes of hierarchical nodes during topdown layout. The default

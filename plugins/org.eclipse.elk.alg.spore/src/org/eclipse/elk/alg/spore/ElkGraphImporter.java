@@ -4,12 +4,18 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.alg.spore;
 
 import java.util.Map;
+import java.util.Random;
 
 import org.eclipse.elk.alg.common.ICostFunction;
 import org.eclipse.elk.alg.common.nodespacing.NodeDimensionCalculation;
@@ -50,6 +56,8 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
     private ElkNode elkGraph;
     /** Spacing between nodes. */
     private double spacingNodeNode;
+    /** The random number generator. */
+    private Random random;
 
     // callback functions ----------------------------------------------------------------------------------------------
     /** A cost function for the spanning tree calculation, that represents the euclidean distance between 
@@ -119,6 +127,14 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
         RootSelection rootSelection = elkGraph.getProperty(SporeCompactionOptions.PROCESSING_ORDER_ROOT_SELECTION);
         spacingNodeNode = elkGraph.getProperty(SporeCompactionOptions.SPACING_NODE_NODE);
         
+        // set the random number generator based on the random seed option
+        int randomSeed = elkGraph.getProperty(SporeCompactionOptions.RANDOM_SEED);
+        if (randomSeed == 0) {
+            random = new Random();
+        } else {
+            random = new Random(randomSeed);
+        }
+        
         ICostFunction costFunction = centerDistance;
         switch (costFunctionID) {
         case CENTER_DISTANCE:
@@ -159,12 +175,7 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
                                          elkNode.getY() + halfHeight);
             
             // randomly shift identical points a tiny bit to make them unique
-            while (nodeMap.containsKey(vertex)) {
-                // SUPPRESS CHECKSTYLE NEXT 1 MagicNumber
-                vertex.add((Math.random() - 0.5) * 0.001, (Math.random() - 0.5) * 0.001);
-                // If two positions were identical, their corresponding edge in the spanning tree would be
-                // of zero length, had no direction, and couldn't be scaled by anything.
-            }
+            shiftUntilUnique(vertex, nodeMap);
             
             ElkMargin margin = elkNode.getProperty(CoreOptions.MARGINS);
             
@@ -228,10 +239,32 @@ public class ElkGraphImporter implements IGraphImporter<ElkNode> {
         // update nodes
         for (Node n : g.vertices) {
             Pair<Node, ElkNode> original = nodeMap.get(n.originalVertex);
-            n.originalVertex = n.rect.getCenter();
+            KVector center = n.rect.getCenter();
+            // overlap removal can move a node onto the center of another one, keep the centers unique
+            if (updatedNodeMap.containsKey(center)) {
+                KVector oldCenter = center.clone();
+                shiftUntilUnique(center, updatedNodeMap);
+                n.translate(center.clone().sub(oldCenter));
+            }
+            n.originalVertex = center;
             updatedNodeMap.put(n.originalVertex, original);
         }
         nodeMap = updatedNodeMap;
+    }
+    
+    /**
+     * Randomly shifts the given point a tiny bit until it is not a key of the given map. The centers of the nodes
+     * must be unique: if two positions were identical, their corresponding edge in the spanning tree would be of
+     * zero length, had no direction, and couldn't be scaled by anything.
+     * 
+     * @param vertex the point to shift
+     * @param vertexMap the map whose keys are the points already taken
+     */
+    private void shiftUntilUnique(final KVector vertex, final Map<KVector, ?> vertexMap) {
+        while (vertexMap.containsKey(vertex)) {
+            // SUPPRESS CHECKSTYLE NEXT 1 MagicNumber
+            vertex.add((random.nextDouble() - 0.5) * 0.001, (random.nextDouble() - 0.5) * 0.001);
+        }
     }
 
     @Override

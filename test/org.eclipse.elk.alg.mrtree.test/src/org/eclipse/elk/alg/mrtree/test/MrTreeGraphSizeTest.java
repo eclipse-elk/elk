@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  * 
- * SPDX-License-Identifier: EPL-2.0 
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later 
  *******************************************************************************/
 package org.eclipse.elk.alg.mrtree.test;
 
@@ -100,5 +105,39 @@ public class MrTreeGraphSizeTest {
         
         assertEquals(paddingLeft + nodeWidth + nodeNodeSpacing + nodeWidth + paddingRight, graph.getWidth(), DOUBLE_EQ_EPSILON);
         assertEquals(paddingTop + nodeHeight + nodeNodeSpacing + nodeHeight + paddingBottom, graph.getHeight(), DOUBLE_EQ_EPSILON);
+    }
+    
+    /**
+     * Tests that the graph size is correct when the graph consists of disconnected components.
+     */
+    @Test
+    public void ComponentsGraphSizeCalculationTest() {
+        PlainJavaInitialization.initializePlainJavaLayout();
+        ElkNode graph = ElkGraphUtil.createGraph();
+        graph.setProperty(CoreOptions.ALGORITHM, MrTreeOptions.ALGORITHM_ID);
+        graph.setProperty(CoreOptions.PADDING, new ElkPadding(0));
+        graph.setProperty(CoreOptions.SPACING_NODE_NODE, 0.0);
+        // set aspect ratio to high value to force components to be laid out horizontally for the test
+        graph.setProperty(CoreOptions.ASPECT_RATIO, 1000.0);
+        
+        
+        ElkNode n1 = ElkGraphUtil.createNode(graph);
+        n1.setDimensions(nodeWidth, nodeHeight);
+        ElkNode n2 = ElkGraphUtil.createNode(graph);
+        n2.setDimensions(nodeWidth, nodeHeight);
+        
+        
+        // prepare layout engine
+        LayoutConfigurator config = new LayoutConfigurator();
+        ElkUtil.applyVisitors(graph, config, new LayoutAlgorithmResolver());
+        // call layout with layout engine
+        try {
+            new RecursiveGraphLayoutEngine().layout(graph, new BasicProgressMonitor());
+        } catch (UnsupportedGraphException exception) {
+            fail(exception.toString());
+        }
+        
+        assertEquals(nodeWidth + nodeWidth, graph.getWidth(), DOUBLE_EQ_EPSILON);
+        assertEquals(nodeHeight, graph.getHeight(), DOUBLE_EQ_EPSILON);
     }
 }

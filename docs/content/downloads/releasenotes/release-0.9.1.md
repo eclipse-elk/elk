@@ -16,13 +16,13 @@ menu:
 
 ## Details
 
-This is mainly a bugfix release. See GitHub for the full [list of resolved issues](https://github.com/eclipse/elk/milestone/19?closed=1).
+This is mainly a bugfix release. See GitHub for the full [list of resolved issues](https://github.com/eclipse-elk/elk/milestone/19?closed=1).
 
 
 ### Bugfixes
 
-* [#1011](https://github.com/eclipse/elk/pull/1011), [#1015](https://github.com/eclipse/elk/pull/1015): Fixes the issue that maven central plugins have poms with p2 dependencies.
-* [#972](https://github.com/eclipse/elk/pull/972/), [#989](https://github.com/eclipse/elk/pull/989/), [#996](https://github.com/eclipse/elk/pull/996/), [#997](https://github.com/eclipse/elk/pull/997/): Fixes micro layout issues for rectpacking.
+* [#1011](https://github.com/eclipse-elk/elk/pull/1011), [#1015](https://github.com/eclipse-elk/elk/pull/1015): Fixes the issue that maven central plugins have poms with p2 dependencies.
+* [#972](https://github.com/eclipse-elk/elk/pull/972/), [#989](https://github.com/eclipse-elk/elk/pull/989/), [#996](https://github.com/eclipse-elk/elk/pull/996/), [#997](https://github.com/eclipse-elk/elk/pull/997/): Fixes micro layout issues for rectpacking.
 
 
 

@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.alg.rectpacking.p1widthapproximation;
 
@@ -145,8 +150,10 @@ public class AreaApproximation {
         if (candidates.size() == 1) {
             return candidates.get(candidates.size() - 1);
         }
-        // Multiple options have the same value for every benchmark. These special cases are caught in the following.
-        if (candidates.size() == 2) {
+        // Two or more options have the same value for every benchmark. These special cases are caught in the following.
+        // If more than two options remain, for example for a rectangle without a size and no spacing between the
+        // nodes, the first two are compared.
+        if (candidates.size() >= 2) {
             return checkSpecialCases(candidates.get(0), candidates.get(1), lastPlaced, toPlace);
         }
         return null;

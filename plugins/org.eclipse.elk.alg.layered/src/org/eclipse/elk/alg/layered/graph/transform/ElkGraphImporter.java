@@ -4,12 +4,18 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.alg.layered.graph.transform;
 
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +35,7 @@ import org.eclipse.elk.alg.layered.graph.LPort;
 import org.eclipse.elk.alg.layered.options.CrossingMinimizationStrategy;
 import org.eclipse.elk.alg.layered.options.CycleBreakingStrategy;
 import org.eclipse.elk.alg.layered.options.GraphProperties;
+import org.eclipse.elk.alg.layered.options.GroupOrderStrategy;
 import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 import org.eclipse.elk.alg.layered.options.LayeredSpacings;
@@ -37,6 +44,7 @@ import org.eclipse.elk.alg.layered.options.NodePlacementStrategy;
 import org.eclipse.elk.alg.layered.options.NodePromotionStrategy;
 import org.eclipse.elk.alg.layered.options.OrderingStrategy;
 import org.eclipse.elk.alg.layered.options.PortType;
+import org.eclipse.elk.core.UnsupportedConfigurationException;
 import org.eclipse.elk.core.UnsupportedGraphException;
 import org.eclipse.elk.core.labels.LabelManagementOptions;
 import org.eclipse.elk.core.math.ElkPadding;
@@ -228,15 +236,24 @@ class ElkGraphImporter {
     private void importFlatGraph(final ElkNode elkgraph, final LGraph lgraph) {
         // Transform the node's children, unless we're told not to
         int index = 0;
+        HashSet<Integer> cbGroupModelOrders = new HashSet<>();
         for (ElkNode child : elkgraph.getChildren()) {
             if (!child.getProperty(LayeredOptions.NO_LAYOUT)) {
                 if (needsModelOrder(child)) {
                     child.setProperty(InternalProperties.MODEL_ORDER, index);
                     index++;
+                    if (child.hasProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CYCLE_BREAKING_ID)) {
+                        cbGroupModelOrders.add(child.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CYCLE_BREAKING_ID));
+                    }
                 }
                 transformNode(child, lgraph);
             }
         }
+        // Save the maximum node model order.
+        // This is relevant to create graph partitions based on model order and constraints.
+        lgraph.setProperty(InternalProperties.MAX_MODEL_ORDER_NODES, index);
+        // Save the number of model order groups.
+        lgraph.setProperty(InternalProperties.CB_NUM_MODEL_ORDER_GROUPS, cbGroupModelOrders.size());
 
         // iterate the list of contained edges to preserve the 'input order' of the edges
         // (this is not part of the previous loop since all children must have already been transformed)
@@ -298,6 +315,7 @@ class ElkGraphImporter {
 
         // Model order index for nodes
         int index = 0;
+        HashSet<Integer> cbGroupModelOrders = new HashSet<>();
         // Transform the node's children
         elkGraphQueue.addAll(elkgraph.getChildren());
         while (!elkGraphQueue.isEmpty()) {
@@ -306,6 +324,9 @@ class ElkGraphImporter {
             if (needsModelOrder(elknode)) {
                 // Assign a model order to the nodes as they are read
                 elknode.setProperty(InternalProperties.MODEL_ORDER, index++);
+                if (elknode.hasProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CYCLE_BREAKING_ID)) {
+                    cbGroupModelOrders.add(elknode.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CYCLE_BREAKING_ID));
+                }
             }
             
             // Check if the current node is to be laid out in the first place
@@ -353,11 +374,17 @@ class ElkGraphImporter {
                 if (nestedGraph != null) {
                     lnode.setNestedGraph(nestedGraph);
                     nestedGraph.setParentNode(lnode);
+                    ensureNoModelOrderStrategies(lnode, nestedGraph);
                     
                     elkGraphQueue.addAll(elknode.getChildren());
                 }
             }
         }
+        // Save the maximum node model order.
+        // This is relevant to create graph partitions based on model order and constraints.
+        lgraph.setProperty(InternalProperties.MAX_MODEL_ORDER_NODES, index);
+        // Save the number of model order groups.
+        lgraph.setProperty(InternalProperties.CB_NUM_MODEL_ORDER_GROUPS, cbGroupModelOrders.size());
 
         // Model order index for edges. 
         index = 0;
@@ -458,21 +485,84 @@ class ElkGraphImporter {
      * @return True, if model order should be set.
      */
     private boolean needsModelOrderBasedOnParent(final ElkNode elkgraph) {
-        return (elkgraph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY) != OrderingStrategy.NONE
-                || elkgraph.getProperty(LayeredOptions.CYCLE_BREAKING_STRATEGY) == CycleBreakingStrategy.MODEL_ORDER
-                || elkgraph
-                        .getProperty(LayeredOptions.CYCLE_BREAKING_STRATEGY) == CycleBreakingStrategy.GREEDY_MODEL_ORDER
+        
+        boolean modelOrderCycleBreaking = elkgraph.getProperty(LayeredOptions.CYCLE_BREAKING_STRATEGY) == CycleBreakingStrategy.MODEL_ORDER
+                || elkgraph.getProperty(LayeredOptions.CYCLE_BREAKING_STRATEGY) == CycleBreakingStrategy.BFS_NODE_ORDER
+                || elkgraph.getProperty(LayeredOptions.CYCLE_BREAKING_STRATEGY) == CycleBreakingStrategy.DFS_NODE_ORDER
+                || elkgraph.getProperty(LayeredOptions.CYCLE_BREAKING_STRATEGY) == CycleBreakingStrategy.GREEDY_MODEL_ORDER
+                || elkgraph.getProperty(LayeredOptions.CYCLE_BREAKING_STRATEGY) == CycleBreakingStrategy.SCC_CONNECTIVITY
+                || elkgraph.getProperty(LayeredOptions.CYCLE_BREAKING_STRATEGY) == CycleBreakingStrategy.SCC_NODE_TYPE;
+        boolean modelOrderLayering = elkgraph.getProperty(LayeredOptions.LAYERING_STRATEGY) == LayeringStrategy.BF_MODEL_ORDER
+                || elkgraph.getProperty(LayeredOptions.LAYERING_STRATEGY) == LayeringStrategy.DF_MODEL_ORDER
+                || elkgraph.getProperty(LayeredOptions.LAYERING_NODE_PROMOTION_STRATEGY) == NodePromotionStrategy.MODEL_ORDER_LEFT_TO_RIGHT
+                || elkgraph.getProperty(LayeredOptions.LAYERING_NODE_PROMOTION_STRATEGY) == NodePromotionStrategy.MODEL_ORDER_RIGHT_TO_LEFT;
+        boolean modelOrderCrossingMinimization =
+                // Maybe add the explicit strategies here
+                elkgraph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY) != OrderingStrategy.NONE
                 || elkgraph.getProperty(LayeredOptions.CROSSING_MINIMIZATION_FORCE_NODE_MODEL_ORDER)
-                || elkgraph
-                        .getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_COMPONENTS) != ComponentOrderingStrategy.NONE)
-                || elkgraph.getProperty(
-                        LayeredOptions.LAYERING_NODE_PROMOTION_STRATEGY) == NodePromotionStrategy.MODEL_ORDER_LEFT_TO_RIGHT
-                || elkgraph.getProperty(
-                        LayeredOptions.LAYERING_NODE_PROMOTION_STRATEGY) == NodePromotionStrategy.MODEL_ORDER_RIGHT_TO_LEFT
-                || elkgraph.getProperty(
-                        LayeredOptions.LAYERING_STRATEGY) == LayeringStrategy.BF_MODEL_ORDER
-                || elkgraph.getProperty(
-                        LayeredOptions.LAYERING_STRATEGY) == LayeringStrategy.DF_MODEL_ORDER;
+                // Maybe add the explicit strategies here
+                || elkgraph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_COMPONENTS) != ComponentOrderingStrategy.NONE
+                
+                || elkgraph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_CROSSING_COUNTER_NODE_INFLUENCE) != 0
+                || elkgraph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_CROSSING_COUNTER_PORT_INFLUENCE) != 0;
+        return modelOrderCycleBreaking || modelOrderLayering || modelOrderCrossingMinimization;
+    }    
+    
+    /**
+     * Ensures that a nested graph laid out as part of its parent's hierarchy does not use a model order strategy that
+     * reads {@link InternalProperties#MAX_MODEL_ORDER_NODES} or {@link InternalProperties#CB_NUM_MODEL_ORDER_GROUPS}.
+     * Model order strategies are not supported with {@link HierarchyHandling#INCLUDE_CHILDREN}, since the model order
+     * is assigned across all levels of the hierarchy, and the two properties are only computed for the top-level graph.
+     * Without this check, these strategies fail with a {@link NullPointerException} while the nested graph is laid out.
+     * 
+     * @param lnode
+     *            the node that represents the nested graph in its parent graph.
+     * @param nestedGraph
+     *            the nested graph.
+     * @throws UnsupportedConfigurationException
+     *             if the nested graph is configured to use such a model order strategy.
+     */
+    private void ensureNoModelOrderStrategies(final LNode lnode, final LGraph nestedGraph) {
+        CycleBreakingStrategy cycleBreaking = nestedGraph.getProperty(LayeredOptions.CYCLE_BREAKING_STRATEGY);
+        String setting = null;
+        switch (cycleBreaking) {
+        case MODEL_ORDER:
+        case GREEDY_MODEL_ORDER:
+        case SCC_CONNECTIVITY:
+        case SCC_NODE_TYPE:
+            setting = LayeredOptions.CYCLE_BREAKING_STRATEGY.getId() + " " + cycleBreaking;
+            break;
+        case DFS_NODE_ORDER:
+        case BFS_NODE_ORDER:
+            if (nestedGraph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CB_GROUP_ORDER_STRATEGY)
+                    == GroupOrderStrategy.ENFORCED) {
+                setting = LayeredOptions.CYCLE_BREAKING_STRATEGY.getId() + " " + cycleBreaking + " with "
+                        + LayeredOptions.CONSIDER_MODEL_ORDER_GROUP_MODEL_ORDER_CB_GROUP_ORDER_STRATEGY.getId() + " "
+                        + GroupOrderStrategy.ENFORCED;
+            }
+            break;
+        default:
+        }
+        
+        OrderingStrategy orderingStrategy = nestedGraph.getProperty(LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY);
+        if (setting == null && orderingStrategy != OrderingStrategy.NONE) {
+            setting = LayeredOptions.CONSIDER_MODEL_ORDER_STRATEGY.getId() + " " + orderingStrategy;
+        }
+        
+        // Only the barycenter heuristic of the layer sweep crossing minimizer reads the model order
+        if (setting == null && nestedGraph.getProperty(LayeredOptions.CROSSING_MINIMIZATION_FORCE_NODE_MODEL_ORDER)
+                && nestedGraph.getProperty(LayeredOptions.CROSSING_MINIMIZATION_STRATEGY)
+                        == CrossingMinimizationStrategy.LAYER_SWEEP) {
+            setting = LayeredOptions.CROSSING_MINIMIZATION_FORCE_NODE_MODEL_ORDER.getId() + " true";
+        }
+        
+        if (setting != null) {
+            throw new UnsupportedConfigurationException("Node '" + lnode.getDesignation() + "' sets " + setting
+                    + ", but it is laid out as part of its parent's hierarchy (hierarchy handling "
+                    + HierarchyHandling.INCLUDE_CHILDREN + "), which does not support model order strategies in "
+                    + "nested graphs. Remove the option or lay this subgraph out with hierarchy handling "
+                    + HierarchyHandling.SEPARATE_CHILDREN + ".");
+        }
     }
 
     /**

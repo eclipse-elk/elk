@@ -4,14 +4,21 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  * 
- * SPDX-License-Identifier: EPL-2.0 
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later 
  *******************************************************************************/
 package org.eclipse.elk.alg.rectpacking.intermediate;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.elk.alg.rectpacking.options.RectPackingOptions;
 import org.eclipse.elk.core.alg.ILayoutProcessor;
@@ -40,19 +47,24 @@ public class InteractiveNodeReorderer implements ILayoutProcessor<ElkNode> {
         progressMonitor.begin("Interactive Node Reorderer", 1);
         List<ElkNode> rectangles = graph.getChildren();
         List<ElkNode> fixedNodes = new ArrayList<>();
+        Map<ElkNode, Integer> modelOrder = new HashMap<>();
         for (ElkNode elkNode : rectangles) {
             if (elkNode.hasProperty(RectPackingOptions.DESIRED_POSITION)) {
+                modelOrder.put(elkNode, fixedNodes.size());
                 fixedNodes.add(elkNode);
             }
         }
         for (ElkNode elkNode : fixedNodes) {
             rectangles.remove(elkNode);
         }
+        // Nodes with the same desired position are sorted later node first, since inserting them at the same index
+        // below reverses them again, so that they keep their model order. Comparing their model order instead of
+        // returning a constant keeps the comparator consistent, which the sort requires.
         Collections.sort(fixedNodes, (a, b) -> {
             int positionA = a.getProperty(RectPackingOptions.DESIRED_POSITION);
             int positionB = b.getProperty(RectPackingOptions.DESIRED_POSITION);
             if (positionA == positionB) {
-                return -1;
+                return Integer.compare(modelOrder.get(b), modelOrder.get(a));
             } else {
                 return Integer.compare(positionA, positionB);
             }

@@ -4,8 +4,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
+
+ * This Source Code may also be made available under the following Secondary
+ * Licenses when the conditions for such availability set forth in the Eclipse
+ * Public License v. 2.0 are satisfied: GPL-3.0 which is available at
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html.
  *
- * SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0 OR GPL-3.0-or-later
  *******************************************************************************/
 package org.eclipse.elk.alg.rectpacking.p2packing;
 
@@ -100,7 +105,7 @@ public final class InitialPlacement {
                 block.addChild(rect);
                 return true;
             } else if (block.getX() + rect.getWidth() <= boundingWidth &&
-                    (block.getY() + block.getHeight() + rect.getHeight() + nodeNodeSpacing <= row.getHeight() || row.getChildren().size() == 1)) {
+                    (block.getY() + block.getHeight() + rect.getHeight() + nodeNodeSpacing <= row.getY() + row.getHeight())) {
                 // Case a new row in the block can be opened
                 block.addChildInNewRow(rect);
                 return true;

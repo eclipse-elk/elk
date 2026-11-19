@@ -3,6 +3,8 @@
 # since PRs are not blocked by unsuccesful 'ci.yml' builds
 # and direct pushes to master are allowed.
 name: ELK Nightly CI
+permissions:
+  contents: read
 
 on:
   schedule:
@@ -16,7 +18,7 @@ jobs:
         # We check LTS versions and the latest release
         # 11 - LTS
         # 17 - LTS
-        java-version: [ 11, 17 ]
+        java-version: [ 17 ]
 
     steps:
     # Checkout the reposity of both elk and elk-models (the latter is required for the tests)
@@ -25,7 +27,7 @@ jobs:
         path: elk
     - uses: actions/checkout@v4
       with:
-        repository: eclipse/elk-models
+        repository: eclipse-elk/elk-models
         path: elk-models
     # Prepare and use a cache for maven
     - uses: actions/cache@v4
@@ -39,6 +41,13 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: ${{ matrix.java-version }}
+    - name: Install Maven
+      run: |
+        MAVEN_VERSION=3.9.16
+        curl -fsSLO "https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz"
+        tar -xzf "apache-maven-${MAVEN_VERSION}-bin.tar.gz"
+        echo "$PWD/apache-maven-${MAVEN_VERSION}/bin" >> "$GITHUB_PATH"
+        rm "apache-maven-${MAVEN_VERSION}-bin.tar.gz"
     - name: Build and verify with maven
       # Run mvn in the 'build' folder
       working-directory: /home/runner/work/elk/elk/elk/build/
