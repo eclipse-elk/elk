@@ -380,8 +380,12 @@ public class GraphStats {
      * @param layerIndex index of the layer before which a cut is considered.
      * @return whether the cut is not adjacent to an edge-label dummy layer.
      */
-    public boolean isCutAllowedForMultiEdge(final int layerIndex) {
+public boolean isCutAllowedForMultiEdge(final int layerIndex) {
         if (layerIndex <= 0 || layerIndex >= graph.getLayers().size()) {
+            return false;
+        }
+        if (graph.hasProperty(LayeredOptions.WRAPPING_VALIDIFY_FORBIDDEN_INDICES)
+                && graph.getProperty(LayeredOptions.WRAPPING_VALIDIFY_FORBIDDEN_INDICES).contains(layerIndex)) {
             return false;
         }
         return !isLabelLayer(graph.getLayers().get(layerIndex - 1))
