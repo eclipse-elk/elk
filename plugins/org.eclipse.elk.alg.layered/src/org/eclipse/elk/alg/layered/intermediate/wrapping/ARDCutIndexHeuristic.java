@@ -35,6 +35,8 @@ public class ARDCutIndexHeuristic implements ICutIndexCalculator {
         List<Integer> cuts = Lists.newArrayList();
         double step = gs.longestPath / (double) rows;
         for (int idx = 1; idx < rows; ++idx) {
+            // Compute ARD's ideal evenly spaced cut. The search below moves it to the nearest legal,
+            // unused index when this target would split an edge label or violate another cut constraint.
             int desiredCut = (int) Math.round(idx * step);
             int lower = desiredCut - 1;
             while (lower > 0 && (!gs.isCutAllowed(lower) || cuts.contains(lower))) {
