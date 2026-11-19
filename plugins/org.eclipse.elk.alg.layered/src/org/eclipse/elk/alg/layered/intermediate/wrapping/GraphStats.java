@@ -307,7 +307,7 @@ public class GraphStats {
         
         if (graph.hasProperty(LayeredOptions.WRAPPING_VALIDIFY_FORBIDDEN_INDICES)) {
             // user-specified forbidden indices
-            for (int i = 1; i < cutsAllowed.length; i++) {
+            for (i = 1; i < cutsAllowed.length; i++) {
                 cutsAllowed[i] = true;
             }
             List<Integer> forbidden = graph.getProperty(LayeredOptions.WRAPPING_VALIDIFY_FORBIDDEN_INDICES);
