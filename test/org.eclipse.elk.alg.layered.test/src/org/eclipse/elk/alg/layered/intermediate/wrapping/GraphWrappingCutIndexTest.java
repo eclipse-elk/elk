@@ -7,7 +7,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package org.eclipse.elk.alg.layered.intermediate;
+package org.eclipse.elk.alg.layered.intermediate.wrapping;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -18,9 +18,6 @@ import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.graph.LNode;
 import org.eclipse.elk.alg.layered.graph.Layer;
 import org.eclipse.elk.alg.layered.intermediate.greedyswitch.TestGraphCreator;
-import org.eclipse.elk.alg.layered.intermediate.wrapping.ARDCutIndexHeuristic;
-import org.eclipse.elk.alg.layered.intermediate.wrapping.GraphStats;
-import org.eclipse.elk.alg.layered.intermediate.wrapping.MSDCutIndexHeuristic;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 import org.junit.Test;
 

@@ -83,7 +83,7 @@ public class MSDCutIndexHeuristic implements ICutIndexCalculator {
             } else {
                 while (index < gs.longestPath) {
                     
-                    if (widthAtIndex[index - 1] - sumSoFar >= rowSum && gs.isCutAllowed(index)) {
+                    if (widthAtIndex[index - 1] - sumSoFar >= rowSum && gs.isCutAllowedForWrapping(index)) {
     
                         // cut _before_ index
                         cuts.add(index);

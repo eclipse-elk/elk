@@ -25,6 +25,7 @@ import org.eclipse.elk.alg.layered.graph.LNode.NodeType;
 import org.eclipse.elk.alg.layered.graph.Layer;
 import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
+import org.eclipse.elk.alg.layered.options.WrappingStrategy;
 import org.eclipse.elk.core.options.Direction;
 
 /**
@@ -282,6 +283,22 @@ public class GraphStats {
             initCutAllowed();
         }
         return cutsAllowed[layerIndex];
+    }
+
+    /**
+     * Checks whether a cut is allowed for the graph's wrapping strategy. Single-edge wrapping also requires the
+     * boundary to span only one source-target pair; multi-edge wrapping only forbids boundaries adjacent to label
+     * dummy layers.
+     *
+     * @param layerIndex
+     *            the index of the layer before which a cut is considered.
+     * @return whether the cut is allowed for the configured wrapping strategy.
+     */
+    public boolean isCutAllowedForWrapping(final int layerIndex) {
+        if (graph.getProperty(LayeredOptions.WRAPPING_STRATEGY) == WrappingStrategy.MULTI_EDGE) {
+            return isCutAllowedForMultiEdge(layerIndex);
+        }
+        return isCutAllowed(layerIndex);
     }
     
     private void initCutAllowed() {

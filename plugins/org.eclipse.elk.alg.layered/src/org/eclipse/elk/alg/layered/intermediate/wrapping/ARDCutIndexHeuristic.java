@@ -39,11 +39,11 @@ public class ARDCutIndexHeuristic implements ICutIndexCalculator {
             // unused index when this target would split an edge label or violate another cut constraint.
             int desiredCut = (int) Math.round(idx * step);
             int lower = desiredCut - 1;
-            while (lower > 0 && (!gs.isCutAllowed(lower) || cuts.contains(lower))) {
+            while (lower > 0 && (!gs.isCutAllowedForWrapping(lower) || cuts.contains(lower))) {
                 lower--;
             }
             int upper = desiredCut;
-            while (upper < gs.longestPath && (!gs.isCutAllowed(upper) || cuts.contains(upper))) {
+            while (upper < gs.longestPath && (!gs.isCutAllowedForWrapping(upper) || cuts.contains(upper))) {
                 upper++;
             }
             int cut;
@@ -54,7 +54,7 @@ public class ARDCutIndexHeuristic implements ICutIndexCalculator {
             } else {
                 cut = upper;
             }
-            if (cut > 0 && cut < gs.longestPath && gs.isCutAllowed(cut) && !cuts.contains(cut)) {
+            if (cut > 0 && cut < gs.longestPath && gs.isCutAllowedForWrapping(cut) && !cuts.contains(cut)) {
                 cuts.add(cut);
                 Collections.sort(cuts);
             }

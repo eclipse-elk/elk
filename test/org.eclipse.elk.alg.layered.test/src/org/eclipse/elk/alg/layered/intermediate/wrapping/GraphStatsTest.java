@@ -89,6 +89,38 @@ public class GraphStatsTest {
         return graph;
     }
 
+    /** A sized graph with branches at cut indexes 1, 2, and 3. */
+    private static LGraph sizedBranchingGraph(final WrappingStrategy strategy) {
+        LGraph graph = new LGraph();
+        LNode a = node(graph, layer(graph));
+        Layer layer1 = layer(graph);
+        LNode b = node(graph, layer1);
+        LNode c = node(graph, layer1);
+        LNode d = node(graph, layer(graph));
+        Layer layer3 = layer(graph);
+        LNode e = node(graph, layer3);
+        LNode f = node(graph, layer3);
+        LNode g = node(graph, layer(graph));
+        edge(a, b);
+        edge(a, c);
+        edge(b, d);
+        edge(c, d);
+        edge(d, e);
+        edge(d, f);
+        edge(e, g);
+        edge(f, g);
+
+        graph.setProperty(LayeredOptions.WRAPPING_STRATEGY, strategy);
+        graph.setProperty(LayeredOptions.ASPECT_RATIO, 1.0);
+        for (int i = 0; i < graph.getLayers().size(); i++) {
+            for (LNode node : graph.getLayers().get(i).getNodes()) {
+                node.getSize().x = i < 2 || i == 4 ? 10 : 30;
+                node.getSize().y = 10;
+            }
+        }
+        return graph;
+    }
+
     /**
      * Lays out a path of six nodes with {@code SINGLE_EDGE} wrapping and a manual cut before the fourth node, with the
      * given forbidden indices if they are not {@code null}.
@@ -216,6 +248,29 @@ public class GraphStatsTest {
         assertFalse(stats.isCutAllowedForMultiEdge(2));
         assertFalse(stats.isCutAllowedForMultiEdge(3));
         assertTrue(stats.isCutAllowedForMultiEdge(4));
+    }
+
+    @Test
+    public void testArdAllowsBranchedCutOnlyForMultiEdgeWrapping() {
+        assertBranchedCutByStrategy(new ARDCutIndexHeuristic());
+    }
+
+    @Test
+    public void testMsdAllowsBranchedCutOnlyForMultiEdgeWrapping() {
+        assertBranchedCutByStrategy(new MSDCutIndexHeuristic());
+    }
+
+    private static void assertBranchedCutByStrategy(final ICutIndexCalculator heuristic) {
+        LGraph multiEdgeGraph = sizedBranchingGraph(WrappingStrategy.MULTI_EDGE);
+        List<Integer> multiEdgeCuts = heuristic.getCutIndexes(multiEdgeGraph, new GraphStats(multiEdgeGraph));
+        assertTrue("The heuristic should retain a valid multi-edge cut after a branch: "
+                + multiEdgeCuts,
+                multiEdgeCuts.contains(3));
+
+        LGraph singleEdgeGraph = sizedBranchingGraph(WrappingStrategy.SINGLE_EDGE);
+        List<Integer> singleEdgeCuts = heuristic.getCutIndexes(singleEdgeGraph, new GraphStats(singleEdgeGraph));
+        assertFalse("The heuristic must keep the single-edge topology restriction", singleEdgeCuts.contains(2));
+        assertFalse("The heuristic must keep the single-edge topology restriction", singleEdgeCuts.contains(3));
     }
 
     @Test
