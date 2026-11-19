@@ -307,6 +307,9 @@ public class GraphStats {
         
         if (graph.hasProperty(LayeredOptions.WRAPPING_VALIDIFY_FORBIDDEN_INDICES)) {
             // user-specified forbidden indices
+            for (int i = 1; i < cutsAllowed.length; i++) {
+                cutsAllowed[i] = true;
+            }
             List<Integer> forbidden = graph.getProperty(LayeredOptions.WRAPPING_VALIDIFY_FORBIDDEN_INDICES);
             for (int f : forbidden) {
                 if (f > 0 && f < cutsAllowed.length) {
@@ -330,6 +333,20 @@ public class GraphStats {
      * @return whether it is allowed to cut <em>before</em> the given layer.
      */
     private boolean isCutAllowed(final Layer layer) {
+        // Edge labels are represented by label dummy nodes. A cut adjacent to one
+        // would split the label from the edge segment it belongs to.
+        Layer previousLayer = graph.getLayers().get(layer.getIndex() - 1);
+        for (LNode node : previousLayer.getNodes()) {
+            if (node.getType() == NodeType.LABEL) {
+                return false;
+            }
+        }
+        for (LNode node : layer.getNodes()) {
+            if (node.getType() == NodeType.LABEL) {
+                return false;
+            }
+        }
+
         // we only allow to cut between a pair of layers 
         // if there is only one pair 
         // of nodes that is connected by 1 or more edges

@@ -17,9 +17,6 @@ package org.eclipse.elk.alg.layered.intermediate.wrapping;
 import java.util.List;
 
 import org.eclipse.elk.alg.layered.graph.LGraph;
-import org.eclipse.elk.alg.layered.graph.LNode;
-import org.eclipse.elk.alg.layered.graph.LNode.NodeType;
-import org.eclipse.elk.alg.layered.graph.Layer;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
 
 import com.google.common.collect.Lists;
@@ -86,23 +83,7 @@ public class MSDCutIndexHeuristic implements ICutIndexCalculator {
             } else {
                 while (index < gs.longestPath) {
                     
-                    Layer layer = graph.getLayers().get(index);
-                    Layer previousLayer = graph.getLayers().get(index-1);
-                    
-                    boolean valid = true;
-                    for (LNode node : previousLayer.getNodes()) {
-                        if (NodeType.LABEL == node.getType()) {
-                            valid = false;
-                            break;
-                        }
-                    }
-                    for (LNode node : layer.getNodes()) {
-                        if (NodeType.LABEL == node.getType()) {
-                            valid = false;
-                            break;
-                        }
-                    }
-                    if (widthAtIndex[index - 1] - sumSoFar >= rowSum && valid) {
+                    if (widthAtIndex[index - 1] - sumSoFar >= rowSum && gs.isCutAllowed(index)) {
     
                         // cut _before_ index
                         cuts.add(index);

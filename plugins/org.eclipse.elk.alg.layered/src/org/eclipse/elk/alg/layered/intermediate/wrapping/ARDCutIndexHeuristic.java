@@ -15,6 +15,7 @@
 package org.eclipse.elk.alg.layered.intermediate.wrapping;
 
 import java.util.List;
+import java.util.Collections;
 
 import org.eclipse.elk.alg.layered.graph.LGraph;
 
@@ -34,7 +35,27 @@ public class ARDCutIndexHeuristic implements ICutIndexCalculator {
         List<Integer> cuts = Lists.newArrayList();
         double step = gs.longestPath / (double) rows;
         for (int idx = 1; idx < rows; ++idx) {
-            cuts.add((int) Math.round(idx * step));
+            int desiredCut = (int) Math.round(idx * step);
+            int lower = desiredCut - 1;
+            while (lower > 0 && (!gs.isCutAllowed(lower) || cuts.contains(lower))) {
+                lower--;
+            }
+            int upper = desiredCut;
+            while (upper < gs.longestPath && (!gs.isCutAllowed(upper) || cuts.contains(upper))) {
+                upper++;
+            }
+            int cut;
+            if (lower == 0) {
+                cut = upper;
+            } else if (upper >= gs.longestPath || desiredCut - lower <= upper - desiredCut) {
+                cut = lower;
+            } else {
+                cut = upper;
+            }
+            if (cut > 0 && cut < gs.longestPath && gs.isCutAllowed(cut) && !cuts.contains(cut)) {
+                cuts.add(cut);
+                Collections.sort(cuts);
+            }
         }
 
         return cuts;
