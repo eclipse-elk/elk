@@ -294,15 +294,12 @@ public class GraphStats {
         
         // 'default' behavior as implemented by 'isCutAllowed(..)'
         Iterator<Layer> layerIt = graph.getLayers().iterator();
-        // skip the first layer
-        if (layerIt.hasNext()) {
-            layerIt.next();
-        }
-        // now check for valid cut indexes
+        Layer previousLayer = layerIt.hasNext() ? layerIt.next() : null;
         int i = 1;
         while (layerIt.hasNext()) {
             Layer layer = layerIt.next();
-            cutsAllowed[i++] = isCutAllowed(layer);
+            cutsAllowed[i++] = isCutAllowed(layer, previousLayer);
+            previousLayer = layer;
         }
         
         if (graph.hasProperty(LayeredOptions.WRAPPING_VALIDIFY_FORBIDDEN_INDICES)) {
@@ -329,28 +326,20 @@ public class GraphStats {
     /**
      * @return whether it is allowed to cut <em>before</em> the given layer.
      */
-    private boolean isCutAllowed(final Layer layer) {
+    private boolean isCutAllowed(final Layer layer, final Layer previousLayer) {
         // Edge labels are represented by label dummy nodes. A cut adjacent to one
         // would split the label from the edge segment it belongs to.
-        Layer previousLayer = graph.getLayers().get(layer.getIndex() - 1);
-        for (LNode node : previousLayer.getNodes()) {
-            if (node.getType() == NodeType.LABEL) {
-                return false;
-            }
-        }
-        for (LNode node : layer.getNodes()) {
-            if (node.getType() == NodeType.LABEL) {
-                return false;
-            }
+        if (isLabelLayer(layer) || isLabelLayer(previousLayer)) {
+            return false;
         }
 
-        // we only allow to cut between a pair of layers 
-        // if there is only one pair 
+        // we only allow to cut between a pair of layers
+        // if there is only one pair
         // of nodes that is connected by 1 or more edges
         boolean cutAllowed = true;
         LNode n1 = null, n2 = null;
-        check: 
-        for (LNode tgt: layer.getNodes()) {
+        check:
+        for (LNode tgt : layer.getNodes()) {
             for (LEdge e : tgt.getIncomingEdges()) {
                 // check for different source
                 if (n1 != null && n1 != tgt) {
@@ -368,6 +357,30 @@ public class GraphStats {
             }
         }
         return cutAllowed;
+    }
+
+    /**
+     * @param layerIndex index of the layer before which a cut is considered.
+     * @return whether the cut is not adjacent to an edge-label dummy layer.
+     */
+    public boolean isCutAllowedForMultiEdge(final int layerIndex) {
+        if (layerIndex <= 0 || layerIndex >= graph.getLayers().size()) {
+            return false;
+        }
+        return !isLabelLayer(graph.getLayers().get(layerIndex - 1))
+                && !isLabelLayer(graph.getLayers().get(layerIndex));
+    }
+
+    private boolean isLabelLayer(final Layer layer) {
+        if (layer == null) {
+            return false;
+        }
+        for (LNode node : layer.getNodes()) {
+            if (node.getType() == NodeType.LABEL) {
+                return true;
+            }
+        }
+        return false;
     }
     
 }

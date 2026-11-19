@@ -23,15 +23,19 @@ import java.util.List;
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.graph.LNode;
+import org.eclipse.elk.alg.layered.graph.LNode.NodeType;
 import org.eclipse.elk.alg.layered.graph.LPort;
 import org.eclipse.elk.alg.layered.graph.Layer;
 import org.eclipse.elk.alg.layered.options.CuttingStrategy;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
+import org.eclipse.elk.alg.layered.options.ValidifyStrategy;
 import org.eclipse.elk.alg.layered.options.WrappingStrategy;
 import org.eclipse.elk.alg.test.PlainJavaInitialization;
 import org.eclipse.elk.core.RecursiveGraphLayoutEngine;
 import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.core.util.BasicProgressMonitor;
+import org.eclipse.elk.graph.ElkEdge;
+import org.eclipse.elk.graph.ElkLabel;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
 import org.junit.BeforeClass;
@@ -113,6 +117,36 @@ public class GraphStatsTest {
         return graph;
     }
 
+    /** Lays out a path with a real edge label and wrapping cut validation disabled. */
+    private static ElkNode layoutLabeledPath(final WrappingStrategy wrappingStrategy,
+            final CuttingStrategy cuttingStrategy, final boolean improveCuts) {
+        ElkNode graph = ElkGraphUtil.createGraph();
+        graph.setProperty(CoreOptions.ALGORITHM, LayeredOptions.ALGORITHM_ID);
+        graph.setProperty(LayeredOptions.WRAPPING_STRATEGY, wrappingStrategy);
+        graph.setProperty(LayeredOptions.WRAPPING_CUTTING_STRATEGY, cuttingStrategy);
+        graph.setProperty(LayeredOptions.WRAPPING_VALIDIFY_STRATEGY, ValidifyStrategy.NO);
+        graph.setProperty(LayeredOptions.WRAPPING_MULTI_EDGE_IMPROVE_CUTS, improveCuts);
+        graph.setProperty(LayeredOptions.WRAPPING_CUTTING_CUTS, Lists.newArrayList(3, 5));
+
+        ElkNode previous = null;
+        for (int i = 0; i < 8; i++) {
+            ElkNode node = ElkGraphUtil.createNode(graph);
+            node.setDimensions(30, 30);
+            if (previous != null) {
+                ElkEdge edge = ElkGraphUtil.createSimpleEdge(previous, node);
+                if (i == 3) {
+                    ElkLabel label = ElkGraphUtil.createLabel(edge);
+                    label.setText("edge label");
+                    label.setDimensions(24, 12);
+                }
+            }
+            previous = node;
+        }
+
+        new RecursiveGraphLayoutEngine().layout(graph, new BasicProgressMonitor());
+        return graph;
+    }
+
     /** Whether the fourth node of a path laid out by {@link #layoutWrappedPath(List)} starts a new chunk. */
     private static boolean isWrappedBeforeFourthNode(final ElkNode graph) {
         ElkNode third = graph.getChildren().get(2);
@@ -169,6 +203,29 @@ public class GraphStatsTest {
         LGraph graph = pathGraph();
         graph.setProperty(LayeredOptions.WRAPPING_VALIDIFY_FORBIDDEN_INDICES, Lists.newArrayList(-1, 0, 5));
         assertArrayEquals(new boolean[] { false, true, true, true, true }, new GraphStats(graph).getCutsAllowed());
+    }
+
+    @Test
+    public void testMultiEdgeCutsAvoidLabelDummyLayers() {
+        LGraph graph = pathGraph();
+        LNode labelDummy = node(graph, graph.getLayers().get(2));
+        labelDummy.setType(NodeType.LABEL);
+        GraphStats stats = new GraphStats(graph);
+
+        assertTrue(stats.isCutAllowedForMultiEdge(1));
+        assertFalse(stats.isCutAllowedForMultiEdge(2));
+        assertFalse(stats.isCutAllowedForMultiEdge(3));
+        assertTrue(stats.isCutAllowedForMultiEdge(4));
+    }
+
+    @Test
+    public void testSingleEdgeWrappingWithActualEdgeLabelAndValidationDisabled() {
+        layoutLabeledPath(WrappingStrategy.SINGLE_EDGE, CuttingStrategy.ARD, false);
+    }
+
+    @Test
+    public void testMultiEdgeWrappingWithActualEdgeLabelAndCutImprovement() {
+        layoutLabeledPath(WrappingStrategy.MULTI_EDGE, CuttingStrategy.MANUAL, true);
     }
 
     @Test
