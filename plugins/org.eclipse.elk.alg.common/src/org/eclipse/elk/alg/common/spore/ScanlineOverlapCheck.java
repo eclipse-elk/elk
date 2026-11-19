@@ -167,7 +167,6 @@ public class ScanlineOverlapCheck {
             }
             
             // find overlaps with rectangles on current scanline and apply the overlapHandler
-            boolean overlapsFound = false;
             for (Node other : intervalsSortLeft) { // have to start with first(left side) node because the 
                 if (overlap(p.node, other)) {       // last(right side) that does not overlap is not necessarily the
                     overlapHandler.handle(p.node, other); // first candidate to overlap (there could be a wide node).
@@ -175,11 +174,11 @@ public class ScanlineOverlapCheck {
                     svg.g("o").addRect(other.rect, "stroke=\"none\" fill=\"red\" opacity=\"0.18\"");
                     svg.g("e").addLine(p.node.vertex.x, p.node.vertex.y, other.vertex.x, other.vertex.y, 
                             "stroke=\"blue\"");
-                    overlapsFound = true;
-                } else {
-                    if (overlapsFound) {
-                        break; // there cannot be any more overlaps because the set is sorted
-                    }
+                } else if (DoubleMath.fuzzyCompare(other.rect.x, p.node.rect.x + p.node.rect.width,
+                        InternalProperties.FUZZINESS) >= 0) {
+                    // other starts at or right of the inserted node's right side; the set is sorted by left
+                    // sides, so no later node can overlap the inserted node either
+                    break;
                 }
             }
         }
