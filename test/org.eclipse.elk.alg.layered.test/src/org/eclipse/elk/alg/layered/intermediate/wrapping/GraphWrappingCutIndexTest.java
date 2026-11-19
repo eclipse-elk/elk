@@ -19,6 +19,7 @@ import org.eclipse.elk.alg.layered.graph.LNode;
 import org.eclipse.elk.alg.layered.graph.Layer;
 import org.eclipse.elk.alg.layered.intermediate.greedyswitch.TestGraphCreator;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
+import org.eclipse.elk.alg.layered.options.WrappingStrategy;
 import org.junit.Test;
 
 /** Tests that wrapping heuristics avoid cuts next to edge label dummies. */
@@ -26,40 +27,57 @@ public class GraphWrappingCutIndexTest extends TestGraphCreator {
 
     @Test
     public void testArdAvoidsEdgeLabelCut() {
-        LGraph graph = graphWithLabel(8);
-        GraphStats stats = new GraphStats(graph);
+        assertHeuristicAvoidsEdgeLabelCut(new ARDCutIndexHeuristic(), WrappingStrategy.SINGLE_EDGE, "ARD");
+    }
 
-        List<Integer> cuts = new ARDCutIndexHeuristic().getCutIndexes(graph, stats);
-
-        assertTrue(cuts.size() > 0);
-        for (int cut : cuts) {
-            assertTrue("ARD returned forbidden cut " + cut, stats.isCutAllowed(cut));
-        }
+    @Test
+    public void testArdAvoidsEdgeLabelCutForMultiEdgeWrapping() {
+        assertHeuristicAvoidsEdgeLabelCut(new ARDCutIndexHeuristic(), WrappingStrategy.MULTI_EDGE, "ARD");
     }
 
     @Test
     public void testMsdAvoidsEdgeLabelCut() {
-        LGraph graph = graphWithLabel(8);
+        assertHeuristicAvoidsEdgeLabelCut(new MSDCutIndexHeuristic(), WrappingStrategy.SINGLE_EDGE, "MSD");
+    }
+
+    @Test
+    public void testMsdAvoidsEdgeLabelCutForMultiEdgeWrapping() {
+        assertHeuristicAvoidsEdgeLabelCut(new MSDCutIndexHeuristic(), WrappingStrategy.MULTI_EDGE, "MSD");
+    }
+
+    private void assertHeuristicAvoidsEdgeLabelCut(final ICutIndexCalculator heuristic,
+            final WrappingStrategy strategy, final String heuristicName) {
+        LGraph graph = graphWithLabel(8, strategy);
         GraphStats stats = new GraphStats(graph);
 
-        List<Integer> cuts = new MSDCutIndexHeuristic().getCutIndexes(graph, stats);
+        List<Integer> cuts = heuristic.getCutIndexes(graph, stats);
 
         assertTrue(cuts.size() > 0);
         for (int cut : cuts) {
-            assertTrue("MSD returned forbidden cut " + cut, stats.isCutAllowed(cut));
+            assertTrue(heuristicName + " returned forbidden cut " + cut + " for " + strategy,
+                    stats.isCutAllowedForWrapping(cut));
         }
     }
 
     @Test
     public void testCutsAdjacentToLabelAreForbidden() {
-        LGraph graph = graphWithLabel(5);
+        LGraph graph = graphWithLabel(5, WrappingStrategy.SINGLE_EDGE);
         GraphStats stats = new GraphStats(graph);
 
-        assertFalse(stats.isCutAllowed(2));
-        assertFalse(stats.isCutAllowed(3));
+        assertFalse(stats.isCutAllowedForWrapping(2));
+        assertFalse(stats.isCutAllowedForWrapping(3));
     }
 
-    private LGraph graphWithLabel(final int layerCount) {
+    @Test
+    public void testMultiEdgeCutsAdjacentToLabelAreForbidden() {
+        LGraph graph = graphWithLabel(5, WrappingStrategy.MULTI_EDGE);
+        GraphStats stats = new GraphStats(graph);
+
+        assertFalse(stats.isCutAllowedForWrapping(2));
+        assertFalse(stats.isCutAllowedForWrapping(3));
+    }
+
+    private LGraph graphWithLabel(final int layerCount, final WrappingStrategy strategy) {
         graph = new LGraph();
         Layer[] layers = makeLayers(layerCount);
         for (Layer layer : layers) {
@@ -72,6 +90,7 @@ public class GraphWrappingCutIndexTest extends TestGraphCreator {
         label.getSize().x = 2;
         label.getSize().y = 2;
         graph.setProperty(LayeredOptions.ASPECT_RATIO, 0.1);
+        graph.setProperty(LayeredOptions.WRAPPING_STRATEGY, strategy);
         return graph;
     }
 }
