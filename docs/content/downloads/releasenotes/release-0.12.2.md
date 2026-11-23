@@ -23,7 +23,7 @@ This release is a minor patch containing some bugfixes as well as some cleanup a
 - [#1211](https://github.com/eclipse-elk/elk/issues/1211), [#1242](https://github.com/eclipse-elk/elk/pull/1242): Shift coincident SPOrE node centres with a seeded random generator
 - [#1214](https://github.com/eclipse-elk/elk/issues/1214), [#1215](https://github.com/eclipse-elk/elk/pull/1215): rectpacking: Handle more than two equal candidates in the area approximation
 - [#1236](https://github.com/eclipse-elk/elk/issues/1236), [#1237](https://github.com/eclipse-elk/elk/pull/1237): Keep the interactive rectpacking tie order with a consistent comparator
-- [#1216](https://github.com/eclipse-elk/elk/pull/1216),[#1217](https://github.com/eclipse-elk/elk/pull/1217): Fixes to EndLabelSorter
+- [#1216](https://github.com/eclipse-elk/elk/pull/1216), [#1217](https://github.com/eclipse-elk/elk/pull/1217): Fixes to EndLabelSorter
 - [#1213](https://github.com/eclipse-elk/elk/pull/1213): Drop a repeated assignment in InLayerConstraintProcessorTest
 - [#1210](https://github.com/eclipse-elk/elk/pull/1210): Read the port influence when choosing the model-order crossing counter
 - [#1218](https://github.com/eclipse-elk/elk/issues/1218), [#1219](https://github.com/eclipse-elk/elk/pull/1219): Refuse BF/DF model order layerings with edges that do not point forward
