@@ -35,3 +35,11 @@ This release is a minor patch containing some bugfixes as well as some cleanup a
 - [#1226](https://github.com/eclipse-elk/elk/issues/1226), [#1227](https://github.com/eclipse-elk/elk/pull/1227): Let PortRestorer split self loop ports at the first non-negative flow
 - [#1230](https://github.com/eclipse-elk/elk/issues/1230), [#1231](https://github.com/eclipse-elk/elk/pull/1231): Fix fixed port order for inside self-loops in compound layouts
 - [#1246](https://github.com/eclipse-elk/elk/issues/1246), [#1247](https://github.com/eclipse-elk/elk/pull/1247): Report all overlaps of a node inserted into the overlap scanline
+
+Special thanks to the contributors who made this release possible:
+- @sseely
+- @ilandikov
+- @adityaanikam
+- @trackoor
+- @dannote
+- @imbacile
