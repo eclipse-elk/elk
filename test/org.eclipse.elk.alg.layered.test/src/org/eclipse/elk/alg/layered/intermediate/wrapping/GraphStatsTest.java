@@ -23,15 +23,19 @@ import java.util.List;
 import org.eclipse.elk.alg.layered.graph.LEdge;
 import org.eclipse.elk.alg.layered.graph.LGraph;
 import org.eclipse.elk.alg.layered.graph.LNode;
+import org.eclipse.elk.alg.layered.graph.LNode.NodeType;
 import org.eclipse.elk.alg.layered.graph.LPort;
 import org.eclipse.elk.alg.layered.graph.Layer;
 import org.eclipse.elk.alg.layered.options.CuttingStrategy;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
+import org.eclipse.elk.alg.layered.options.ValidifyStrategy;
 import org.eclipse.elk.alg.layered.options.WrappingStrategy;
 import org.eclipse.elk.alg.test.PlainJavaInitialization;
 import org.eclipse.elk.core.RecursiveGraphLayoutEngine;
 import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.core.util.BasicProgressMonitor;
+import org.eclipse.elk.graph.ElkEdge;
+import org.eclipse.elk.graph.ElkLabel;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
 import org.junit.BeforeClass;
@@ -85,6 +89,38 @@ public class GraphStatsTest {
         return graph;
     }
 
+    /** A sized graph with branches at cut indexes 1, 2, and 3. */
+    private static LGraph sizedBranchingGraph(final WrappingStrategy strategy) {
+        LGraph graph = new LGraph();
+        LNode a = node(graph, layer(graph));
+        Layer layer1 = layer(graph);
+        LNode b = node(graph, layer1);
+        LNode c = node(graph, layer1);
+        LNode d = node(graph, layer(graph));
+        Layer layer3 = layer(graph);
+        LNode e = node(graph, layer3);
+        LNode f = node(graph, layer3);
+        LNode g = node(graph, layer(graph));
+        edge(a, b);
+        edge(a, c);
+        edge(b, d);
+        edge(c, d);
+        edge(d, e);
+        edge(d, f);
+        edge(e, g);
+        edge(f, g);
+
+        graph.setProperty(LayeredOptions.WRAPPING_STRATEGY, strategy);
+        graph.setProperty(LayeredOptions.ASPECT_RATIO, 1.0);
+        for (int i = 0; i < graph.getLayers().size(); i++) {
+            for (LNode node : graph.getLayers().get(i).getNodes()) {
+                node.getSize().x = i < 2 || i == 4 ? 10 : 30;
+                node.getSize().y = 10;
+            }
+        }
+        return graph;
+    }
+
     /**
      * Lays out a path of six nodes with {@code SINGLE_EDGE} wrapping and a manual cut before the fourth node, with the
      * given forbidden indices if they are not {@code null}.
@@ -105,6 +141,36 @@ public class GraphStatsTest {
             node.setDimensions(30, 30);
             if (previous != null) {
                 ElkGraphUtil.createSimpleEdge(previous, node);
+            }
+            previous = node;
+        }
+
+        new RecursiveGraphLayoutEngine().layout(graph, new BasicProgressMonitor());
+        return graph;
+    }
+
+    /** Lays out a path with a real edge label and wrapping cut validation disabled. */
+    private static ElkNode layoutLabeledPath(final WrappingStrategy wrappingStrategy,
+            final CuttingStrategy cuttingStrategy, final boolean improveCuts) {
+        ElkNode graph = ElkGraphUtil.createGraph();
+        graph.setProperty(CoreOptions.ALGORITHM, LayeredOptions.ALGORITHM_ID);
+        graph.setProperty(LayeredOptions.WRAPPING_STRATEGY, wrappingStrategy);
+        graph.setProperty(LayeredOptions.WRAPPING_CUTTING_STRATEGY, cuttingStrategy);
+        graph.setProperty(LayeredOptions.WRAPPING_VALIDIFY_STRATEGY, ValidifyStrategy.NO);
+        graph.setProperty(LayeredOptions.WRAPPING_MULTI_EDGE_IMPROVE_CUTS, improveCuts);
+        graph.setProperty(LayeredOptions.WRAPPING_CUTTING_CUTS, Lists.newArrayList(3, 5));
+
+        ElkNode previous = null;
+        for (int i = 0; i < 8; i++) {
+            ElkNode node = ElkGraphUtil.createNode(graph);
+            node.setDimensions(30, 30);
+            if (previous != null) {
+                ElkEdge edge = ElkGraphUtil.createSimpleEdge(previous, node);
+                if (i == 3) {
+                    ElkLabel label = ElkGraphUtil.createLabel(edge);
+                    label.setText("edge label");
+                    label.setDimensions(24, 12);
+                }
             }
             previous = node;
         }
@@ -169,6 +235,52 @@ public class GraphStatsTest {
         LGraph graph = pathGraph();
         graph.setProperty(LayeredOptions.WRAPPING_VALIDIFY_FORBIDDEN_INDICES, Lists.newArrayList(-1, 0, 5));
         assertArrayEquals(new boolean[] { false, true, true, true, true }, new GraphStats(graph).getCutsAllowed());
+    }
+
+    @Test
+    public void testMultiEdgeCutsAvoidLabelDummyLayers() {
+        LGraph graph = pathGraph();
+        LNode labelDummy = node(graph, graph.getLayers().get(2));
+        labelDummy.setType(NodeType.LABEL);
+        GraphStats stats = new GraphStats(graph);
+
+        assertTrue(stats.isCutAllowedForMultiEdge(1));
+        assertFalse(stats.isCutAllowedForMultiEdge(2));
+        assertFalse(stats.isCutAllowedForMultiEdge(3));
+        assertTrue(stats.isCutAllowedForMultiEdge(4));
+    }
+
+    @Test
+    public void testArdAllowsBranchedCutOnlyForMultiEdgeWrapping() {
+        assertBranchedCutByStrategy(new ARDCutIndexHeuristic());
+    }
+
+    @Test
+    public void testMsdAllowsBranchedCutOnlyForMultiEdgeWrapping() {
+        assertBranchedCutByStrategy(new MSDCutIndexHeuristic());
+    }
+
+    private static void assertBranchedCutByStrategy(final ICutIndexCalculator heuristic) {
+        LGraph multiEdgeGraph = sizedBranchingGraph(WrappingStrategy.MULTI_EDGE);
+        List<Integer> multiEdgeCuts = heuristic.getCutIndexes(multiEdgeGraph, new GraphStats(multiEdgeGraph));
+        assertTrue("The heuristic should retain a valid multi-edge cut after a branch: "
+                + multiEdgeCuts,
+                multiEdgeCuts.contains(3));
+
+        LGraph singleEdgeGraph = sizedBranchingGraph(WrappingStrategy.SINGLE_EDGE);
+        List<Integer> singleEdgeCuts = heuristic.getCutIndexes(singleEdgeGraph, new GraphStats(singleEdgeGraph));
+        assertFalse("The heuristic must keep the single-edge topology restriction", singleEdgeCuts.contains(2));
+        assertFalse("The heuristic must keep the single-edge topology restriction", singleEdgeCuts.contains(3));
+    }
+
+    @Test
+    public void testSingleEdgeWrappingWithActualEdgeLabelAndValidationDisabled() {
+        layoutLabeledPath(WrappingStrategy.SINGLE_EDGE, CuttingStrategy.ARD, false);
+    }
+
+    @Test
+    public void testMultiEdgeWrappingWithActualEdgeLabelAndCutImprovement() {
+        layoutLabeledPath(WrappingStrategy.MULTI_EDGE, CuttingStrategy.MANUAL, true);
     }
 
     @Test

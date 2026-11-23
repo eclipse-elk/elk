@@ -25,6 +25,7 @@ import org.eclipse.elk.alg.layered.graph.LNode.NodeType;
 import org.eclipse.elk.alg.layered.graph.Layer;
 import org.eclipse.elk.alg.layered.options.InternalProperties;
 import org.eclipse.elk.alg.layered.options.LayeredOptions;
+import org.eclipse.elk.alg.layered.options.WrappingStrategy;
 import org.eclipse.elk.core.options.Direction;
 
 /**
@@ -283,6 +284,22 @@ public class GraphStats {
         }
         return cutsAllowed[layerIndex];
     }
+
+    /**
+     * Checks whether a cut is allowed for the graph's wrapping strategy. Single-edge wrapping also requires the
+     * boundary to span only one source-target pair; multi-edge wrapping only forbids boundaries adjacent to label
+     * dummy layers.
+     *
+     * @param layerIndex
+     *            the index of the layer before which a cut is considered.
+     * @return whether the cut is allowed for the configured wrapping strategy.
+     */
+    public boolean isCutAllowedForWrapping(final int layerIndex) {
+        if (graph.getProperty(LayeredOptions.WRAPPING_STRATEGY) == WrappingStrategy.MULTI_EDGE) {
+            return isCutAllowedForMultiEdge(layerIndex);
+        }
+        return isCutAllowed(layerIndex);
+    }
     
     private void initCutAllowed() {
         if (cutsAllowed != null) {
@@ -294,15 +311,12 @@ public class GraphStats {
         
         // 'default' behavior as implemented by 'isCutAllowed(..)'
         Iterator<Layer> layerIt = graph.getLayers().iterator();
-        // skip the first layer
-        if (layerIt.hasNext()) {
-            layerIt.next();
-        }
-        // now check for valid cut indexes
+        Layer previousLayer = layerIt.hasNext() ? layerIt.next() : null;
         int i = 1;
         while (layerIt.hasNext()) {
             Layer layer = layerIt.next();
-            cutsAllowed[i++] = isCutAllowed(layer);
+            cutsAllowed[i++] = isCutAllowed(layer, previousLayer);
+            previousLayer = layer;
         }
         
         if (graph.hasProperty(LayeredOptions.WRAPPING_VALIDIFY_FORBIDDEN_INDICES)) {
@@ -329,14 +343,20 @@ public class GraphStats {
     /**
      * @return whether it is allowed to cut <em>before</em> the given layer.
      */
-    private boolean isCutAllowed(final Layer layer) {
-        // we only allow to cut between a pair of layers 
-        // if there is only one pair 
+    private boolean isCutAllowed(final Layer layer, final Layer previousLayer) {
+        // Edge labels are represented by label dummy nodes. A cut adjacent to one
+        // would split the label from the edge segment it belongs to.
+        if (isLabelLayer(layer) || isLabelLayer(previousLayer)) {
+            return false;
+        }
+
+        // we only allow to cut between a pair of layers
+        // if there is only one pair
         // of nodes that is connected by 1 or more edges
         boolean cutAllowed = true;
         LNode n1 = null, n2 = null;
-        check: 
-        for (LNode tgt: layer.getNodes()) {
+        check:
+        for (LNode tgt : layer.getNodes()) {
             for (LEdge e : tgt.getIncomingEdges()) {
                 // check for different source
                 if (n1 != null && n1 != tgt) {
@@ -354,6 +374,34 @@ public class GraphStats {
             }
         }
         return cutAllowed;
+    }
+
+    /**
+     * @param layerIndex index of the layer before which a cut is considered.
+     * @return whether the cut is not adjacent to an edge-label dummy layer.
+     */
+public boolean isCutAllowedForMultiEdge(final int layerIndex) {
+        if (layerIndex <= 0 || layerIndex >= graph.getLayers().size()) {
+            return false;
+        }
+        if (graph.hasProperty(LayeredOptions.WRAPPING_VALIDIFY_FORBIDDEN_INDICES)
+                && graph.getProperty(LayeredOptions.WRAPPING_VALIDIFY_FORBIDDEN_INDICES).contains(layerIndex)) {
+            return false;
+        }
+        return !isLabelLayer(graph.getLayers().get(layerIndex - 1))
+                && !isLabelLayer(graph.getLayers().get(layerIndex));
+    }
+
+    private boolean isLabelLayer(final Layer layer) {
+        if (layer == null) {
+            return false;
+        }
+        for (LNode node : layer.getNodes()) {
+            if (node.getType() == NodeType.LABEL) {
+                return true;
+            }
+        }
+        return false;
     }
     
 }
