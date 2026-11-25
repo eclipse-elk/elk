@@ -80,3 +80,7 @@ This is a summary of the information on [this page](https://central.sonatype.org
 
 1. Close the release milestone [on GitHub](https://github.com/eclipse-elk/elk/milestones).
 1. Create a new release [on GitHub](https://github.com/eclipse-elk/elk/releases) with a release tag named `vVERSION` (for instance, `v0.4.0`).
+
+## Other Projects
+1. elkjs release
+1. elk-live release
